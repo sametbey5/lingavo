@@ -345,7 +345,7 @@ const Dashboard: React.FC = () => {
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <DailyFlowCard 
-                        title="Warm Up: Word Rush" 
+                        title="Word Rush" 
                         time="2 min • Vocabulary" 
                         icon={<Zap />} 
                         color="bg-fun-yellow" 
@@ -353,7 +353,7 @@ const Dashboard: React.FC = () => {
                         completed={false}
                     />
                     <DailyFlowCard 
-                        title="Live Race: Compete!" 
+                        title="Word Race"
                         time="3 min • Multiplayer" 
                         icon={<Flag />} 
                         color="bg-red-500" 
