@@ -342,10 +342,11 @@ const Dashboard: React.FC = () => {
                     <div className="h-full bg-fun-green w-1/3" />
                 </div>
                 <h3 className="text-2xl font-black text-slate-800 mb-6 flex items-center gap-3">
+                    <Map className="text-fun-blue" /> TODAY'S JOURNEY
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <DailyFlowCard 
-                        title="Word Rush" 
+                        title="Warm Up: Word Rush" 
                         time="2 min • Vocabulary" 
                         icon={<Zap />} 
                         color="bg-fun-yellow" 
@@ -353,7 +354,7 @@ const Dashboard: React.FC = () => {
                         completed={false}
                     />
                     <DailyFlowCard 
-                        title="Word Race"
+                        title="Live Race: Compete!" 
                         time="3 min • Multiplayer" 
                         icon={<Flag />} 
                         color="bg-red-500" 
@@ -377,6 +378,14 @@ const Dashboard: React.FC = () => {
                         completed={false}
                     />
                     <DailyFlowCard 
+                        title="Speak: Roleplay" 
+                        time="5 min • Speaking" 
+                        icon={<Mic />} 
+                        color="bg-fun-purple" 
+                        onClick={() => navigate('/roleplay')}
+                        completed={false}
+                    />
+                    <DailyFlowCard 
                         title="Learn: Grammar" 
                         time="10 min • Lessons" 
                         icon={<BookOpen />} 
@@ -390,6 +399,14 @@ const Dashboard: React.FC = () => {
                         icon={<Brain />} 
                         color="bg-fun-blue" 
                         onClick={() => navigate('/game/scramble')}
+                        completed={false}
+                    />
+                    <DailyFlowCard 
+                        title="Fun: Vocab Breaker" 
+                        time="3 min • Vocabulary" 
+                        icon={<Gamepad2 />} 
+                        color="bg-blue-600" 
+                        onClick={() => navigate('/game/breaker')}
                         completed={false}
                     />
                     <DailyFlowCard 
@@ -412,11 +429,53 @@ const Dashboard: React.FC = () => {
                     {stats.skills && (
                         <>
                             <SkillTreeCard skill={stats.skills.vocabulary} onClick={() => navigate('/vocab')} />
-                            <SkillTreeCard skill={stats.skills.speaking} onClick={() => navigate('/pronunciation')} />
+                            <SkillTreeCard skill={stats.skills.speaking} onClick={() => navigate('/roleplay')} />
                             <SkillTreeCard skill={stats.skills.listening} onClick={() => navigate('/story')} />
                             <SkillTreeCard skill={stats.skills.grammar} onClick={() => navigate('/grammar-lessons')} />
                             <SkillTreeCard skill={stats.skills.realLife} onClick={() => navigate('/story')} />
                         </>
+                    )}
+                </div>
+            </div>
+
+            {/* Teachers Section */}
+            <div className="bg-white p-8 rounded-[3rem] border-4 border-slate-100 shadow-xl relative overflow-hidden">
+                <div className="flex items-center justify-between mb-6">
+                    <h3 className="text-2xl font-black text-slate-800 flex items-center gap-3">
+                        <User className="text-fun-blue" /> MEET YOUR TEACHERS
+                    </h3>
+                    <button 
+                        onClick={() => navigate('/teachers')}
+                        className="text-fun-blue font-black text-sm hover:underline flex items-center gap-1"
+                    >
+                        View All <ArrowRight size={16} />
+                    </button>
+                </div>
+                <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide">
+                    {verifiedTeachers.length === 0 ? (
+                        <div className="flex items-center gap-4 text-slate-400 font-bold italic p-4">
+                            No verified teachers yet.
+                        </div>
+                    ) : (
+                        verifiedTeachers.map((teacher, idx) => (
+                            <div key={idx} className="flex flex-col items-center gap-2 min-w-[120px] cursor-pointer" onClick={() => navigate('/teachers')}>
+                                <div className="relative group">
+                                    <img 
+                                        src={teacher.avatar} 
+                                        alt={teacher.username} 
+                                        className="w-20 h-20 rounded-full border-4 border-slate-50 shadow-md group-hover:scale-110 transition-transform bg-slate-100"
+                                        referrerPolicy="no-referrer"
+                                    />
+                                    <div className="absolute bottom-0 right-0 w-5 h-5 bg-fun-green border-2 border-white rounded-full flex items-center justify-center">
+                                        <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
+                                    </div>
+                                </div>
+                                <div className="text-center">
+                                    <p className="font-black text-slate-800 text-sm">{teacher.username}</p>
+                                    <UserRoleBadge role="teacher" size="sm" showText={false} />
+                                </div>
+                            </div>
+                        ))
                     )}
                 </div>
             </div>

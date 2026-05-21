@@ -16,15 +16,19 @@ const Sidebar: React.FC = () => {
   const dueCount = wordBank.filter(w => w.nextReviewAt.split('T')[0] <= today).length;
 
   const navItems = [
-    { name: 'Home', path: '/', icon: <LayoutDashboard size={24} />, color: 'text-fun-blue' },
+    { name: 'Arcade Home', path: '/', icon: <LayoutDashboard size={24} />, color: 'text-fun-blue' },
     { name: <img src="https://i.ibb.co/MyJNdByd/lingavolearns.png" alt="Lingavo Learns" className="h-6 object-contain" />, path: '/videos', icon: <MonitorPlay size={24} />, color: 'text-[#00F798]' },
     { name: 'News', path: '/notifications', icon: <Bell size={24} />, color: 'text-fun-orange' },
-    { name: 'Dictionary', path: '/wordbank', icon: <Brain size={24} />, color: 'text-fun-pink', badge: dueCount > 0 ? dueCount : undefined },
-    { name: 'Speaking', path: '/pronunciation', icon: <Volume2 size={24} />, color: 'text-fun-blue' },
+    { name: 'Word Bank', path: '/wordbank', icon: <Brain size={24} />, color: 'text-fun-pink', badge: dueCount > 0 ? dueCount : undefined },
+    { name: 'Quest Mode', path: '/roleplay', icon: <Sword size={24} />, color: 'text-fun-pink' },
+    { name: 'Talk to Friend', path: '/talk', icon: <Mic size={24} />, color: 'text-fun-green' }, 
+    { name: 'Speak Clear', path: '/pronunciation', icon: <Volume2 size={24} />, color: 'text-fun-blue' },
     { name: 'Word Rush', path: '/vocab', icon: <Zap size={24} />, color: 'text-fun-yellow' },
-    { name: 'Word Race', path: '/race', icon: <Flag size={24} />, color: 'text-red-500' },
+    { name: 'Live Race', path: '/race', icon: <Flag size={24} />, color: 'text-red-500' },
+    { name: 'Teachers', path: '/teachers', icon: <User size={24} />, color: 'text-fun-blue' },
     { name: 'Grammar Coach', path: '/grammar', icon: <GraduationCap size={24} />, color: 'text-fun-purple' },
     { name: 'Scramble', path: '/game/scramble', icon: <Brain size={24} />, color: 'text-fun-purple' },
+    { name: 'Vocab Breaker', path: '/game/breaker', icon: <Gamepad2 size={24} />, color: 'text-fun-blue' },
     { name: 'Trading Post', path: '/trading', icon: <Store size={24} />, color: 'text-teal-500' },
     { name: 'Leaderboard', path: '/leaderboard', icon: <Trophy size={24} />, color: 'text-fun-green' },
   ];

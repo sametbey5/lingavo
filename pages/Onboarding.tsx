@@ -46,7 +46,7 @@ const Onboarding: React.FC = () => {
   const navigate = useNavigate();
 
   if (isLoading) {
-    return null;
+    return <div className="min-h-screen flex items-center justify-center bg-slate-50 text-slate-400">Loading...</div>;
   }
   
   // Steps:

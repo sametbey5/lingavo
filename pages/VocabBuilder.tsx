@@ -107,6 +107,10 @@ const VocabBuilder: React.FC = () => {
       <div className="max-w-4xl mx-auto space-y-8 animate-fade-in py-6 sm:py-10 relative">
         {/* --- Main Lobby Content --- */}
         <div className="text-center space-y-6 sm:space-y-8">
+            <div className="w-24 h-24 sm:w-32 sm:h-32 bg-fun-yellow rounded-full flex items-center justify-center mx-auto shadow-2xl border-4 border-white ring-8 ring-yellow-100 animate-bounce">
+            <Zap size={48} className="text-white fill-current sm:hidden" />
+            <Zap size={64} className="text-white fill-current hidden sm:block" />
+            </div>
             <h2 className="text-4xl sm:text-6xl font-black text-slate-800 uppercase tracking-tighter rainbow-text">
               WORD RUSH
               {preferredLanguage && preferredLanguage !== 'English' && (

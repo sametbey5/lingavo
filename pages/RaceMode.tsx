@@ -321,7 +321,7 @@ const RaceMode: React.FC = () => {
         <Flag size={64} className="text-white" />
       </motion.div>
       <div className="space-y-2">
-        <h1 className="text-6xl font-black text-slate-900 tracking-tight">WORD RACE</h1>
+        <h1 className="text-6xl font-black text-slate-900 tracking-tight">LIVE WORD RACE</h1>
         <p className="text-xl text-slate-500 font-bold">The fastest English 1v1 on the planet!</p>
       </div>
       

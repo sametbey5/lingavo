@@ -27,7 +27,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     { name: <img src="https://i.ibb.co/MyJNdByd/lingavolearns.png" alt="Lingavo Learns" className="h-6 object-contain" />, path: '/videos', icon: <MonitorPlay size={24} />, color: 'text-[#00F798]' },
     { name: isKids ? 'News' : 'Notifications', path: '/notifications', icon: <Bell size={24} />, color: isKids ? 'text-fun-orange' : 'text-slate-600' },
     { name: isKids ? 'Quest Mode' : 'Scenarios', path: '/roleplay', icon: <MessageCircle size={24} />, color: isKids ? 'text-fun-pink' : 'text-slate-600' },
-    { name: isKids ? 'Word Race' : 'Competitive Race', path: '/race', icon: <Flag size={24} />, color: 'text-red-500' },
+    { name: isKids ? 'Live Race' : 'Competitive Race', path: '/race', icon: <Flag size={24} />, color: 'text-red-500' },
     { name: isKids ? 'Word Cards' : 'Vocabulary', path: '/vocab', icon: <BookOpen size={24} />, color: isKids ? 'text-fun-green' : 'text-slate-600' },
     { name: isKids ? 'Word Fixer' : 'Grammar', path: isKids ? '/grammar' : '/grammar-lessons', icon: <PenTool size={24} />, color: isKids ? 'text-fun-purple' : 'text-slate-600' },
     { name: isKids ? 'Trading Post' : 'Exchange', path: '/trading', icon: isKids ? <Store size={24} /> : <ArrowRightLeft size={24} />, color: isKids ? 'text-teal-500' : 'text-slate-600' },

@@ -22,7 +22,7 @@ const Leaderboard: React.FC = () => {
   return (
     <div className="max-w-3xl mx-auto animate-fade-in pb-12">
       <div className="text-center mb-10">
-        <h2 className="text-4xl font-black text-slate-800 tracking-tight">Leaderboard</h2>
+        <h2 className="text-4xl font-black text-slate-800 tracking-tight">🏆 Hall of Fame 🏆</h2>
         <p className="text-xl text-slate-500 mt-2 font-bold">Top English Learners this Week</p>
       </div>
 
