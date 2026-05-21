@@ -378,14 +378,6 @@ const Dashboard: React.FC = () => {
                         completed={false}
                     />
                     <DailyFlowCard 
-                        title="Speak: Roleplay" 
-                        time="5 min • Speaking" 
-                        icon={<Mic />} 
-                        color="bg-fun-purple" 
-                        onClick={() => navigate('/roleplay')}
-                        completed={false}
-                    />
-                    <DailyFlowCard 
                         title="Learn: Grammar" 
                         time="10 min • Lessons" 
                         icon={<BookOpen />} 
@@ -399,14 +391,6 @@ const Dashboard: React.FC = () => {
                         icon={<Brain />} 
                         color="bg-fun-blue" 
                         onClick={() => navigate('/game/scramble')}
-                        completed={false}
-                    />
-                    <DailyFlowCard 
-                        title="Fun: Vocab Breaker" 
-                        time="3 min • Vocabulary" 
-                        icon={<Gamepad2 />} 
-                        color="bg-blue-600" 
-                        onClick={() => navigate('/game/breaker')}
                         completed={false}
                     />
                     <DailyFlowCard 
@@ -429,7 +413,7 @@ const Dashboard: React.FC = () => {
                     {stats.skills && (
                         <>
                             <SkillTreeCard skill={stats.skills.vocabulary} onClick={() => navigate('/vocab')} />
-                            <SkillTreeCard skill={stats.skills.speaking} onClick={() => navigate('/roleplay')} />
+                            <SkillTreeCard skill={stats.skills.speaking} onClick={() => navigate('/talk')} />
                             <SkillTreeCard skill={stats.skills.listening} onClick={() => navigate('/story')} />
                             <SkillTreeCard skill={stats.skills.grammar} onClick={() => navigate('/grammar-lessons')} />
                             <SkillTreeCard skill={stats.skills.realLife} onClick={() => navigate('/story')} />

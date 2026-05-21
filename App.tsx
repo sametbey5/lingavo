@@ -3,7 +3,6 @@ import React from 'react';
 import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
-import RoleplayChat from './pages/RoleplayChat';
 import VocabBuilder from './pages/VocabBuilder';
 import GrammarCoach from './pages/GrammarCoach';
 import ScrambleMaster from './pages/ScrambleMaster';
@@ -26,7 +25,6 @@ import StoryMode from './pages/StoryMode';
 import PronunciationPractice from './pages/PronunciationPractice';
 import Notifications from './pages/Notifications';
 import RaceMode from './pages/RaceMode';
-import VocabBreaker from './pages/VocabBreaker';
 import Teachers from './pages/Teachers';
 import TeacherPanel from './pages/TeacherPanel';
 import WordBank from './pages/WordBank';
@@ -60,7 +58,6 @@ const AppRoutes: React.FC = () => {
       <Route path="/onboarding" element={userId ? <Onboarding /> : <Login />} />
       <Route path="/story" element={<AuthWrapper><StoryMode /></AuthWrapper>} />
       <Route path="/" element={<AuthWrapper><Dashboard /></AuthWrapper>} />
-      <Route path="/roleplay" element={<AuthWrapper><RoleplayChat /></AuthWrapper>} />
       <Route path="/talk" element={<AuthWrapper><MascotTalk /></AuthWrapper>} />
       <Route path="/talk/:id" element={<AuthWrapper><MascotChat /></AuthWrapper>} />
       <Route path="/pronunciation" element={<AuthWrapper><PronunciationPractice /></AuthWrapper>} />
@@ -84,7 +81,6 @@ const AppRoutes: React.FC = () => {
       <Route path="/game/boss" element={<AuthWrapper><BossBattle /></AuthWrapper>} />
       <Route path="/game/racer" element={<AuthWrapper><SpeedRacer /></AuthWrapper>} />
       <Route path="/game/whack" element={<AuthWrapper><WordWhack /></AuthWrapper>} />
-      <Route path="/game/breaker" element={<AuthWrapper><VocabBreaker /></AuthWrapper>} />
       <Route path="/race" element={<AuthWrapper><RaceMode /></AuthWrapper>} />
     </Routes>
   );
