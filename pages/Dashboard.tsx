@@ -69,55 +69,13 @@ const AVATAR_OPTIONS = [
   'https://api.dicebear.com/7.x/avataaars/svg?seed=Piper&mouth=serious',
 ];
 
-const AVATAR_FEATURES = {
-  top: ['longHair', 'shortHair', 'bob', 'bun', 'curly', 'curvy', 'dreads', 'shaggy', 'shortCurly', 'shortFlat', 'shortRound', 'shortWaved', 'theCaesar'],
-  accessories: ['blank', 'prescription01', 'prescription02', 'round', 'sunglasses', 'wayfarers'],
-  hairColor: ['2c1b18', '4a4444', '724130', 'b58143', 'd6b370', 'f59797', 'ecdcbf', 'c93305', 'ffae42', 'e8e1e1'],
-  facialHair: ['blank', 'beardMedium', 'beardLight', 'beardMajestic', 'moustachesFancy', 'moustachesMagnum'],
-  clothing: ['blazerAndShirt', 'blazerAndSweater', 'collarAndSweater', 'graphicShirt', 'hoodie', 'overall', 'shirtCrewNeck', 'shirtScoopNeck', 'shirtVNeck'],
-  eyes: ['default', 'closed', 'eyeRoll', 'happy', 'hearts', 'side', 'squint', 'surprised', 'wink'],
-  eyebrows: ['default', 'angry', 'flatNatural', 'raisedExcited', 'sadHelpful', 'unibrowNatural', 'upDown'],
-  mouth: ['default', 'serious', 'smile', 'tongue', 'twinkle', 'grimace', 'eating'],
-  skinColor: ['614335', 'ae5d29', 'd08b5b', 'edb98a', 'f8d25c', 'fd9841', 'ffdbb4']
-};
-
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   const { stats, quests, mode, awardPoints, badges, setThemeColor, setAvatar, grantBadge, userId, isPremium, isAdmin, isVerifiedTeacher, verifiedTeachers } = useGamification();
   const [showMysteryBox, setShowMysteryBox] = useState(false);
   const [isBoxClaimed, setIsBoxClaimed] = useState(false);
   const [showStyleModal, setShowStyleModal] = useState(false);
-  const [modalTab, setModalTab] = useState<'avatar' | 'color' | 'customize'>('avatar');
-  const [customAvatar, setCustomAvatar] = useState({
-    top: 'shortHair',
-    accessories: 'blank',
-    hairColor: '2c1b18',
-    facialHair: 'blank',
-    clothing: 'shirtCrewNeck',
-    eyes: 'default',
-    eyebrows: 'default',
-    mouth: 'serious',
-    skinColor: 'edb98a'
-  });
-
-  // Sync customizer with current avatar if it's a DiceBear URL
-  React.useEffect(() => {
-    if (stats.avatar && stats.avatar.includes('api.dicebear.com')) {
-      try {
-        const url = new URL(stats.avatar);
-        const params = Object.fromEntries(url.searchParams.entries());
-        const newFeatures = { ...customAvatar };
-        Object.keys(AVATAR_FEATURES).forEach(key => {
-          if (params[key]) {
-            (newFeatures as any)[key] = params[key];
-          }
-        });
-        setCustomAvatar(newFeatures);
-      } catch (e) {
-        // Not a standard URL or parsing failed
-      }
-    }
-  }, [stats.avatar]);
+  const [modalTab, setModalTab] = useState<'avatar' | 'color'>('avatar');
   
   const isKids = true; // Forced to kids mode
 
@@ -140,14 +98,6 @@ const Dashboard: React.FC = () => {
     setIsBoxClaimed(true);
   };
 
-  const generateAvatarUrl = (features: any) => {
-    const params = new URLSearchParams({
-      seed: userId || 'Felix',
-      ...features
-    });
-    return `https://api.dicebear.com/7.x/avataaars/svg?${params.toString()}`;
-  };
-
   const StylePickerModal = () => (
     <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
       <div className="bg-white rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-8 max-w-md w-full shadow-2xl border-4 border-slate-100 relative">
@@ -158,7 +108,6 @@ const Dashboard: React.FC = () => {
         
         <div className="flex gap-2 sm:gap-4 mb-6 bg-slate-100 p-2 rounded-2xl">
            <button onClick={() => setModalTab('avatar')} className={`flex-1 py-3 rounded-xl font-bold text-sm transition-all ${modalTab === 'avatar' ? 'bg-white text-fun-blue shadow-sm' : 'text-slate-500 hover:bg-slate-200'}`}>Presets</button>
-           <button onClick={() => setModalTab('customize')} className={`flex-1 py-3 rounded-xl font-bold text-sm transition-all ${modalTab === 'customize' ? 'bg-white text-fun-blue shadow-sm' : 'text-slate-500 hover:bg-slate-200'}`}>Create</button>
            <button onClick={() => setModalTab('color')} className={`flex-1 py-3 rounded-xl font-bold text-sm transition-all ${modalTab === 'color' ? 'bg-white text-fun-blue shadow-sm' : 'text-slate-500 hover:bg-slate-200'}`}>Theme</button>
         </div>
 
@@ -179,39 +128,6 @@ const Dashboard: React.FC = () => {
                   />
                 </button>
               ))}
-            </div>
-          )}
-
-          {modalTab === 'customize' && (
-            <div className="space-y-6">
-              <div className="flex justify-center mb-6">
-                <div className={`w-32 h-32 rounded-[2.5rem] ${stats.themeColor || 'bg-fun-blue'} border-4 border-white shadow-xl overflow-hidden`}>
-                  <img src={generateAvatarUrl(customAvatar)} alt="Custom Preview" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-                </div>
-              </div>
-              <div className="space-y-6">
-                {Object.entries(AVATAR_FEATURES).map(([key, options]) => (
-                  <div key={key} className="space-y-2">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{key}</label>
-                    <div className="flex flex-wrap gap-2">
-                      {options.map(opt => (
-                        <button
-                          key={opt}
-                          onClick={() => setCustomAvatar(prev => ({ ...prev, [key]: opt }))}
-                          className={`px-3 py-1.5 rounded-xl text-[10px] font-black uppercase transition-all ${customAvatar[key as keyof typeof customAvatar] === opt ? 'bg-fun-blue text-white shadow-md' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'}`}
-                        >
-                          {opt.replace(/([A-Z])/g, ' $1').trim()}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div className="sticky bottom-0 pt-4 bg-white">
-                <Button fullWidth onClick={() => { setAvatar(generateAvatarUrl(customAvatar)); setShowStyleModal(false); }}>
-                  Save Appearance
-                </Button>
-              </div>
             </div>
           )}
 
@@ -413,7 +329,7 @@ const Dashboard: React.FC = () => {
                     {stats.skills && (
                         <>
                             <SkillTreeCard skill={stats.skills.vocabulary} onClick={() => navigate('/vocab')} />
-                            <SkillTreeCard skill={stats.skills.speaking} onClick={() => navigate('/talk')} />
+                            <SkillTreeCard skill={stats.skills.speaking} onClick={() => navigate('/pronunciation')} />
                             <SkillTreeCard skill={stats.skills.listening} onClick={() => navigate('/story')} />
                             <SkillTreeCard skill={stats.skills.grammar} onClick={() => navigate('/grammar-lessons')} />
                             <SkillTreeCard skill={stats.skills.realLife} onClick={() => navigate('/story')} />

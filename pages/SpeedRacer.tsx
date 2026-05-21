@@ -69,13 +69,13 @@ const SpeedRacer: React.FC = () => {
 
   if (gameState === 'start') {
     return (
-      <div className="min-h-[80vh] bg-slate-900 rounded-[3rem] flex flex-col items-center justify-center text-white p-10 relative overflow-hidden">
+      <div className="min-h-[80vh] bg-slate-900 rounded-2xl sm:rounded-[3rem] flex flex-col items-center justify-center text-white p-4 sm:p-10 relative overflow-hidden">
         <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
-        <Car size={120} className="text-fun-orange animate-bounce-slow" />
-        <h2 className="text-6xl font-black italic tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-fun-orange to-red-500 mt-6">SPEED RACER</h2>
-        <p className="text-xl font-bold text-slate-400 mt-4 max-w-md text-center">Type the words as fast as you can to cross the finish line before time runs out!</p>
+        <Car size={100} className="text-fun-orange animate-bounce-slow" />
+        <h2 className="text-4xl sm:text-6xl font-black italic tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-fun-orange to-red-500 mt-6 text-center">SPEED RACER</h2>
+        <p className="text-base sm:text-xl font-bold text-slate-400 mt-4 max-w-md text-center px-4">Type the words as fast as you can to cross the finish line before time runs out!</p>
         <div className="mt-8">
-           <Button onClick={() => { setGameState('playing'); setTimeLeft(30); setProgress(0); setWordsCompleted(0); }} className="px-12 py-6 text-2xl" variant="primary">
+           <Button onClick={() => { setGameState('playing'); setTimeLeft(30); setProgress(0); setWordsCompleted(0); }} className="px-8 py-4 sm:px-12 sm:py-6 text-xl sm:text-2xl" variant="primary">
               START ENGINE
            </Button>
         </div>
@@ -84,15 +84,15 @@ const SpeedRacer: React.FC = () => {
   }
 
   return (
-    <div className="min-h-[80vh] bg-slate-100 rounded-[3rem] p-8 flex flex-col relative overflow-hidden border-8 border-slate-200">
+    <div className="min-h-[80vh] bg-slate-100 rounded-2xl sm:rounded-[3rem] p-4 sm:p-8 flex flex-col relative overflow-hidden border-4 sm:border-8 border-slate-200">
       {/* Header */}
-      <div className="flex justify-between items-center mb-10 z-10">
-        <button onClick={() => navigate('/')} className="bg-white p-3 rounded-xl text-slate-500 hover:bg-slate-50 border-2 border-slate-200 font-bold flex items-center gap-2">
-            <ChevronLeft /> Exit Race
+      <div className="flex justify-between items-center mb-6 sm:mb-10 z-10">
+        <button onClick={() => navigate('/')} className="bg-white p-2 sm:p-3 rounded-xl text-slate-500 hover:bg-slate-50 border-2 border-slate-200 font-bold flex items-center gap-1 sm:gap-2 text-sm sm:text-base">
+            <ChevronLeft size={18} /> Exit Race
         </button>
-        <div className="flex items-center gap-4">
-            <div className={`flex items-center gap-2 px-6 py-2 rounded-full font-black text-xl border-4 ${timeLeft < 10 ? 'bg-red-100 text-red-500 border-red-200 animate-pulse' : 'bg-white text-slate-700 border-slate-200'}`}>
-                <Timer /> {timeLeft}s
+        <div className="flex items-center gap-2 sm:gap-4">
+            <div className={`flex items-center gap-1.5 sm:gap-2 px-3 py-1 sm:px-6 sm:py-2 rounded-full font-black text-base sm:text-xl border-2 sm:border-4 ${timeLeft < 10 ? 'bg-red-100 text-red-500 border-red-200 animate-pulse' : 'bg-white text-slate-700 border-slate-200'}`}>
+                <Timer size={18} /> {timeLeft}s
             </div>
         </div>
       </div>

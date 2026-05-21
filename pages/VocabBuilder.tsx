@@ -310,7 +310,7 @@ const VocabBuilder: React.FC = () => {
            <span className={`text-xs font-black uppercase tracking-[0.2em] mb-4 block ${isFever ? 'text-orange-500 animate-pulse' : 'text-slate-300'}`}>
              {isFever ? 'FEVER MODE ACTIVATED' : 'WORD LEVEL RUSH'}
            </span>
-           <h3 className={`text-5xl sm:text-7xl font-black mb-8 sm:mb-12 tracking-tight transition-colors ${isFever ? 'text-orange-600' : 'text-slate-800'}`}>
+           <h3 className={`text-3xl sm:text-5xl md:text-7xl font-black mb-8 sm:mb-12 tracking-tight transition-colors break-all leading-tight ${isFever ? 'text-orange-600' : 'text-slate-800'}`}>
              {words[currentIndex].word}
            </h3>
            

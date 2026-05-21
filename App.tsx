@@ -11,8 +11,6 @@ import Leaderboard from './pages/Leaderboard';
 import VideoLearning from './pages/VideoLearning';
 import GrammarGalaxy from './pages/GrammarGalaxy';
 import BossBattle from './pages/BossBattle';
-import MascotTalk from './pages/MascotTalk'; 
-import MascotChat from './pages/MascotChat';
 import SpeedRacer from './pages/SpeedRacer';
 import WordWhack from './pages/WordWhack';
 import BadgeTrading from './pages/BadgeTrading';
@@ -58,8 +56,6 @@ const AppRoutes: React.FC = () => {
       <Route path="/onboarding" element={userId ? <Onboarding /> : <Login />} />
       <Route path="/story" element={<AuthWrapper><StoryMode /></AuthWrapper>} />
       <Route path="/" element={<AuthWrapper><Dashboard /></AuthWrapper>} />
-      <Route path="/talk" element={<AuthWrapper><MascotTalk /></AuthWrapper>} />
-      <Route path="/talk/:id" element={<AuthWrapper><MascotChat /></AuthWrapper>} />
       <Route path="/pronunciation" element={<AuthWrapper><PronunciationPractice /></AuthWrapper>} />
       <Route path="/vocab" element={<AuthWrapper><VocabBuilder /></AuthWrapper>} />
       <Route path="/wordbank" element={<AuthWrapper><WordBank /></AuthWrapper>} />

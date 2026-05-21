@@ -37,22 +37,22 @@ const Leaderboard: React.FC = () => {
             </div>
         </div>
 
-        <div className="p-4 space-y-3">
+        <div className="p-2 sm:p-4 space-y-3">
           {leaderboard.map((user: any, index) => (
             <div 
               key={user.id} 
               onClick={() => navigate(`/profile/${user.id}`)}
-              className={`flex items-center p-5 rounded-3xl transition-all border-b-4 cursor-pointer group ${
+              className={`flex items-center p-3 sm:p-5 rounded-2xl sm:rounded-3xl transition-all border-b-4 cursor-pointer group ${
                 user.isCurrentUser 
-                  ? 'bg-blue-50 border-fun-blue transform scale-[1.02] shadow-md z-10' 
+                  ? 'bg-blue-50 border-fun-blue transform scale-[1.01] shadow-md z-10' 
                   : 'bg-white border-slate-100 hover:bg-slate-50 hover:scale-[1.01] hover:border-slate-200'
               }`}
             >
-              <div className="w-16 flex justify-center flex-shrink-0">
+              <div className="w-10 sm:w-16 flex justify-center flex-shrink-0">
                 {getRankIcon(index)}
               </div>
               
-              <div className={`w-16 h-16 rounded-2xl ${user.color || 'bg-slate-100'} flex items-center justify-center mr-6 border-4 border-white shadow-sm ring-2 ring-slate-100 group-hover:scale-110 transition-transform overflow-hidden`}>
+              <div className={`w-12 h-12 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl ${user.color || 'bg-slate-100'} flex items-center justify-center mr-3 sm:mr-6 border-2 sm:border-4 border-white shadow-sm ring-2 ring-slate-100 group-hover:scale-110 transition-transform overflow-hidden flex-shrink-0`}>
                 <img 
                   src={user.avatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix'} 
                   alt={user.name} 
@@ -61,9 +61,9 @@ const Leaderboard: React.FC = () => {
                 />
               </div>
 
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <div className="flex flex-col">
-                  <h4 className={`text-xl font-black ${user.isCurrentUser ? 'text-fun-blue' : 'text-slate-700'}`}>
+                  <h4 className={`text-base sm:text-xl font-black truncate ${user.isCurrentUser ? 'text-fun-blue' : 'text-slate-700'}`}>
                     {user.name} {user.isCurrentUser && '(You)'}
                   </h4>
                   <div className="flex flex-wrap gap-1 mt-1">
@@ -72,12 +72,12 @@ const Leaderboard: React.FC = () => {
                     {user.isPremium && <UserRoleBadge role="premium" size="sm" />}
                   </div>
                 </div>
-                <p className="text-sm font-bold text-slate-400 uppercase tracking-wide mt-1">Rank #{index + 1}</p>
+                <p className="text-[10px] sm:text-sm font-bold text-slate-400 uppercase tracking-wide mt-0.5">Rank #{index + 1}</p>
               </div>
 
-              <div className="text-right bg-slate-50 px-4 py-2 rounded-xl border-2 border-slate-100 group-hover:bg-white transition-colors">
-                <p className="font-black text-2xl text-slate-800">{user.points.toLocaleString()}</p>
-                <p className="text-[10px] text-slate-400 uppercase font-black tracking-widest">XP Points</p>
+              <div className="text-right bg-slate-50 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl border-2 border-slate-100 group-hover:bg-white transition-colors flex-shrink-0 ml-2">
+                <p className="font-black text-lg sm:text-2xl text-slate-800">{user.points.toLocaleString()}</p>
+                <p className="text-[8px] sm:text-[10px] text-slate-400 uppercase font-black tracking-widest">XP</p>
               </div>
             </div>
           ))}
