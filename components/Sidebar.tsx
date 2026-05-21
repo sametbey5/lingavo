@@ -17,7 +17,7 @@ const Sidebar: React.FC = () => {
 
   const navItems: { name: React.ReactNode; path: string; icon: React.ReactNode; color: string; badge?: number }[] = [
     { name: 'Arcade Home', path: '/', icon: <LayoutDashboard size={24} />, color: 'text-fun-blue' },
-    { name: <img src="https://i.ibb.co/MyJNdByd/lingavolearns.png" alt="Lingavo Learns" className="h-6 object-contain" />, path: '/videos', icon: <MonitorPlay size={24} />, color: 'text-[#00F798]' },
+    { name: <img src="https://i.ibb.co/Fk917rRY/smartclips.png" alt="Lingavo Learns" className="h-6 object-contain" />, path: '/videos', icon: <MonitorPlay size={24} />, color: 'text-[#00F798]' },
     { name: 'News', path: '/notifications', icon: <Bell size={24} />, color: 'text-fun-orange' },
     { name: 'Dictionary', path: '/wordbank', icon: <BookOpen size={24} />, color: 'text-fun-pink' },
     { name: 'Speak Clear', path: '/pronunciation', icon: <Volume2 size={24} />, color: 'text-fun-blue' },
@@ -40,7 +40,7 @@ const Sidebar: React.FC = () => {
     <div className={`w-72 bg-white hidden md:flex flex-col h-screen fixed left-0 top-0 z-10 border-r-4 border-slate-100 shadow-lg rounded-r-[3rem]`}>
       <div className="p-8 flex items-center justify-center">
         <img 
-          src="https://i.ibb.co/23HGg63k/lingavo.png" 
+          src="https://i.ibb.co/TMMP1KYB/smart.png" 
           alt="Lingavo Logo" 
           className="h-12 w-auto object-contain"
           referrerPolicy="no-referrer"

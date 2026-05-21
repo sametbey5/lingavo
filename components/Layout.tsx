@@ -24,7 +24,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   const navItems = [
     { name: isKids ? 'My Dashboard' : 'Dashboard', path: '/', icon: <LayoutDashboard size={24} />, color: isKids ? 'text-fun-blue' : 'text-slate-600' },
-    { name: <img src="https://i.ibb.co/MyJNdByd/lingavolearns.png" alt="Lingavo Learns" className="h-6 object-contain" />, path: '/videos', icon: <MonitorPlay size={24} />, color: 'text-[#00F798]' },
+    { name: <img src="https://i.ibb.co/TMMP1KYB/smart.png" alt="Smart Language" className="h-6 object-contain" />, path: '/videos', icon: <MonitorPlay size={24} />, color: 'text-[#00F798]' },
     { name: isKids ? 'News' : 'Notifications', path: '/notifications', icon: <Bell size={24} />, color: isKids ? 'text-fun-orange' : 'text-slate-600' },
     { name: 'Dictionary', path: '/wordbank', icon: <BookOpen size={24} />, color: isKids ? 'text-fun-pink' : 'text-slate-600' },
     { name: isKids ? 'Live Race' : 'Competitive Race', path: '/race', icon: <Flag size={24} />, color: 'text-red-500' },
@@ -62,7 +62,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <div className={`md:hidden p-4 flex items-center justify-between sticky top-0 z-30 shadow-sm ${isKids ? 'bg-white border-b-4 border-slate-100' : 'bg-white border-b border-slate-200'}`}>
         <div className="flex items-center gap-2">
             <img 
-              src="https://i.ibb.co/23HGg63k/lingavo.png" 
+              src="https://i.ibb.co/TMMP1KYB/smart.png" 
               alt="Lingavo Logo" 
               className="h-8 w-auto object-contain"
               referrerPolicy="no-referrer"

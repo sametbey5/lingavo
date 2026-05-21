@@ -204,7 +204,7 @@ const VideoLearning: React.FC = () => {
         </button>
         
         <div className="flex flex-col items-center">
-          <img src="https://i.ibb.co/MyJNdByd/lingavolearns.png" alt="Lingavo Learns" className="h-10 mb-2" />
+          <img src="https://i.ibb.co/Fk917rRY/smartclips.png" alt="Smart Clips" className="h-10 mb-2" />
         </div>
 
         <div className="w-10 h-10 flex items-center justify-center text-white/60">

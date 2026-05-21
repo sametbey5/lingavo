@@ -74,7 +74,7 @@ const Login: React.FC = () => {
         <div className="text-center mb-8">
           <div className="mb-6 flex items-center justify-center">
              <img 
-               src="https://i.ibb.co/23HGg63k/lingavo.png" 
+               src="https://i.ibb.co/TMMP1KYB/smart.png" 
                alt="Lingavo Logo" 
                className="h-20 w-auto object-contain"
                referrerPolicy="no-referrer"
