@@ -75,7 +75,7 @@ interface VideoOverride {
 const CUSTOM_LESSON_VIDEOS: Record<string, VideoOverride> = {
   // --- LEVEL A1 BEGINNER ---
   'a1-1': {
-    title: 'Mastering the present verb "To Be" (am, is, are)',
+    title: 'Unit 1 — Present “to be” (am, is, are)',
     duration: '3:15',
     videoUrl: 'https://videos.pexels.com/video-files/5906253/5906253-hd_1920_1080_25fps.mp4', // Overwrite with your custom link!
     tutor: 'Emma Mitchell',

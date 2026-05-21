@@ -105,68 +105,219 @@ export const LESSONS: Lesson[] = [
     topic: 'Verbs',
     explanation: (
       <div className="space-y-4">
-        <p>The verb "to be" is the most important verb in English. We use it to describe people, places, and things.</p>
-        <p>In the present simple, it has three forms: <strong>am</strong>, <strong>is</strong>, and <strong>are</strong>.</p>
+        <p className="text-lg text-slate-700">We use <strong>am / is / are</strong> as the present tense of the verb <strong>to be</strong>.</p>
+        <p className="text-slate-600">The verb "to be" is one of the most important verbs in English, used to describe identity, age, profession, emotions, location, and condition.</p>
       </div>
     ),
     explanationParts: [
       <div className="space-y-6">
-        <h4 className="text-2xl font-black text-slate-800">Part 1: The Basics</h4>
-        <p className="text-lg text-slate-600">The verb "to be" changes depending on the subject (the person or thing doing the action).</p>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="bg-blue-50 p-4 rounded-2xl border-2 border-blue-100">
-            <span className="font-black text-fun-blue">I</span>
-            <span className="mx-2">→</span>
-            <span className="font-black text-slate-800">am</span>
+        <h4 className="text-2xl font-black text-slate-800">Unit 1: Present Simple "To Be" (am, is, are)</h4>
+        <p className="text-lg text-slate-600">
+          The verb <strong className="text-fun-blue">to be</strong> is one of the most important verbs in English. It is used to describe:
+        </p>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-sm text-center">
+          {['identity', 'age', 'profession', 'emotions', 'location', 'condition'].map((item) => (
+            <div key={item} className="bg-slate-50 border border-slate-200 px-3 py-2 rounded-xl font-bold text-slate-700 capitalize">
+              {item}
+            </div>
+          ))}
+        </div>
+        
+        <div className="mt-6">
+          <h5 className="font-bold text-slate-700 mb-2 uppercase tracking-wider text-xs">Basic Forms</h5>
+          <div className="overflow-hidden border border-slate-100 rounded-2xl shadow-sm">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="bg-slate-100 font-black text-slate-600 text-xs uppercase">
+                  <th className="p-3">Subject</th>
+                  <th className="p-3">Verb</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 font-bold text-slate-700">
+                <tr>
+                  <td className="p-3 bg-blue-50/50 text-sm">I</td>
+                  <td className="p-3 text-fun-blue bg-blue-50/50 text-sm">am</td>
+                </tr>
+                <tr>
+                  <td className="p-3 bg-purple-50/50 text-sm">He / She / It</td>
+                  <td className="p-3 text-fun-purple bg-purple-50/50 text-sm">is</td>
+                </tr>
+                <tr>
+                  <td className="p-3 bg-green-50/50 text-sm">You / We / They</td>
+                  <td className="p-3 text-fun-green bg-green-50/50 text-sm">are</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-          <div className="bg-purple-50 p-4 rounded-2xl border-2 border-purple-100">
-            <span className="font-black text-fun-purple">You / We / They</span>
-            <span className="mx-2">→</span>
-            <span className="font-black text-slate-800">are</span>
+        </div>
+
+        <div className="mt-4 bg-amber-50 border-2 border-amber-200/60 p-4 rounded-2xl">
+          <h5 className="font-black text-amber-800 text-xs uppercase tracking-wider mb-1">Sentence Structure</h5>
+          <p className="font-mono text-base font-black text-amber-950">Subject + am / is / are + complement</p>
+        </div>
+
+        <div className="space-y-2 mt-4">
+          <p className="font-bold text-slate-700">Examples:</p>
+          <ul className="space-y-1.5 text-slate-600 font-medium text-sm">
+            <li className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-fun-blue"></span>
+              <span>I <strong>am</strong> a student.</span>
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-fun-purple"></span>
+              <span>She <strong>is</strong> happy.</span>
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-fun-green"></span>
+              <span>They <strong>are</strong> at school.</span>
+            </li>
+          </ul>
+        </div>
+      </div>,
+      <div className="space-y-6">
+        <h4 className="text-2xl font-black text-slate-800">Why Different Forms?</h4>
+        <p className="text-lg text-slate-600">English changes the verb depending on the subject.</p>
+        
+        <div className="space-y-3">
+          <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 text-sm">
+            <span className="font-black text-fun-blue block">“I” → am</span>
+            <p className="text-slate-600 italic font-medium mt-1">Example: "I am tired."</p>
           </div>
-          <div className="bg-green-50 p-4 rounded-2xl border-2 border-green-100 col-span-2">
-            <span className="font-black text-fun-green">He / She / It</span>
-            <span className="mx-2">→</span>
-            <span className="font-black text-slate-800">is</span>
+          <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 text-sm">
+            <span className="font-black text-fun-purple block">Singular person/object → is</span>
+            <p className="text-slate-600 italic font-medium mt-1">Examples: "He is tall.", "The dog is hungry."</p>
+          </div>
+          <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 text-sm">
+            <span className="font-black text-fun-green block">Plural or “you” → are</span>
+            <p className="text-slate-600 italic font-medium mt-1">Examples: "You are late.", "We are ready."</p>
+          </div>
+        </div>
+
+        <div className="mt-6">
+          <h4 className="text-2xl font-black text-slate-800">Contractions (Short Forms)</h4>
+          <p className="text-base text-slate-600 mb-3">Native speakers use contractions constantly in conversation.</p>
+          <div className="grid grid-cols-2 gap-2 mt-2">
+            {[
+              { full: 'I am', short: "I'm" },
+              { full: 'He is', short: "He's" },
+              { full: 'She is', short: "She's" },
+              { full: 'It is', short: "It's" },
+              { full: 'We are', short: "We're" },
+              { full: 'They are', short: "They're" },
+            ].map((c, i) => (
+              <div key={i} className="bg-white p-3 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-center text-sm">
+                <div className="flex justify-between items-center">
+                  <span className="text-slate-400 font-bold">{c.full}</span>
+                  <span className="font-black text-fun-pink">→ {c.short}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-4 bg-slate-50 p-4 rounded-xl border border-slate-200 text-sm font-bold text-slate-600 space-y-1">
+            <p className="font-black text-xs text-slate-400 uppercase tracking-wider mb-1">Examples</p>
+            <p>• I'm busy.</p>
+            <p>• She's my teacher.</p>
+            <p>• They're friends.</p>
           </div>
         </div>
       </div>,
       <div className="space-y-6">
-        <h4 className="text-2xl font-black text-slate-800">Part 2: Positive Sentences</h4>
-        <p className="text-lg text-slate-600">We use these forms to make simple statements about ourselves and others.</p>
-        <ul className="space-y-3">
-          <li className="flex items-center gap-3 bg-white p-3 rounded-xl shadow-sm border border-slate-100">
-            <span className="w-8 h-8 bg-fun-blue/10 text-fun-blue rounded-full flex items-center justify-center font-bold">1</span>
-            <span><strong>I am</strong> a student.</span>
-          </li>
-          <li className="flex items-center gap-3 bg-white p-3 rounded-xl shadow-sm border border-slate-100">
-            <span className="w-8 h-8 bg-fun-blue/10 text-fun-blue rounded-full flex items-center justify-center font-bold">2</span>
-            <span><strong>He is</strong> happy today.</span>
-          </li>
-          <li className="flex items-center gap-3 bg-white p-3 rounded-xl shadow-sm border border-slate-100">
-            <span className="w-8 h-8 bg-fun-blue/10 text-fun-blue rounded-full flex items-center justify-center font-bold">3</span>
-            <span><strong>They are</strong> at school.</span>
-          </li>
-        </ul>
-      </div>,
-      <div className="space-y-6">
-        <h4 className="text-2xl font-black text-slate-800">Part 3: Negative Sentences</h4>
-        <p className="text-lg text-slate-600">To make a negative sentence, just add <strong>not</strong> after the verb.</p>
-        <div className="bg-slate-800 text-white p-6 rounded-[2rem] space-y-4">
-          <div className="flex justify-between items-center border-b border-white/10 pb-2">
-            <span>I am</span>
-            <span className="font-black text-fun-pink">+ not</span>
-          </div>
-          <div className="flex justify-between items-center border-b border-white/10 pb-2">
-            <span>He/She/It is</span>
-            <span className="font-black text-fun-pink">+ not</span>
-          </div>
-          <div className="flex justify-between items-center">
-            <span>You/We/They are</span>
-            <span className="font-black text-fun-pink">+ not</span>
+        <h4 className="text-2xl font-black text-slate-800">Negative Form</h4>
+        <p className="text-lg text-slate-600">To make a sentence negative, we simply add <strong className="text-fun-pink">not</strong>.</p>
+
+        <div className="overflow-hidden border border-slate-100 rounded-2xl shadow-sm">
+          <table className="w-full text-left border-collapse text-sm">
+            <thead>
+              <tr className="bg-slate-100 font-black text-slate-600 text-xs uppercase border-b border-slate-100">
+                <th className="p-3">Positive</th>
+                <th className="p-3">Negative</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100 font-bold text-slate-700">
+              <tr>
+                <td className="p-3">I am</td>
+                <td className="p-3 text-fun-pink">I am not</td>
+              </tr>
+              <tr>
+                <td className="p-3">He / She / It is</td>
+                <td className="p-3 text-fun-pink">He / She / It is not</td>
+              </tr>
+              <tr>
+                <td className="p-3">You / We / They are</td>
+                <td className="p-3 text-fun-pink">You / We / They are not</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div className="bg-slate-800 text-white p-5 rounded-[2rem] mt-6 space-y-3">
+          <h5 className="font-black text-fun-pink text-xs uppercase tracking-widest">Short Negative Forms</h5>
+          <div className="grid grid-cols-2 gap-4 text-sm font-bold">
+            <div className="bg-white/5 p-3 rounded-xl border border-white/10">
+              <span className="text-slate-300 block text-xs">is not</span>
+              <span className="text-white text-base">isn't</span>
+            </div>
+            <div className="bg-white/5 p-3 rounded-xl border border-white/10">
+              <span className="text-slate-300 block text-xs">are not</span>
+              <span className="text-white text-base">aren't</span>
+            </div>
           </div>
         </div>
-        <p className="italic text-slate-500 text-sm">Example: "I am not hungry." or "They are not here."</p>
+
+        <div className="space-y-2 mt-4 text-sm">
+          <p className="font-bold text-slate-700">Examples:</p>
+          <ul className="space-y-1.5 text-slate-600 font-medium">
+            <li className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-fun-pink"></span>
+              <span>She <strong>isn't</strong> sad. <span className="text-slate-400 text-xs font-mono">(She is not sad)</span></span>
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-fun-pink"></span>
+              <span>We <strong>aren't</strong> tired. <span className="text-slate-400 text-xs font-mono">(We are not tired)</span></span>
+            </li>
+          </ul>
+        </div>
+      </div>,
+      <div className="space-y-6">
+        <h4 className="text-2xl font-black text-slate-800">Common Uses & Mistakes</h4>
+        <div>
+          <h5 className="font-black text-xs uppercase tracking-widest text-slate-400 mb-2">Common Uses</h5>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {[
+              { tag: "1. Identity", desc: "I am Ahmet.", alt: "She is my sister." },
+              { tag: "2. Profession", desc: "He is a doctor.", alt: "They are engineers." },
+              { tag: "3. Age", desc: "I am 18 years old.", alt: "She is 25." },
+              { tag: "4. Location", desc: "The keys are on the table.", alt: "We are at home." },
+              { tag: "5. Feelings", desc: "We are excited.", alt: "I am happy." }
+            ].map((item, idx) => (
+              <div key={idx} className="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 text-sm">
+                <span className="font-black text-xs uppercase tracking-widest text-slate-400 block mb-1">{item.tag}</span>
+                <p className="text-slate-800 font-bold">{item.desc}</p>
+                <p className="text-slate-500 text-xs font-medium mt-0.5">{item.alt}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-6">
+          <h5 className="font-black text-xs uppercase tracking-widest text-slate-400 mb-2">Common Mistakes</h5>
+          <div className="space-y-3">
+            {[
+              { wrong: "She are happy.", correct: "She is happy." },
+              { wrong: "I is tired.", correct: "I am tired." },
+              { wrong: "They is here.", correct: "They are here." }
+            ].map((mistake, idx) => (
+              <div key={idx} className="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm flex flex-col gap-1 text-sm">
+                <p className="text-red-500 font-bold flex items-center gap-2">
+                  <span>❌</span> <span className="line-through">{mistake.wrong}</span>
+                </p>
+                <p className="text-green-600 font-black flex items-center gap-2">
+                  <span>✅</span> <span>{mistake.correct}</span>
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     ],
     exercises: [
@@ -176,12 +327,139 @@ export const LESSONS: Lesson[] = [
     ],
     translations: {
       'Turkish': {
-        title: 'Geniş Zaman (Olmak)',
-        explanation: <div>"am", "is" veya "are" kullanın.</div>,
+        title: 'Present Simple (To Be)',
+        explanation: (
+          <div className="space-y-4 text-slate-700 text-lg">
+            <p><strong>am / is / are</strong> İngilizcedeki "to be" fiilinin şimdiki zaman halidir ve Türkçe'deki <em>olmak</em>, <em>bulunmak</em> veya <em>-dir/-dir</em> ek anlamlarını karşılar.</p>
+          </div>
+        ),
         explanationParts: [
-          <div>Temel bilgiler: Özneye göre fiil çekimini unutmayın.</div>,
-          <div>Olumlu cümleler: "I am a student" gibi.</div>,
-          <div>Olumsuz cümleler: "not" ekleyin.</div>
+          <div className="space-y-6">
+            <h4 className="text-2xl font-black text-slate-800">Kullanım Alanları</h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                <span className="font-black text-fun-blue block">1. Kimlik belirtme</span>
+                <p className="text-slate-800 font-bold mt-1">Ben öğrenciyim.</p>
+                <p className="text-slate-500 italic">→ I am a student.</p>
+              </div>
+              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                <span className="font-black text-fun-purple block">2. Meslek belirtme</span>
+                <p className="text-slate-800 font-bold mt-1">O doktor.</p>
+                <p className="text-slate-500 italic">→ He is a doctor.</p>
+              </div>
+              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                <span className="font-black text-fun-green block">3. Duygu belirtme</span>
+                <p className="text-slate-800 font-bold mt-1">Mutluyum.</p>
+                <p className="text-slate-500 italic">→ I am happy.</p>
+              </div>
+              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                <span className="font-black text-fun-orange block">4. Yer belirtme</span>
+                <p className="text-slate-800 font-bold mt-1">Evdeler.</p>
+                <p className="text-slate-500 italic">→ They are at home.</p>
+              </div>
+              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 col-span-1 sm:col-span-2">
+                <span className="font-black text-fun-pink block">5. Yaş belirtme</span>
+                <p className="text-slate-800 font-bold mt-1">20 yaşındayım.</p>
+                <p className="text-slate-500 italic">→ I am 20 years old.</p>
+              </div>
+            </div>
+
+            <div className="mt-6">
+              <h4 className="font-bold text-slate-800 mb-2">Özneye Göre Kullanım:</h4>
+              <div className="grid grid-cols-3 gap-2 text-center text-sm">
+                <div className="bg-blue-50 p-3 rounded-xl border border-blue-100 font-bold">
+                  <span className="text-fun-blue block">I</span> am
+                </div>
+                <div className="bg-purple-50 p-3 rounded-xl border border-purple-100 font-bold">
+                  <span className="text-fun-purple block">He/She/It</span> is
+                </div>
+                <div className="bg-green-50 p-3 rounded-xl border border-green-100 font-bold">
+                  <span className="text-fun-green block">You/We/They</span> are
+                </div>
+              </div>
+            </div>
+          </div>,
+          <div className="space-y-6">
+            <h4 className="text-2xl font-black text-slate-800">Cümle Yapısı</h4>
+            <div className="bg-amber-50 border-2 border-amber-200 p-4 rounded-2xl">
+              <p className="font-mono text-base font-black text-amber-950">Özne + am / is / are + tamamlayıcı</p>
+            </div>
+            
+            <div className="space-y-2 font-bold text-slate-700 text-sm">
+              <p>Örnekler:</p>
+              <div className="bg-white p-3 rounded-xl border shadow-sm">
+                <p>I am tired. <span className="text-slate-500 font-medium">→ Yorgunum.</span></p>
+              </div>
+              <div className="bg-white p-3 rounded-xl border shadow-sm">
+                <p>She is beautiful. <span className="text-slate-500 font-medium">→ O güzel.</span></p>
+              </div>
+              <div className="bg-white p-3 rounded-xl border shadow-sm">
+                <p>They are students. <span className="text-slate-500 font-medium">→ Onlar öğrenci.</span></p>
+              </div>
+            </div>
+
+            <div className="mt-6">
+              <h4 className="text-2xl font-black text-slate-800">Kısaltmalar</h4>
+              <p className="text-slate-600 mb-3 text-sm">Konuşma İngilizcesinde kısaltmalar çok sık tercih edilir.</p>
+              <div className="overflow-hidden border border-slate-100 rounded-2xl shadow-sm text-sm">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="bg-slate-100 font-black text-slate-600 text-xs">
+                      <th className="p-3">Uzun Hâl</th>
+                      <th className="p-3">Kısa Hâl</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 font-bold text-slate-700">
+                    <tr>
+                      <td className="p-3">I am</td>
+                      <td className="p-3 text-fun-pink">I'm</td>
+                    </tr>
+                    <tr>
+                      <td className="p-3">He is / She is</td>
+                      <td className="p-3 text-fun-pink font-bold">He's / She's</td>
+                    </tr>
+                    <tr>
+                      <td className="p-3">They are</td>
+                      <td className="p-3 text-fun-pink font-bold">They're</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>,
+          <div className="space-y-6">
+            <h4 className="text-2xl font-black text-slate-800">Olumsuz Yapı & Hatalar</h4>
+            <div>
+              <h5 className="font-black text-xs uppercase tracking-widest text-slate-400 mb-2">Olumsuz Yapı</h5>
+              <p className="text-sm text-slate-600 mb-3">Olumsuz cümle yaparken yardımcı fiilden sonra <strong className="text-fun-pink">not</strong> eklenir.</p>
+              
+              <div className="space-y-2 text-sm font-bold">
+                <div className="bg-slate-50 p-3 rounded-xl border">
+                  <p>I am not hungry. <span className="text-slate-500 font-medium">→ Aç değilim.</span></p>
+                </div>
+                <div className="bg-slate-50 p-3 rounded-xl border">
+                  <p>She isn't busy. <span className="text-slate-500 font-medium">→ Meşgul değil.</span></p>
+                </div>
+                <div className="bg-slate-50 p-3 rounded-xl border">
+                  <p>They aren't here. <span className="text-slate-500 font-medium">→ Burada değiller.</span></p>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-6">
+              <h4 className="text-2xl font-black text-slate-800">Sık Yapılan Hatalar</h4>
+              <div className="space-y-3 mt-3 text-sm">
+                <div className="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm">
+                  <p className="text-red-500 font-bold line-through">❌ She are happy.</p>
+                  <p className="text-green-600 font-black">✅ She is happy.</p>
+                </div>
+                <div className="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm">
+                  <p className="text-red-500 font-bold line-through">❌ I is tired.</p>
+                  <p className="text-green-600 font-black">✅ I am tired.</p>
+                </div>
+              </div>
+            </div>
+          </div>
         ]
       }
     }
