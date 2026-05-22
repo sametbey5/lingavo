@@ -1,5 +1,5 @@
 {
-  "name": "Lingavo - Learn Languages",
+  "name": "Smart Language",
   "description": "A professional English learning platform. Features real-time competitive races, roleplay scenarios, vocabulary building with pronunciation, and grammar coaching.",
   "requestFramePermissions": ["microphone"],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]

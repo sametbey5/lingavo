@@ -263,6 +263,47 @@ const STATIC_DICTIONARY: DictionaryWord[] = [
   }
 ];
 
+const WORD_IMAGES: Record<string, string> = {
+  "hello": "https://images.unsplash.com/photo-1516214104703-d870798883c5?w=500&auto=format&fit=crop&q=80",
+  "family": "https://images.unsplash.com/photo-1511895426328-dc8714191300?w=500&auto=format&fit=crop&q=80",
+  "beautiful": "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=500&auto=format&fit=crop&q=80",
+  "journey": "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=500&auto=format&fit=crop&q=80",
+  "bright": "https://images.unsplash.com/photo-1507608869274-d3177c8bb4c7?w=500&auto=format&fit=crop&q=80",
+  "adventure": "https://images.unsplash.com/photo-1501555088652-021faa106b9b?w=500&auto=format&fit=crop&q=80",
+  "celebrate": "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=500&auto=format&fit=crop&q=80",
+  "curious": "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=500&auto=format&fit=crop&q=80",
+  "delicious": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=500&auto=format&fit=crop&q=80",
+  "explore": "https://images.unsplash.com/photo-1527549993586-dff825b37782?w=500&auto=format&fit=crop&q=80",
+  "collaborate": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=500&auto=format&fit=crop&q=80",
+  "essential": "https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?w=500&auto=format&fit=crop&q=80",
+  "challenge": "https://images.unsplash.com/photo-1513593771513-7b58b6c4af38?w=500&auto=format&fit=crop&q=80",
+  "patience": "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=500&auto=format&fit=crop&q=80",
+  "navigate": "https://images.unsplash.com/photo-1524661135-423995f22d0b?w=500&auto=format&fit=crop&q=80",
+  "perspective": "https://images.unsplash.com/photo-1500485035595-cbe6f645feb1?w=500&auto=format&fit=crop&q=80",
+  "resilient": "https://images.unsplash.com/photo-1485550409059-9afb054cada4?w=500&auto=format&fit=crop&q=80",
+  "analyse": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=500&auto=format&fit=crop&q=80",
+  "accomplish": "https://images.unsplash.com/photo-1531545514256-b1400bc00f31?w=500&auto=format&fit=crop&q=80",
+  "significant": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=500&auto=format&fit=crop&q=80",
+  "pragmatic": "https://images.unsplash.com/photo-1504140713414-2a6c17e3be9e?w=500&auto=format&fit=crop&q=80",
+  "eloquent": "https://images.unsplash.com/photo-1455390582262-044cdead277a?w=500&auto=format&fit=crop&q=80",
+  "ambiguous": "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=500&auto=format&fit=crop&q=80",
+  "benevolent": "https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?w=500&auto=format&fit=crop&q=80",
+  "superfluous": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500&auto=format&fit=crop&q=80",
+  "pristine": "https://images.unsplash.com/photo-1473448912268-2022ce9509d8?w=500&auto=format&fit=crop&q=80",
+  "idiosyncrasy": "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=500&auto=format&fit=crop&q=80",
+  "capricious": "https://images.unsplash.com/photo-1534274988757-a28bf1a57c17?w=500&auto=format&fit=crop&q=80",
+  "quintessential": "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=500&auto=format&fit=crop&q=80",
+  "ineffable": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=500&auto=format&fit=crop&q=80"
+};
+
+const getWordImage = (word: string): string => {
+  const normalized = word.trim().toLowerCase();
+  if (WORD_IMAGES[normalized]) {
+    return WORD_IMAGES[normalized];
+  }
+  return `https://picsum.photos/seed/${encodeURIComponent(normalized)}/400/300`;
+};
+
 const WordBank: React.FC = () => {
   const { cefrLevel, wordBank, addToWordBank, awardPoints } = useGamification();
 
@@ -523,7 +564,7 @@ const WordBank: React.FC = () => {
           <div className="text-center font-bold text-slate-400 mb-2 sm:mb-4 tracking-widest uppercase text-[10px] sm:text-xs">
             {currentFlashcardIndex + 1} OF {filteredWords.length}
           </div>
-          <div className="relative h-[250px] sm:h-[350px] md:h-[400px] w-full perspective-1000 mb-4 sm:mb-8 z-10" onClick={() => setIsFlipped(!isFlipped)}>
+          <div className="relative h-[320px] sm:h-[420px] md:h-[460px] w-full perspective-1000 mb-4 sm:mb-8 z-10" onClick={() => setIsFlipped(!isFlipped)}>
             <motion.div
               className="w-full h-full relative transform-style-3d cursor-pointer"
               animate={{ rotateY: isFlipped ? 180 : 0 }}
@@ -545,12 +586,22 @@ const WordBank: React.FC = () => {
                   </div>
                 </div>
 
-                <h4 className="text-4xl sm:text-5xl md:text-6xl font-black text-slate-850 tracking-tight leading-none mb-2 sm:mb-4 group-hover:scale-105 transition-transform duration-300">
+                <h4 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-850 tracking-tight leading-none mb-1 sm:mb-2 group-hover:scale-105 transition-transform duration-300">
                   {filteredWords[currentFlashcardIndex].word}
                 </h4>
                 
+                {/* Single Image representation for word */}
+                <div className="w-full max-w-[200px] sm:max-w-[280px] md:max-w-[340px] h-24 sm:h-36 md:h-44 overflow-hidden rounded-2xl border-2 border-slate-100 my-2 shadow-inner bg-slate-50 relative shrink-0">
+                  <img
+                    src={getWordImage(filteredWords[currentFlashcardIndex].word)}
+                    alt={filteredWords[currentFlashcardIndex].word}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
+                
                 {filteredWords[currentFlashcardIndex].pronunciation && (
-                  <p className="text-sm sm:text-base font-semibold font-mono text-slate-400 tracking-widest uppercase bg-slate-50 py-1 px-2 sm:py-1.5 sm:px-3 rounded-lg inline-block">
+                  <p className="text-xs sm:text-sm font-semibold font-mono text-slate-400 tracking-widest uppercase bg-slate-50 py-1 px-2 sm:py-1.5 sm:px-3 rounded-lg inline-block">
                     {filteredWords[currentFlashcardIndex].pronunciation}
                   </p>
                 )}

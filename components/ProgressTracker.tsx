@@ -2,7 +2,11 @@ import React from 'react';
 import { useGamification } from '../context/GamificationContext';
 import { BarChart, BookOpen, Mic, Ear, PenTool, Globe, TrendingUp } from 'lucide-react';
 
-const ProgressTracker: React.FC = () => {
+interface ProgressTrackerProps {
+  hideHeader?: boolean;
+}
+
+const ProgressTracker: React.FC<ProgressTrackerProps> = ({ hideHeader = false }) => {
   const { stats } = useGamification();
 
   const skills = [
@@ -14,16 +18,18 @@ const ProgressTracker: React.FC = () => {
   ];
 
   return (
-    <div className="bg-white rounded-[2.5rem] border-4 border-slate-100 p-8 shadow-sm relative overflow-hidden">
-      <div className="flex items-center gap-3 mb-6">
-        <TrendingUp size={32} className="text-fun-blue fill-current" />
-        <h3 className="text-2xl font-black text-slate-800 uppercase tracking-tight">Your Progress</h3>
-      </div>
+    <div className={`bg-white shadow-sm relative overflow-hidden ${hideHeader ? 'rounded-2xl border-2 border-slate-100 p-4' : 'rounded-[2.5rem] border-4 border-slate-100 p-8'}`}>
+      {!hideHeader && (
+        <div className="flex items-center gap-3 mb-6">
+          <TrendingUp size={32} className="text-fun-blue fill-current" />
+          <h3 className="text-2xl font-black text-slate-800 uppercase tracking-tight">Your Progress</h3>
+        </div>
+      )}
       
       <div className="space-y-6">
         {skills.map((skill) => {
           // @ts-ignore
-          const skillData = stats.skills[skill.id];
+          const skillData = stats?.skills?.[skill.id];
           if (!skillData) return null;
           
           return (
@@ -54,16 +60,18 @@ const ProgressTracker: React.FC = () => {
         })}
       </div>
       
-      <div className="mt-8 pt-6 border-t-2 border-slate-100 flex justify-between items-center">
-        <div className="text-center flex-1 border-r-2 border-slate-100">
-            <div className="text-3xl font-black text-slate-800">{stats.level}</div>
-            <div className="text-xs font-bold text-slate-400 uppercase">Global Level</div>
+      {!hideHeader && (
+        <div className="mt-8 pt-6 border-t-2 border-slate-100 flex justify-between items-center">
+          <div className="text-center flex-1 border-r-2 border-slate-100">
+              <div className="text-3xl font-black text-slate-800">{stats.level}</div>
+              <div className="text-xs font-bold text-slate-400 uppercase">Global Level</div>
+          </div>
+          <div className="text-center flex-1">
+              <div className="text-3xl font-black text-fun-blue">{stats.points}</div>
+              <div className="text-xs font-bold text-slate-400 uppercase">Total XP</div>
+          </div>
         </div>
-        <div className="text-center flex-1">
-            <div className="text-3xl font-black text-fun-blue">{stats.points}</div>
-            <div className="text-xs font-bold text-slate-400 uppercase">Total XP</div>
-        </div>
-      </div>
+      )}
     </div>
   );
 };

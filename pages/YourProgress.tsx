@@ -2,17 +2,22 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Target, Star, Flame, Zap, CheckCircle2 } from 'lucide-react';
 import { useGamification } from '../context/GamificationContext';
+import ProgressTracker from '../components/ProgressTracker';
 
 const YourProgress: React.FC = () => {
   const navigate = useNavigate();
-  const { stats, quests } = useGamification();
+  const { stats, quests = [] } = useGamification();
 
   const pointsPerLevel = 500;
-  const currentLevelPoints = stats.points % pointsPerLevel;
+  const points = stats?.points ?? 0;
+  const level = stats?.level ?? 1;
+  const streakDays = stats?.streakDays ?? 0;
+
+  const currentLevelPoints = points % pointsPerLevel;
   const progressPercent = Math.min((currentLevelPoints / pointsPerLevel) * 100, 100);
 
-  const completedQuests = quests.filter(q => q.isCompleted);
-  const activeQuests = quests.filter(q => !q.isCompleted);
+  const completedQuests = (quests || []).filter(q => q && q.isCompleted);
+  const activeQuests = (quests || []).filter(q => q && !q.isCompleted);
 
   return (
     <div className="space-y-4 animate-fade-in pb-10 p-4">
@@ -34,7 +39,7 @@ const YourProgress: React.FC = () => {
       <div className="bg-white rounded-2xl border-2 border-slate-100 p-4 shadow-sm">
         <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Current Level</p>
         <div className="flex items-end gap-2 mb-3">
-          <span className="text-4xl font-black text-slate-800 leading-none">{stats.level}</span>
+          <span className="text-4xl font-black text-slate-800 leading-none">{level}</span>
           <span className="text-slate-400 font-bold text-sm mb-1">/ Next level in {pointsPerLevel - currentLevelPoints} XP</span>
         </div>
         <div className="w-full bg-slate-100 rounded-full h-3 overflow-hidden">
@@ -53,12 +58,12 @@ const YourProgress: React.FC = () => {
       <div className="grid grid-cols-3 gap-3">
         <div className="bg-yellow-50 border-2 border-yellow-100 rounded-2xl p-3 flex flex-col items-center gap-1">
           <Star className="text-fun-yellow fill-current w-5 h-5" />
-          <span className="text-xl font-black text-slate-800 leading-none">{stats.points}</span>
+          <span className="text-xl font-black text-slate-800 leading-none">{points}</span>
           <span className="text-[9px] font-black text-slate-400 uppercase tracking-wide">Total XP</span>
         </div>
         <div className="bg-orange-50 border-2 border-orange-100 rounded-2xl p-3 flex flex-col items-center gap-1">
           <Flame className="text-orange-500 fill-current w-5 h-5" />
-          <span className="text-xl font-black text-slate-800 leading-none">{stats.streakDays}</span>
+          <span className="text-xl font-black text-slate-800 leading-none">{streakDays}</span>
           <span className="text-[9px] font-black text-slate-400 uppercase tracking-wide">Day Streak</span>
         </div>
         <div className="bg-green-50 border-2 border-green-100 rounded-2xl p-3 flex flex-col items-center gap-1">
@@ -69,6 +74,7 @@ const YourProgress: React.FC = () => {
       </div>
 
       {/* Progress Tracker component */}
+      <ProgressTracker hideHeader={true} />
 
       {/* Active Quests */}
       {activeQuests.length > 0 && (
