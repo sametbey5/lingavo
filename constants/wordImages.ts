@@ -1,8 +1,8 @@
 export const WORD_IMAGES: Record<string, string> = {
   // --- A1 Words ---
-  "a / an": "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=500&auto=format&fit=crop&q=80",
-  "about": "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=500&auto=format&fit=crop&q=80",
-  "above": "https://images.unsplash.com/photo-1502082553048-f009c37129b9?w=500&auto=format&fit=crop&q=80",
+  "a / an": "https://i.ibb.co/KjhV7njH/aan.jpg?w=500&auto=format&fit=crop&q=80",
+  "about": "https://i.ibb.co/pt3s9qB/about.jpg?w=500&auto=format&fit=crop&q=80",
+  "above": "https://i.ibb.co/bMvXDt8d/above.jpg?w=500&auto=format&fit=crop&q=80",
   "across": "https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?w=500&auto=format&fit=crop&q=80",
   "action": "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=500&auto=format&fit=crop&q=80",
   "activity": "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=500&auto=format&fit=crop&q=80",

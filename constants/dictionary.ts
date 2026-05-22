@@ -12,7 +12,7 @@ export const CAMBRIDGE_DICTIONARY: DictionaryWord[] = [
   {
     word: "A / An",
     definition: "Used before singular nouns that are countable.",
-    exampleSentence: "I have a cat and an elephant.",
+    exampleSentence: "I have a dog and an elephant.",
     pronunciation: "/ə/, /æn/",
     level: "A1",
     category: "Determiner"
@@ -412,7 +412,7 @@ export const CAMBRIDGE_DICTIONARY: DictionaryWord[] = [
   {
     word: "Back",
     definition: "To the rear or returning to a place.",
-    exampleSentence: "I will be back home in ten minutes.",
+    exampleSentence: "The children sit at the back of the car.",
     pronunciation: "/bæk/",
     level: "A1",
     category: "Adverb & Noun"
@@ -420,7 +420,7 @@ export const CAMBRIDGE_DICTIONARY: DictionaryWord[] = [
   {
     word: "Bad",
     definition: "Of poor, low quality or unpleasant.",
-    exampleSentence: "Staring at screens all night is bad for your eyes.",
+    exampleSentence: "I feel bad today.",
     pronunciation: "/bæd/",
     level: "A1",
     category: "Adjective"
@@ -508,7 +508,7 @@ export const CAMBRIDGE_DICTIONARY: DictionaryWord[] = [
   {
     word: "Beautiful",
     definition: "Pleasing the senses aesthetically.",
-    exampleSentence: "What a beautiful garden of colourful flowers!",
+    exampleSentence: "What a beautiful peacock!",
     pronunciation: "/ˈbjuː.tɪ.fəl/",
     level: "A1",
     category: "Adjective"
