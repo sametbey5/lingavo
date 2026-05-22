@@ -451,37 +451,35 @@ const WordBank: React.FC = () => {
   }, [allDictionaryWords, selectedLevel, searchQuery, wordBank]);
 
   return (
-    <div className="p-2 sm:p-4 max-w-4xl mx-auto space-y-3 sm:space-y-4 animate-fade-in">
+    <div className="p-2 sm:p-3 max-w-xl mx-auto space-y-2.5 sm:space-y-3 animate-fade-in">
       
-      {/* Header Banner */}
-      <div className="relative bg-white rounded-2xl p-3 sm:p-4 shadow-md border-2 border-slate-100 overflow-hidden">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 relative z-10">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-fun-blue rounded-xl flex items-center justify-center text-white text-lg font-black shrink-0">
+      {/* Integrated Header and Level Filters Navigation */}
+      <div className="bg-white rounded-xl p-2.5 sm:p-3 shadow-md border-2 border-slate-100 flex flex-col gap-2">
+        <div className="flex items-center justify-between gap-2.5">
+          <div className="flex items-center gap-2">
+            <h1 className="text-lg sm:text-xl font-black text-slate-800 uppercase tracking-tight">
+              Dictionary
+            </h1>
+            <div className="px-1.5 py-0.5 bg-fun-blue/10 text-fun-blue text-[9px] font-black rounded-md uppercase tracking-wider shrink-0">
               {cefrLevel || 'A1'}
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="bg-fun-pink text-white text-[8px] sm:text-[9px] font-black uppercase px-2 py-0.5 rounded-full tracking-wider shrink-0">
-                  Level-Adaptive
-                </span>
-              </div>
-              <h1 className="text-xl sm:text-2xl font-black text-slate-800 uppercase tracking-tight leading-none mt-0.5">
-                Dictionary
-              </h1>
-            </div>
           </div>
-          <div className="hidden sm:block text-right shrink-0">
-            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none">Your Level Indicator</p>
-            <h4 className="font-bold text-slate-600 text-xs mt-0.5">Recommended Starting Point</h4>
+          
+          {/* Search bar integrated cleanly directly inside the top row */}
+          <div className="relative w-36 xs:w-44 shrink-0">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search..."
+              className="w-full pl-7 pr-2.5 py-1 rounded-lg border border-slate-200 focus:border-fun-blue bg-white font-bold text-[11px] text-slate-700 placeholder-slate-400 outline-none"
+            />
+            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 w-3 h-3" />
           </div>
         </div>
-      </div>
 
-      {/* Tabs and Searching Hub */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 bg-slate-50 p-2 sm:p-3 rounded-2xl border border-slate-200">
-        {/* Level Filters */}
-        <div className="flex flex-wrap gap-1.5">
+        {/* Level Filters + Saves integrated right in the header bar */}
+        <div className="flex flex-wrap items-center gap-1.5 overflow-x-auto pb-0.5 scrollbar-none no-scrollbar">
           {(['A1', 'A2', 'B1', 'B2', 'C1', 'C2'] as const).map(level => {
             const isUserLevel = level === cefrLevel;
             const isSelected = selectedLevel === level;
@@ -492,15 +490,15 @@ const WordBank: React.FC = () => {
                   setSelectedLevel(level);
                   setSearchQuery('');
                 }}
-                className={`px-2 md:px-3 py-1.5 md:py-2 rounded-xl font-bold text-[11px] md:text-xs uppercase transition-all duration-200 flex items-center gap-1 transform active:scale-95 ${
+                className={`px-2 py-1 rounded-lg font-bold text-[10px] md:text-11px uppercase transition-all duration-200 flex items-center gap-0.5 transform active:scale-95 shrink-0 ${
                   isSelected
                     ? 'bg-fun-blue text-white shadow-sm border-b-2 border-blue-800'
-                    : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+                    : 'bg-white text-slate-600 hover:bg-slate-105 border border-slate-200'
                 }`}
               >
                 <span>{level}</span>
                 {isUserLevel && (
-                  <span className={`text-[7px] md:text-[8px] font-black px-1.5 py-0.2 rounded-full shrink-0 ${
+                  <span className={`text-[7px] font-black px-1 py-0.2 rounded-md shrink-0 ${
                     isSelected ? 'bg-white text-fun-blue' : 'bg-fun-pink text-white animate-pulse'
                   }`}>
                     REC
@@ -515,39 +513,25 @@ const WordBank: React.FC = () => {
               setSelectedLevel('saved');
               setSearchQuery('');
             }}
-            className={`px-2 md:px-3 py-1.5 md:py-2 rounded-xl font-bold text-[11px] md:text-xs uppercase transition-all duration-200 flex items-center gap-1 transform active:scale-95 ${
+            className={`px-2 py-1 rounded-lg font-bold text-[10px] md:text-11px uppercase transition-all duration-200 flex items-center gap-1 transform active:scale-95 shrink-0 ${
               selectedLevel === 'saved'
-                ? 'bg-fun-pink text-white shadow-sm border-b-2 border-pink-800'
-                : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+                ? 'bg-fun-pink text-white shadow-sm border-b-2 border-pink-805'
+                : 'bg-white text-slate-600 hover:bg-slate-105 border border-slate-200'
             }`}
           >
-            <Bookmark className="w-3 h-3 fill-current" />
+            <Bookmark className="w-2.5 h-2.5 fill-current" />
             <span>Saves</span>
-            <span className="text-[9px] bg-black/10 px-1 py-0.2 rounded-full">{wordBank.length}</span>
+            <span className="text-[9px] bg-black/10 px-1 py-0.2 rounded-md font-black">{wordBank.length}</span>
           </button>
-        </div>
-
-        {/* Live Search Block */}
-        <div className="relative w-full md:max-w-[200px] shrink-0">
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder={`Search words...`}
-            className="w-full pl-8 pr-3 py-1.5 rounded-xl border border-slate-200 focus:border-fun-blue bg-white font-bold text-xs text-slate-700 placeholder-slate-400 outline-none transition-all shadow-sm"
-          />
-          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 w-3.5 h-3.5" />
         </div>
       </div>
 
-
-
       {/* Main Flashcard Area */}
       {filteredWords.length === 0 ? (
-        <div className="bg-white rounded-[2.5rem] p-12 text-center shadow-lg border-2 border-slate-100 max-w-lg mx-auto">
-          <BookOpen size={48} className="text-fun-pink mx-auto mb-4" />
-          <h3 className="text-2xl font-black text-slate-800">No matching words</h3>
-          <p className="text-slate-400 font-bold mt-2">
+        <div className="bg-white rounded-[2rem] p-8 text-center shadow-lg border-2 border-slate-100 max-w-sm mx-auto">
+          <BookOpen size={40} className="text-fun-pink mx-auto mb-3" />
+          <h3 className="text-xl font-black text-slate-800">No matching words</h3>
+          <p className="text-slate-400 font-bold mt-1 text-xs">
             Try choosing a different level tab or clearing your search queries!
           </p>
         </div>
@@ -556,7 +540,7 @@ const WordBank: React.FC = () => {
           <div className="text-center font-bold text-slate-400 mb-1 tracking-widest uppercase text-[10px]">
             {currentFlashcardIndex + 1} OF {filteredWords.length}
           </div>
-          <div className="relative h-[240px] sm:h-[280px] md:h-[300px] w-full perspective-1000 mb-3 sm:mb-4 z-10" onClick={() => setIsFlipped(!isFlipped)}>
+          <div className="relative h-[290px] sm:h-[340px] md:h-[360px] w-full perspective-1000 mb-3 z-10" onClick={() => setIsFlipped(!isFlipped)}>
             <motion.div
               className="w-full h-full relative transform-style-3d cursor-pointer"
               animate={{ rotateY: isFlipped ? 180 : 0 }}
@@ -578,12 +562,12 @@ const WordBank: React.FC = () => {
                   </div>
                 </div>
 
-                <h4 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-850 tracking-tight leading-none mb-1 group-hover:scale-105 transition-transform duration-300">
+                <h4 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-850 tracking-tight leading-none mb-1 group-hover:scale-105 transition-transform duration-300">
                   {filteredWords[currentFlashcardIndex].word}
                 </h4>
                 
-                {/* Single Image representation for word */}
-                <div className="w-full max-w-[130px] sm:max-w-[180px] md:max-w-[220px] h-14 sm:h-20 md:h-24 overflow-hidden rounded-xl border border-slate-100 my-1 shadow-inner bg-slate-50 relative shrink-0">
+                {/* Single Image representation for word - Made SIGNIFICANTLY larger */}
+                <div className="w-full max-w-[200px] sm:max-w-[260px] md:max-w-[300px] h-24 sm:h-32 md:h-36 overflow-hidden rounded-xl border border-slate-200 my-1.5 shadow-inner bg-slate-50 relative shrink-0">
                   <img
                     src={getWordImage(filteredWords[currentFlashcardIndex].word)}
                     alt={filteredWords[currentFlashcardIndex].word}
@@ -598,7 +582,7 @@ const WordBank: React.FC = () => {
                   </p>
                 )}
 
-                <div className="absolute bottom-2 left-0 w-full text-center text-slate-300 font-black text-[9px] uppercase tracking-widest animate-pulse">
+                <div className="absolute bottom-2 left-0 w-full text-center text-slate-305 font-black text-[9px] uppercase tracking-widest animate-pulse">
                   Click to reveal meaning
                 </div>
                 
@@ -618,7 +602,7 @@ const WordBank: React.FC = () => {
                 className="absolute w-full h-full bg-slate-800 text-white rounded-2xl md:rounded-[2rem] p-4 sm:p-6 shadow-xl border-2 border-slate-700 flex flex-col items-center justify-center text-center rotate-y-180 group"
                 style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
               >
-                <h4 className="text-xl sm:text-2xl font-black mb-1 sm:mb-2 tracking-tight text-yellow-300">
+                <h4 className="text-2xl sm:text-3xl font-black mb-1 sm:mb-2 tracking-tight text-yellow-300">
                   {filteredWords[currentFlashcardIndex].word}
                 </h4>
                 
@@ -727,7 +711,6 @@ const WordBank: React.FC = () => {
           </div>
         </div>
       )}
-
 
     </div>
   );
