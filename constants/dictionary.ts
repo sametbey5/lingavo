@@ -564,7 +564,7 @@ export const CAMBRIDGE_DICTIONARY: DictionaryWord[] = [
   {
     word: "Begin",
     definition: "To start doing something or initiate.",
-    exampleSentence: "When does the morning class begin?",
+    exampleSentence: "When do you start working?",
     pronunciation: "/bɪˈɡɪn/",
     level: "A1",
     category: "Verb"
@@ -580,7 +580,7 @@ export const CAMBRIDGE_DICTIONARY: DictionaryWord[] = [
   {
     word: "Behind",
     definition: "At the back of or on the far side.",
-    exampleSentence: "The cat is hiding behind the armchair.",
+    exampleSentence: "The cat is hiding behind the vase.",
     pronunciation: "/bɪˈhaɪnd/",
     level: "A1",
     category: "Preposition"
@@ -588,7 +588,7 @@ export const CAMBRIDGE_DICTIONARY: DictionaryWord[] = [
   {
     word: "Believe",
     definition: "To accept something as true.",
-    exampleSentence: "I believe everything you told me.",
+    exampleSentence: "She doesn't believe in ghosts.",
     pronunciation: "/bɪˈliːv/",
     level: "A1",
     category: "Verb"
@@ -596,7 +596,7 @@ export const CAMBRIDGE_DICTIONARY: DictionaryWord[] = [
   {
     word: "Below",
     definition: "At a lower level or line than.",
-    exampleSentence: "Please read the sentence written below.",
+    exampleSentence: "The fish are swimming below the boat.",
     pronunciation: "/bɪˈlgʊ/",
     level: "A1",
     category: "Preposition"
@@ -604,7 +604,7 @@ export const CAMBRIDGE_DICTIONARY: DictionaryWord[] = [
   {
     word: "Best",
     definition: "Of the most excellent kind or quality.",
-    exampleSentence: "This is the best bakery in our town.",
+    exampleSentence: "This is the best pizza!",
     pronunciation: "/best/",
     level: "A1",
     category: "Adjective"
@@ -620,7 +620,7 @@ export const CAMBRIDGE_DICTIONARY: DictionaryWord[] = [
   {
     word: "Between",
     definition: "In the middle of two distinct points.",
-    exampleSentence: "Sit down between Sam and John.",
+    exampleSentence: "The dog is between the two boxes.",
     pronunciation: "/bɪˈtwiːn/",
     level: "A1",
     category: "Preposition"
@@ -636,7 +636,7 @@ export const CAMBRIDGE_DICTIONARY: DictionaryWord[] = [
   {
     word: "Big",
     definition: "Large in physical scale or size.",
-    exampleSentence: "They live in a big house with a garden.",
+    exampleSentence: "They live in a big house.",
     pronunciation: "/bɪɡ/",
     level: "A1",
     category: "Adjective"
@@ -644,7 +644,7 @@ export const CAMBRIDGE_DICTIONARY: DictionaryWord[] = [
   {
     word: "Bike",
     definition: "An informal short word for a bicycle.",
-    exampleSentence: "He bought a new mountain bike last week.",
+    exampleSentence: "She rides her new mountain bike.",
     pronunciation: "/baɪk/",
     level: "A1",
     category: "Noun"
@@ -652,7 +652,7 @@ export const CAMBRIDGE_DICTIONARY: DictionaryWord[] = [
   {
     word: "Bill",
     definition: "A written list showing how much you owe.",
-    exampleSentence: "We requested the electricity bill this morning.",
+    exampleSentence: "I need to pay my phone bill",
     pronunciation: "/bɪl/",
     level: "A1",
     category: "Noun"
@@ -660,7 +660,7 @@ export const CAMBRIDGE_DICTIONARY: DictionaryWord[] = [
   {
     word: "Bird",
     definition: "A feathered creature that can fly.",
-    exampleSentence: "A beautiful bird is singing outside my window.",
+    exampleSentence: "A beautiful bird is singing on window.",
     pronunciation: "/bɜːd/",
     level: "A1",
     category: "Noun"
@@ -668,7 +668,7 @@ export const CAMBRIDGE_DICTIONARY: DictionaryWord[] = [
   {
     word: "Birthday",
     definition: "The exact anniversary of a person's birth.",
-    exampleSentence: "Happy birthday to my lovely sister!",
+    exampleSentence: "Come to my birthday party!",
     pronunciation: "/ˈbɜːθ.deɪ/",
     level: "A1",
     category: "Noun"
@@ -676,7 +676,7 @@ export const CAMBRIDGE_DICTIONARY: DictionaryWord[] = [
   {
     word: "Black",
     definition: "The darkest visual color.",
-    exampleSentence: "She wore a black dress to the party.",
+    exampleSentence: "The sky is black at night.",
     pronunciation: "/blæk/",
     level: "A1",
     category: "Adjective"
@@ -684,7 +684,7 @@ export const CAMBRIDGE_DICTIONARY: DictionaryWord[] = [
   {
     word: "Blog",
     definition: "An online platform with regular articles.",
-    exampleSentence: "She started writing a travel blog.",
+    exampleSentence: "She is creating her fashion blog.",
     pronunciation: "/blɒɡ/",
     level: "A1",
     category: "Noun"
