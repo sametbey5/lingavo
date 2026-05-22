@@ -12,7 +12,7 @@ export const CAMBRIDGE_DICTIONARY: DictionaryWord[] = [
   {
     word: "A / An",
     definition: "Used before singular nouns that are countable.",
-    exampleSentence: "I have a cat and an orange.",
+    exampleSentence: "I have a cat and an elephant.",
     pronunciation: "/ə/, /æn/",
     level: "A1",
     category: "Determiner"
@@ -92,7 +92,7 @@ export const CAMBRIDGE_DICTIONARY: DictionaryWord[] = [
   {
     word: "Adult",
     definition: "A person who is fully grown or of legal age.",
-    exampleSentence: "This theme park ride is for adults only.",
+    exampleSentence: "He is a grown adult",
     pronunciation: "/ˈæd.ʌlt/",
     level: "A1",
     category: "Noun"
@@ -196,7 +196,7 @@ export const CAMBRIDGE_DICTIONARY: DictionaryWord[] = [
   {
     word: "Amazing",
     definition: "Extremely surprising, excellent, or wonderful.",
-    exampleSentence: "This sunset is absolutely amazing!",
+    exampleSentence: "This garden is absolutely amazing!",
     pronunciation: "/əˈmeɪ.zɪŋ/",
     level: "A1",
     category: "Adjective"
@@ -236,7 +236,7 @@ export const CAMBRIDGE_DICTIONARY: DictionaryWord[] = [
   {
     word: "Answer",
     definition: "To respond to a question or phone call.",
-    exampleSentence: "Please write the correct answer on your sheet.",
+    exampleSentence: "Please answer the phone.",
     pronunciation: "/ˈɑːn.sər/",
     level: "A1",
     category: "Noun & Verb"
@@ -348,7 +348,7 @@ export const CAMBRIDGE_DICTIONARY: DictionaryWord[] = [
   {
     word: "As",
     definition: "Used to describe a role or comparison.",
-    exampleSentence: "He works as a friendly English teacher.",
+    exampleSentence: "He works as a friendly fireman.",
     pronunciation: "/æz/",
     level: "A1",
     category: "Preposition"
