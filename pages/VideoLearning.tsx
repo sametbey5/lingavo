@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Heart, MessageCircle, Share2, Bookmark, Music2, Volume2, VolumeX, ArrowLeft, Star, Sparkles, Users, User, Loader2 } from 'lucide-react';
+import { Heart, MessageCircle, Share2, BookOpen, Bookmark, Music2, Volume2, VolumeX, ArrowLeft, Star, Sparkles, Users, User, Loader2 } from 'lucide-react';
 import { useGamification } from '../context/GamificationContext';
 import ReactPlayer from 'react-player';
 import { motion, AnimatePresence } from 'motion/react';
@@ -19,22 +19,36 @@ interface Video {
   comments: string;
   channellink?: string;
   avatar?: string;
+  lessonId?: string;
 }
 
 const FALLBACK_VIDEOS: Video[] = [
   { 
-    id: 'abc', 
-    title: 'The Alphabet Adventure', 
-    category: 'Basics', 
+    id: 'movie-1', 
+    title: 'The Great Gatsby - "I am Gatsby"', 
+    category: 'Movies', 
     color: 'bg-fun-pink', 
     url: 'https://videos.pexels.com/video-files/5906253/5906253-hd_1920_1080_25fps.mp4',
-    author: '@HeroTeacher',
-    description: 'Let\'s learn the ABCs together! Sing along and master the alphabet in minutes. 🍎📚',
-    likes: '12.4K',
-    comments: '1.2K',
-    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=HeroTeacher'
+    author: '@CinemaEnglish',
+    description: 'Listen closely to how Gatsby introduces himself using the Present Simple "To Be".',
+    likes: '45.1K',
+    comments: '3.4K',
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Cinema',
+    lessonId: 'a1-1'
   },
-  // ... (other fallback videos can keep using dicebear if avatar is missing)
+  { 
+    id: 'movie-2', 
+    title: 'Interstellar - "We are explorers"', 
+    category: 'Movies', 
+    color: 'bg-fun-blue', 
+    url: 'https://videos.pexels.com/video-files/5906253/5906253-hd_1920_1080_25fps.mp4',
+    author: '@SciFiLearner',
+    description: 'A powerful use of the verb "to be" with "we" to talk about identity.',
+    likes: '89.2K',
+    comments: '5.1K',
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=SciFi',
+    lessonId: 'a1-1'
+  }
 ];
 
 const VideoItem: React.FC<{ video: Video, isActive: boolean }> = ({ video, isActive }) => {
@@ -136,7 +150,20 @@ const VideoItem: React.FC<{ video: Video, isActive: boolean }> = ({ video, isAct
             {video.description}
           </p>
 
-          <div className="flex items-center gap-2 text-white/80 text-sm">
+          {video.lessonId && (
+            <button 
+              onClick={(e) => { 
+                e.stopPropagation(); 
+                navigate(`/grammar?lessonId=${video.lessonId}`); 
+              }}
+              className="mt-2 bg-fun-blue/80 hover:bg-fun-blue text-white px-4 py-2 rounded-xl text-sm font-bold flex items-center justify-center gap-2 backdrop-blur-md transition-all shadow-xl"
+            >
+              <BookOpen size={16} />
+              Learn About This Topic
+            </button>
+          )}
+
+          <div className="flex items-center gap-2 text-white/80 text-sm mt-3">
             <Music2 size={14} className="animate-spin-slow" />
             <div className="overflow-hidden whitespace-nowrap">
               <div className="animate-marquee inline-block">
@@ -204,7 +231,9 @@ const VideoLearning: React.FC = () => {
         </button>
         
         <div className="flex flex-col items-center">
-          <img src="https://i.ibb.co/Fk917rRY/smartclips.png" alt="Smart Clips" className="h-10 mb-2" />
+          <h2 className="text-white text-xl font-black uppercase tracking-widest flex items-center gap-2">
+             🎬 Movie Clips
+          </h2>
         </div>
 
         <div className="w-10 h-10 flex items-center justify-center text-white/60">

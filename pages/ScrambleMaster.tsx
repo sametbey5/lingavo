@@ -11,6 +11,14 @@ const ScrambleMaster: React.FC = () => {
   const isKids = mode === 'kids';
 
   const [level, setLevel] = useState(1);
+
+  const playNextSound = () => {
+    try { new Audio('https://actions.google.com/sounds/v1/ui/button_click.ogg').play().catch(() => {}); } catch(e) {}
+  };
+
+  const playWinSound = () => {
+    try { new Audio('https://actions.google.com/sounds/v1/cartoon/cartoon_success_fanfare.ogg').play().catch(() => {}); } catch(e) {}
+  };
   const [currentSentence, setCurrentSentence] = useState<string>("");
   const [bubbles, setBubbles] = useState<string[]>([]);
   const [selected, setSelected] = useState<string[]>([]);
@@ -57,12 +65,14 @@ const ScrambleMaster: React.FC = () => {
   useEffect(() => { fetchSentence(level); }, []);
 
   const nextLevel = () => {
+      playNextSound();
       const next = level + 1;
       setLevel(next);
       fetchSentence(next);
   };
 
   const handleBubbleClick = (word: string, index: number) => {
+    playNextSound();
     setSelected([...selected, word]);
     const newBubbles = [...bubbles];
     newBubbles.splice(index, 1);
@@ -71,6 +81,7 @@ const ScrambleMaster: React.FC = () => {
 
   const undo = () => {
     if (selected.length === 0) return;
+    playNextSound();
     const last = selected[selected.length - 1];
     setSelected(selected.slice(0, -1));
     setBubbles([...bubbles, last].sort(() => Math.random() - 0.5));
@@ -80,6 +91,7 @@ const ScrambleMaster: React.FC = () => {
     const built = selected.join(' ');
     if (built.toLowerCase() === currentSentence.toLowerCase()) {
       setIsWon(true);
+      playWinSound();
       awardPoints(100, 'Scramble Master Win', 'grammar');
     } else {
       alert("Oops! The order is not quite right. Try again! 🧐");
@@ -87,15 +99,15 @@ const ScrambleMaster: React.FC = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-12 animate-fade-in pb-20">
+    <div className="max-w-4xl mx-auto space-y-8 sm:space-y-12 animate-fade-in pb-20">
       {isWon && <Confetti />}
-      <div className="text-center space-y-4">
-        <h2 className="text-5xl font-black text-slate-800 rainbow-text">SCRAMBLE MASTER</h2>
-        <p className="text-xl font-bold text-slate-500">Unscramble the sentence! Catch the floating words! 🫧</p>
+      <div className="text-center space-y-2 sm:space-y-4">
+        <h2 className="text-3xl sm:text-5xl font-black text-slate-800 rainbow-text">SCRAMBLE MASTER</h2>
+        <p className="text-sm sm:text-xl font-bold text-slate-500">Unscramble the sentence! Catch the floating words! 🫧</p>
         <div className="inline-block bg-fun-blue text-white px-4 py-1 rounded-full font-black text-sm">LEVEL {level} / 1000</div>
       </div>
 
-      <div className="bg-white p-12 rounded-[4rem] shadow-2xl border-4 border-slate-100 min-h-[450px] flex flex-col justify-between items-center gap-10 relative overflow-hidden">
+      <div className="bg-white p-6 sm:p-12 rounded-[2.5rem] sm:rounded-[4rem] shadow-2xl border-4 border-slate-100 min-h-[350px] sm:min-h-[450px] flex flex-col justify-between items-center gap-6 sm:gap-10 relative overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none" style={{ backgroundImage: 'radial-gradient(#BA68C8 2px, transparent 2px)', backgroundSize: '24px 24px' }} />
         
         {loading ? (
@@ -118,13 +130,13 @@ const ScrambleMaster: React.FC = () => {
           <>
             <div className="w-full space-y-4">
               <span className="text-[10px] font-black uppercase text-slate-400 tracking-widest block text-center">Your Sentence</span>
-              <div className="flex flex-wrap justify-center gap-3 min-h-[120px] p-8 bg-slate-50 rounded-[2.5rem] w-full border-4 border-dashed border-slate-200 transition-all">
+              <div className="flex flex-wrap justify-center gap-2 sm:gap-3 min-h-[80px] sm:min-h-[120px] p-4 sm:p-8 bg-slate-50 rounded-[1.5rem] sm:rounded-[2.5rem] w-full border-4 border-dashed border-slate-200 transition-all">
                 {selected.length === 0 && <p className="text-slate-300 font-bold self-center italic">Select words below...</p>}
                 {selected.map((word, i) => (
                   <span 
                     key={i} 
                     onClick={() => undo()}
-                    className="bg-white px-6 py-3 rounded-2xl font-black text-2xl shadow-md text-fun-purple border-b-4 border-slate-100 cursor-pointer hover:bg-red-50 hover:text-red-400 transition-colors animate-pop"
+                    className="bg-white px-4 py-2 sm:px-6 sm:py-3 rounded-xl sm:rounded-2xl font-black text-xl sm:text-2xl shadow-md text-fun-purple border-b-2 sm:border-b-4 border-slate-100 cursor-pointer hover:bg-red-50 hover:text-red-400 transition-colors animate-pop"
                   >
                     {word}
                   </span>
@@ -134,12 +146,12 @@ const ScrambleMaster: React.FC = () => {
 
             <div className="w-full">
               <span className="text-[10px] font-black uppercase text-slate-400 tracking-widest block text-center mb-6">Floating Words</span>
-              <div className="flex flex-wrap justify-center gap-4">
+              <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
                 {bubbles.map((word, i) => (
                   <button
                       key={i}
                       onClick={() => handleBubbleClick(word, i)}
-                      className="bg-fun-purple text-white px-8 py-5 rounded-full font-black text-2xl shadow-xl border-b-8 border-indigo-700 hover:scale-110 active:scale-95 hover:-translate-y-2 transition-all animate-float"
+                      className="bg-fun-purple text-white px-5 py-3 sm:px-8 sm:py-5 rounded-full font-black text-lg sm:text-2xl shadow-xl border-b-4 sm:border-b-8 border-indigo-700 hover:scale-110 active:scale-95 hover:-translate-y-1 sm:hover:-translate-y-2 transition-all animate-float"
                       style={{ animationDelay: `${i * 0.2}s` }}
                   >
                     {word}
@@ -164,8 +176,8 @@ const ScrambleMaster: React.FC = () => {
         )}
       </div>
       
-      <div className="bg-slate-900 p-8 rounded-[3rem] text-white flex items-center gap-6 shadow-2xl">
-         <div className="w-20 h-20 bg-white/10 rounded-2xl flex items-center justify-center text-4xl">💡</div>
+      <div className="bg-slate-900 p-6 sm:p-8 rounded-[2rem] sm:rounded-[3rem] text-white flex flex-col sm:flex-row items-center gap-4 sm:gap-6 shadow-2xl text-center sm:text-left">
+         <div className="w-16 h-16 sm:w-20 sm:h-20 bg-white/10 rounded-2xl flex items-center justify-center text-4xl shrink-0">💡</div>
          <div>
             <h4 className="font-black text-xl mb-1">PRO TIP</h4>
             <p className="font-bold text-slate-400">Remember to start with a Capital letter! Sentences in English usually follow Subject-Verb-Object order.</p>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { 
   BookOpen, 
   CheckCircle, 
@@ -442,10 +442,20 @@ const getLessonVideo = (lesson: Lesson): GrammarVideo => {
 const GrammarLessons: React.FC = () => {
   const { awardPoints, cefrLevel, updateProfile, preferredLanguage } = useGamification();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   
+  const playNextSound = () => {
+    try { new Audio('https://actions.google.com/sounds/v1/ui/button_click.ogg').play().catch(() => {}); } catch(e) {}
+  };
+
+  const playWinSound = () => {
+    try { new Audio('https://actions.google.com/sounds/v1/cartoon/cartoon_success_fanfare.ogg').play().catch(() => {}); } catch(e) {}
+  };
+
   const t = (key: string) => UI_TRANSLATIONS[preferredLanguage]?.[key] || UI_TRANSLATIONS['Turkish']?.[key] || key;
 
   const [selectedLevel, setSelectedLevel] = useState<Level>(cefrLevel || 'A1');
+  const [currentLessonPage, setCurrentLessonPage] = useState(1);
   const [activeTab, setActiveTab] = useState<'lessons' | 'videos'>('lessons');
   const [selectedVideo, setSelectedVideo] = useState<GrammarVideo | null>(null);
   
@@ -463,6 +473,24 @@ const GrammarLessons: React.FC = () => {
       setVideoPointsClaimed(JSON.parse(savedClaimed));
     }
   }, []);
+
+  useEffect(() => {
+    const lessonIdParam = searchParams.get('lessonId');
+    if (lessonIdParam) {
+      const lesson = LESSONS.find(l => l.id === lessonIdParam);
+      if (lesson) {
+        setSelectedLevel(lesson.level);
+        setSelectedLesson(lesson);
+        setPhase('explanation');
+        setExplanationMode('text');
+        setCurrentExerciseIndex(0);
+        setCurrentExplanationPartIndex(0);
+        setFeedback(null);
+        setUserAnswer('');
+        setIsHelpRequested(false);
+      }
+    }
+  }, [searchParams]);
   
   const levelOrder: Level[] = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
   
@@ -513,6 +541,7 @@ const GrammarLessons: React.FC = () => {
   };
 
   const handleNextExercise = () => {
+    playNextSound();
     if (!selectedLesson) return;
     
     if (currentExerciseIndex < selectedLesson.exercises.length - 1) {
@@ -520,6 +549,7 @@ const GrammarLessons: React.FC = () => {
       setUserAnswer('');
       setFeedback(null);
     } else {
+      playWinSound();
       setPhase('completed');
       if (!completedLessons.includes(selectedLesson.id)) {
         setCompletedLessons([...completedLessons, selectedLesson.id]);
@@ -585,6 +615,12 @@ const GrammarLessons: React.FC = () => {
     const filteredLessons = LESSONS.filter(l => l.level === selectedLevel);
     // Dynamically generate a tailored video lesson for EVERY single unit in the course syllabus!
     const filteredVideos = filteredLessons.map(lesson => getLessonVideo(lesson));
+    
+    // Pagination
+    const itemsPerPage = 6;
+    const paginatedLessons = filteredLessons.slice((currentLessonPage - 1) * itemsPerPage, currentLessonPage * itemsPerPage);
+    const paginatedVideos = filteredVideos.slice((currentLessonPage - 1) * itemsPerPage, currentLessonPage * itemsPerPage);
+    const totalPages = Math.ceil(filteredLessons.length / itemsPerPage);
 
     return (
       <div className="max-w-6xl mx-auto space-y-8 animate-fade-in pb-20 px-4">
@@ -624,7 +660,12 @@ const GrammarLessons: React.FC = () => {
             return (
             <button
               key={lvl.id}
-              onClick={() => !locked && setSelectedLevel(lvl.id)}
+              onClick={() => {
+                if (!locked) {
+                  setSelectedLevel(lvl.id);
+                  setCurrentLessonPage(1);
+                }
+              }}
               disabled={locked}
               className={`relative px-6 py-4 rounded-2xl border-b-4 transition-all flex flex-col items-center min-w-[100px] ${
                 selectedLevel === lvl.id 
@@ -642,7 +683,7 @@ const GrammarLessons: React.FC = () => {
         </div>
 
         {/* Current Level Info */}
-        <div className="bg-white p-8 rounded-[2rem] border-4 border-slate-100 shadow-sm text-center max-w-2xl mx-auto">
+        <div className="bg-white p-6 sm:p-8 rounded-[2rem] border-4 border-slate-100 shadow-sm text-center max-w-2xl mx-auto">
            <h3 className="text-2xl font-black text-slate-800 mb-2">
              {LEVELS.find(l => l.id === selectedLevel)?.title} Level
            </h3>
@@ -681,7 +722,7 @@ const GrammarLessons: React.FC = () => {
         {/* Lessons Tab */}
         {activeTab === 'lessons' && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
-            {filteredLessons.map((lesson) => {
+            {paginatedLessons.map((lesson) => {
               const isCompleted = completedLessons.includes(lesson.id);
               const isExam = lesson.id.includes('exam');
               
@@ -732,6 +773,28 @@ const GrammarLessons: React.FC = () => {
                 <p>{t('lessons_coming_soon')}</p>
               </div>
             )}
+            
+            {paginatedLessons.length > 0 && totalPages > 1 && (
+              <div className="col-span-full flex justify-center items-center gap-4 mt-8 pb-4">
+                <Button 
+                  onClick={() => setCurrentLessonPage(p => Math.max(1, p - 1))}
+                  disabled={currentLessonPage === 1}
+                  variant="secondary"
+                >
+                  Previous
+                </Button>
+                <div className="font-bold text-slate-500 bg-white px-4 py-2 rounded-2xl shadow-sm border-2 border-slate-100">
+                  {currentLessonPage} / {totalPages}
+                </div>
+                <Button 
+                  onClick={() => setCurrentLessonPage(p => Math.min(totalPages, p + 1))}
+                  disabled={currentLessonPage === totalPages}
+                  variant="primary"
+                >
+                  Next
+                </Button>
+              </div>
+            )}
           </div>
         )}
 
@@ -749,7 +812,7 @@ const GrammarLessons: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
-              {filteredVideos.map((video) => {
+              {paginatedVideos.map((video) => {
                 const watched = videoWatchedCompleted.includes(video.id);
                 const claimed = videoPointsClaimed.includes(video.id);
                 
@@ -823,6 +886,28 @@ const GrammarLessons: React.FC = () => {
                 </div>
               )}
             </div>
+            
+            {paginatedVideos.length > 0 && totalPages > 1 && (
+              <div className="flex justify-center items-center gap-4 mt-8 pb-4">
+                <Button 
+                  onClick={() => setCurrentLessonPage(p => Math.max(1, p - 1))}
+                  disabled={currentLessonPage === 1}
+                  variant="secondary"
+                >
+                  Previous
+                </Button>
+                <div className="font-bold text-slate-500 bg-white px-4 py-2 rounded-2xl shadow-sm border-2 border-slate-100">
+                  {currentLessonPage} / {totalPages}
+                </div>
+                <Button 
+                  onClick={() => setCurrentLessonPage(p => Math.min(totalPages, p + 1))}
+                  disabled={currentLessonPage === totalPages}
+                  variant="primary"
+                >
+                  Next
+                </Button>
+              </div>
+            )}
           </div>
         )}
 
@@ -864,7 +949,7 @@ const GrammarLessons: React.FC = () => {
                 </div>
 
                 {/* Video Info Details */}
-                <div className="p-8 space-y-6">
+                <div className="p-6 sm:p-8 space-y-6">
                   <div className="flex flex-wrap items-center justify-between gap-4 border-b-2 border-slate-100 pb-4">
                     <div>
                       <div className="flex gap-2 mb-2">
@@ -970,6 +1055,7 @@ const GrammarLessons: React.FC = () => {
     const currentVid = getVideoForLesson(selectedLesson);
 
     const handleNextPart = () => {
+        playNextSound();
         if (hasParts && currentExplanationPartIndex < selectedLesson.explanationParts!.length - 1) {
             setCurrentExplanationPartIndex(prev => prev + 1);
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -979,6 +1065,7 @@ const GrammarLessons: React.FC = () => {
     };
 
     const handlePrevPart = () => {
+        playNextSound();
         if (currentExplanationPartIndex > 0) {
             setCurrentExplanationPartIndex(prev => prev - 1);
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -998,7 +1085,7 @@ const GrammarLessons: React.FC = () => {
             )}
         </div>
         
-        <div className="bg-white p-8 md:p-12 rounded-[3.5rem] border-4 border-slate-100 shadow-xl relative overflow-hidden">
+        <div className="bg-white p-6 sm:p-8 md:p-12 rounded-[3.5rem] border-4 border-slate-100 shadow-xl relative overflow-hidden">
           {/* Progress Bar for Parts */}
           {hasParts && (
               <div className="absolute top-0 left-0 w-full h-2 bg-slate-100">
@@ -1181,7 +1268,7 @@ const GrammarLessons: React.FC = () => {
           <div className="bg-fun-blue h-full transition-all duration-500" style={{ width: `${progress}%` }} />
         </div>
         
-        <div className="bg-white p-8 md:p-12 rounded-[3.5rem] border-4 border-slate-100 shadow-xl">
+        <div className="bg-white p-6 sm:p-8 md:p-12 rounded-[3.5rem] border-4 border-slate-100 shadow-xl">
           <h3 className="text-2xl md:text-3xl font-black text-slate-800 mb-8 leading-tight">
             {exercise.question}
           </h3>

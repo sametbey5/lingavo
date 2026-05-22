@@ -603,7 +603,7 @@ const StoryMode: React.FC = () => {
 
   if (isCompleted) {
     return (
-      <div className="max-w-2xl mx-auto p-8 text-center space-y-8 animate-fade-in">
+      <div className="max-w-2xl mx-auto p-6 sm:p-8 text-center space-y-8 animate-fade-in">
         <div className="w-32 h-32 bg-green-500 rounded-full flex items-center justify-center mx-auto shadow-xl animate-bounce">
           <CheckCircle size={64} className="text-white" />
         </div>

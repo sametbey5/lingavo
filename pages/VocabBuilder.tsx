@@ -203,25 +203,25 @@ const VocabBuilder: React.FC = () => {
 
   if (gameState === 'lobby') {
     return (
-      <div className="max-w-4xl mx-auto space-y-10 animate-fade-in py-10">
+      <div className="max-w-xl mx-auto space-y-6 animate-fade-in py-6">
         
         {/* Banner Card */}
-        <div className="relative text-center space-y-8">
-          <div className="w-24 h-24 sm:w-28 sm:h-28 bg-fun-yellow rounded-full flex items-center justify-center mx-auto shadow-2xl border-4 border-white ring-8 ring-yellow-100 animate-bounce">
-            <Zap size={56} className="text-white fill-current" />
+        <div className="relative text-center space-y-4">
+          <div className="w-16 h-16 sm:w-20 sm:h-20 bg-fun-yellow rounded-full flex items-center justify-center mx-auto shadow-xl border-4 border-white ring-4 ring-yellow-100 animate-bounce">
+            <Zap size={32} className="text-white fill-current" />
           </div>
-          <h2 className="text-4xl sm:text-6xl font-black text-slate-800 uppercase tracking-tighter rainbow-text">
+          <h2 className="text-3xl sm:text-4xl font-black text-slate-800 uppercase tracking-tighter rainbow-text leading-none">
             Level Word Rush
           </h2>
-          <p className="text-lg font-bold text-slate-500 italic">
+          <p className="text-sm font-bold text-slate-500 italic max-w-sm mx-auto px-4">
             Test yourself on all vocabulary words matched exactly to your CEFR language level!
           </p>
 
           {/* Lobby Configuration Dashboard without "learning focus" */}
-          <div className="bg-white p-8 md:p-10 rounded-[3rem] border-4 border-slate-100 shadow-xl space-y-8">
-            <div className="text-left space-y-4">
-              <label className="text-xs font-black uppercase text-slate-400 mb-2 block px-2 tracking-wider flex items-center gap-1">
-                <CheckCircle2 size={14} className="text-fun-green" /> Language Level Target
+          <div className="bg-white p-4 sm:p-6 rounded-[2rem] border-4 border-slate-100 shadow-md space-y-6">
+            <div className="text-left space-y-3">
+              <label className="text-[10px] sm:text-xs font-black uppercase text-slate-400 mb-2 block px-1 tracking-wider flex items-center gap-1">
+                <CheckCircle2 size={12} className="text-fun-green" /> Language Level Target
               </label>
               
               {/* Responsive Selector for CEFR Levels */}
@@ -234,7 +234,7 @@ const VocabBuilder: React.FC = () => {
                       key={lvl}
                       type="button"
                       onClick={() => setActiveTestLevel(lvl)}
-                      className={`py-4 rounded-2xl font-black text-lg transition-all border-2 transform active:scale-95 flex flex-col items-center justify-center relative ${
+                      className={`py-3 sm:py-4 rounded-xl sm:rounded-2xl font-black text-base transition-all border-2 transform active:scale-95 flex flex-col items-center justify-center relative ${
                         isSelected
                           ? 'bg-fun-blue border-blue-600 text-white shadow-md scale-105'
                           : 'bg-slate-50 border-slate-100 text-slate-500 hover:bg-slate-100 hover:border-slate-300'
@@ -253,16 +253,16 @@ const VocabBuilder: React.FC = () => {
                 })}
               </div>
 
-              <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex items-start gap-3 mt-4">
-                <AlertCircle className="text-fun-blue shrink-0 mt-0.5" size={18} />
-                <p className="text-slate-500 font-bold text-xs leading-relaxed">
-                  We'll shuffle and test you on all of the words for the selected level <span className="text-fun-pink font-black uppercase">{activeTestLevel}</span>. Every correct answer builds up your multiplier combo and nets you loads of XP!
+              <div className="bg-slate-50 p-3 rounded-xl border border-slate-100 flex items-start gap-2 mt-4">
+                <AlertCircle className="text-fun-blue shrink-0 mt-0.5" size={14} />
+                <p className="text-slate-500 font-bold text-[10px] sm:text-xs leading-relaxed">
+                  We'll shuffle and test you on all of the words for <span className="text-fun-pink font-black uppercase">{activeTestLevel}</span>. Build a combo to multiply your XP!
                 </p>
               </div>
             </div>
 
-            <Button onClick={startGame} className="w-full py-6 text-2xl transform hover:scale-105 active:scale-95 shadow-xl font-black border-b-8 border-green-800" variant="success" icon={<Zap />}>
-              START RUSH - LEVEL {activeTestLevel}
+            <Button onClick={startGame} className="w-full py-4 sm:py-5 text-lg sm:text-xl transform outline-none shadow-md font-black border-b-4 border-green-800" variant="success">
+              START RUSH - {activeTestLevel}
             </Button>
           </div>
         </div>
@@ -273,63 +273,63 @@ const VocabBuilder: React.FC = () => {
   // Active Game State
   if (gameState === 'playing') {
     return (
-      <div className={`max-w-4xl mx-auto space-y-8 animate-fade-in transition-colors duration-500 ${isFever ? 'bg-orange-50/50 p-4 sm:p-6 rounded-[4rem]' : ''}`}>
+      <div className={`max-w-2xl mx-auto space-y-4 sm:space-y-6 animate-fade-in transition-colors duration-500 ${isFever ? 'bg-orange-50/50 p-2 sm:p-4 rounded-[2rem]' : ''}`}>
         
         {/* Scoring / Timer panel */}
-        <div className={`flex justify-between items-center ${isFever ? 'bg-orange-600 animate-pulse' : 'bg-slate-900'} text-white p-4 sm:p-6 rounded-[2.5rem] shadow-2xl border-4 ${isFever ? 'border-orange-400' : 'border-slate-700'} transition-colors`}>
-           <div className="flex items-center gap-2 sm:gap-3">
-             <div className="bg-white/10 p-2 rounded-xl">
-               <Clock className={timer < 4 ? "text-red-500 animate-wiggle" : "text-fun-blue"} size={24} />
+        <div className={`flex justify-between items-center ${isFever ? 'bg-orange-600 animate-pulse' : 'bg-slate-900'} text-white p-3 sm:p-5 rounded-[1.5rem] sm:rounded-[2rem] shadow-lg border-4 ${isFever ? 'border-orange-400' : 'border-slate-700'} transition-colors`}>
+           <div className="flex items-center gap-2">
+             <div className="bg-white/10 p-1.5 sm:p-2 rounded-xl">
+               <Clock className={timer < 4 ? "text-red-500 animate-wiggle" : "text-fun-blue"} size={20} />
              </div>
-             <span className={`text-2xl sm:text-4xl font-black ${timer < 4 ? 'text-red-500' : 'text-white'}`}>{timer}s</span>
+             <span className={`text-xl sm:text-2xl font-black leading-none ${timer < 4 ? 'text-red-500' : 'text-white'}`}>{timer}s</span>
            </div>
            
-           <div className="flex flex-col items-center">
+           <div className="flex flex-col items-center relative">
               {combo > 1 && (
-                <div className="absolute -top-10 sm:-top-12 animate-bounce bg-fun-yellow text-slate-900 px-4 py-1.5 rounded-full font-black text-xs border-2 border-white shadow-lg">
-                  {combo}X COMBO! {isFever && 'FEVER MODE!'}
+                <div className="absolute -top-8 sm:-top-10 animate-bounce bg-fun-yellow text-slate-900 px-3 py-1 rounded-full font-black text-[10px] sm:text-xs border-2 border-white shadow-sm whitespace-nowrap">
+                  {combo}X {isFever && ' FEVER'}
                 </div>
               )}
-              <div className="text-xl sm:text-3xl font-black text-fun-yellow tracking-widest flex items-center gap-2">
-                <Flame size={20} className={isFever ? "text-orange-400 fill-current animate-pulse animate-float" : "hidden"} />
-                XP: {score}
+              <div className="text-lg sm:text-xl font-black text-fun-yellow tracking-widest flex items-center gap-1.5 sm:gap-2 leading-none">
+                <Flame size={16} className={isFever ? "text-orange-400 fill-current animate-pulse animate-float" : "hidden"} />
+                {score} XP
               </div>
            </div>
            
-           <div className="bg-white/10 px-4 py-1.5 rounded-full text-xs font-black opacity-75 uppercase">
-             {currentIndex + 1} / {words.length}
+           <div className="bg-white/10 px-3 py-1 rounded-full text-[10px] sm:text-xs font-black opacity-75 uppercase">
+             {currentIndex + 1}/{words.length}
            </div>
         </div>
 
         {/* Question Area */}
-        <div className={`p-6 sm:p-12 bg-white rounded-[3rem] sm:rounded-[4rem] shadow-2xl border-b-[12px] sm:border-b-[20px] transition-all text-center ${
-          feedback === 'correct' ? 'border-fun-green scale-[1.02] sm:scale-[1.05] animate-pop' : 
+        <div className={`p-4 sm:p-8 bg-white rounded-[2rem] sm:rounded-[3rem] shadow-xl border-b-[8px] sm:border-b-[12px] transition-all text-center ${
+          feedback === 'correct' ? 'border-fun-green scale-[1.02] animate-pop' : 
           feedback === 'wrong' ? 'border-fun-pink animate-wiggle' : 
           isFever ? 'border-orange-500 ring-4 sm:ring-8 ring-orange-100' : 'border-slate-100'
         }`}>
-           <span className={`text-xs font-black uppercase tracking-[0.2em] mb-4 block ${isFever ? 'text-orange-500 animate-pulse' : 'text-slate-300'}`}>
-             {isFever ? 'FEVER MODE ACTIVATED' : 'WORD LEVEL RUSH'}
+           <span className={`text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] mb-3 block ${isFever ? 'text-orange-500 animate-pulse' : 'text-slate-300'}`}>
+             {isFever ? 'FEVER MODE' : 'WORD RUSH'}
            </span>
-           <h3 className={`text-3xl sm:text-5xl md:text-7xl font-black mb-8 sm:mb-12 tracking-tight transition-colors break-all leading-tight ${isFever ? 'text-orange-600' : 'text-slate-800'}`}>
+           <h3 className={`text-2xl sm:text-4xl md:text-5xl font-black mb-6 sm:mb-8 tracking-tight transition-colors break-all leading-tight ${isFever ? 'text-orange-600' : 'text-slate-800'}`}>
              {words[currentIndex].word}
            </h3>
            
-           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               {options.map((opt, i) => (
                 <button
                   key={i}
                   disabled={!!feedback}
                   onClick={() => handleAnswer(opt)}
-                  className={`p-4 sm:p-6 text-base sm:text-lg font-black rounded-[1.5rem] sm:rounded-[2rem] border-4 transition-all text-left flex items-start gap-3 sm:gap-4 ${
-                    feedback && opt === words[currentIndex].definition ? 'bg-fun-green border-green-600 text-white shadow-lg' :
+                  className={`p-3 sm:p-5 text-sm sm:text-base font-black rounded-[1rem] sm:rounded-[1.5rem] border-4 transition-all text-left flex items-center sm:items-start gap-2 sm:gap-3 ${
+                    feedback && opt === words[currentIndex].definition ? 'bg-fun-green border-green-600 text-white shadow-md' :
                     feedback === 'wrong' && opt !== words[currentIndex].definition ? 'bg-slate-50 border-slate-100 opacity-40' :
-                    'bg-white border-slate-50 hover:bg-slate-50 hover:border-fun-blue hover:translate-y-[-4px] text-slate-600 active:scale-95'
+                    'bg-white border-slate-50 hover:bg-slate-50 hover:border-fun-blue hover:-translate-y-1 text-slate-600 active:scale-95'
                   }`}
                 >
-                  <div className={`w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs border-2 shrink-0 ${feedback && opt === words[currentIndex].definition ? 'bg-white text-fun-green' : 'bg-slate-100 text-slate-400'}`}>
+                  <div className={`w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-[10px] sm:text-xs border-2 shrink-0 ${feedback && opt === words[currentIndex].definition ? 'bg-white text-fun-green border-white' : 'bg-slate-100 text-slate-400 border-slate-200'}`}>
                     {String.fromCharCode(65 + i)}
                   </div>
-                  <span className="flex-1 text-left select-none">{opt}</span>
+                  <span className="flex-1 text-left select-none leading-snug">{opt}</span>
                 </button>
               ))}
            </div>
@@ -340,31 +340,31 @@ const VocabBuilder: React.FC = () => {
 
   // Game End / Results
   return (
-    <div className="max-w-2xl mx-auto text-center space-y-8 animate-fade-in py-16">
+    <div className="max-w-md mx-auto text-center space-y-6 animate-fade-in py-10">
       <Confetti />
       <div className="relative inline-block">
-        <Trophy size={140} className="mx-auto text-fun-yellow animate-bounce" />
-        <Star className="absolute top-0 right-0 text-yellow-300 animate-pulse" size={32} />
-        <Sparkles className="absolute bottom-0 left-0 text-cyan-400 animate-pulse" size={32} />
+        <Trophy size={80} className="mx-auto text-fun-yellow animate-bounce" />
+        <Star className="absolute -top-2 -right-4 text-yellow-300 animate-pulse" size={24} />
+        <Sparkles className="absolute -bottom-2 -left-4 text-cyan-400 animate-pulse" size={24} />
       </div>
-      <h2 className="text-5xl sm:text-6xl font-black text-slate-800 tracking-tighter uppercase leading-none">
-        Rush Completed!
+      <h2 className="text-4xl sm:text-5xl font-black text-slate-800 tracking-tighter uppercase leading-none">
+        Completed!
       </h2>
-      <div className="bg-white p-10 rounded-[3rem] border-4 border-slate-100 shadow-2xl relative overflow-hidden">
+      <div className="bg-white p-5 sm:p-8 rounded-[2rem] border-4 border-slate-100 shadow-xl relative overflow-hidden">
          <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-fun-pink via-fun-yellow to-fun-blue" />
-         <p className="text-slate-400 font-black uppercase tracking-[0.3em] text-xs mb-4">Loot Earned</p>
-         <div className="text-8xl font-black text-fun-blue mb-6 tracking-tighter">{score} <span className="text-3xl text-slate-305">XP</span></div>
-         <div className="flex justify-center gap-4 mb-8">
-            <div className="bg-slate-50 px-6 py-2 rounded-2xl border-2 border-slate-100">
-               <span className="text-xs font-black text-slate-400 block uppercase">Max Combo</span>
-               <span className="text-xl font-black text-slate-800">{combo}X</span>
+         <p className="text-slate-400 font-black uppercase tracking-[0.2em] text-[10px] sm:text-xs mb-3">Loot Earned</p>
+         <div className="text-5xl sm:text-6xl font-black text-fun-blue mb-6 tracking-tighter">{score} <span className="text-xl sm:text-2xl text-slate-305">XP</span></div>
+         <div className="flex justify-center gap-3 mb-6">
+            <div className="bg-slate-50 px-4 py-2 rounded-xl border-2 border-slate-100 w-1/2">
+               <span className="text-[10px] font-black text-slate-400 block uppercase">Max Combo</span>
+               <span className="text-lg font-black text-slate-800">{combo}X</span>
             </div>
-            <div className="bg-slate-50 px-6 py-2 rounded-2xl border-2 border-slate-100">
-               <span className="text-xs font-black text-slate-400 block uppercase">Fever State</span>
-               <span className="text-xl font-black text-slate-800">{isFever ? 'Active' : 'Offline'}</span>
+            <div className="bg-slate-50 px-4 py-2 rounded-xl border-2 border-slate-100 w-1/2">
+               <span className="text-[10px] font-black text-slate-400 block uppercase">Fever</span>
+               <span className="text-lg font-black text-slate-800">{isFever ? 'Yes' : 'No'}</span>
             </div>
          </div>
-         <Button onClick={() => setGameState('lobby')} className="w-full py-5 text-xl" variant="primary">
+         <Button onClick={() => setGameState('lobby')} className="w-full py-4 text-lg" variant="primary">
            Play Again
          </Button>
       </div>

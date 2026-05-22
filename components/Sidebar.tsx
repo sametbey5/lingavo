@@ -17,7 +17,7 @@ const Sidebar: React.FC = () => {
 
   const navItems: { name: React.ReactNode; path: string; icon: React.ReactNode; color: string; badge?: number }[] = [
     { name: 'Arcade Home', path: '/', icon: <LayoutDashboard size={24} />, color: 'text-fun-blue' },
-    { name: <img src="https://i.ibb.co/Fk917rRY/smartclips.png" alt="Lingavo Learns" className="h-6 object-contain" />, path: '/videos', icon: <MonitorPlay size={24} />, color: 'text-[#00F798]' },
+    { name: 'Movie Clips', path: '/videos', icon: <MonitorPlay size={24} />, color: 'text-[#00F798]' },
     { name: 'News', path: '/notifications', icon: <Bell size={24} />, color: 'text-fun-orange' },
     { name: 'Dictionary', path: '/wordbank', icon: <BookOpen size={24} />, color: 'text-fun-pink' },
     { name: 'Speak Clear', path: '/pronunciation', icon: <Volume2 size={24} />, color: 'text-fun-blue' },

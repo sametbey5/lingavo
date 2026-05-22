@@ -24,7 +24,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   const navItems = [
     { name: isKids ? 'My Dashboard' : 'Dashboard', path: '/', icon: <LayoutDashboard size={24} />, color: isKids ? 'text-fun-blue' : 'text-slate-600' },
-    { name: <img src="https://i.ibb.co/TMMP1KYB/smart.png" alt="Smart Language" className="h-6 object-contain" />, path: '/videos', icon: <MonitorPlay size={24} />, color: 'text-[#00F798]' },
+    { name: 'Movie Clips', path: '/videos', icon: <MonitorPlay size={24} />, color: 'text-[#00F798]' },
     { name: isKids ? 'News' : 'Notifications', path: '/notifications', icon: <Bell size={24} />, color: isKids ? 'text-fun-orange' : 'text-slate-600' },
     { name: 'Dictionary', path: '/wordbank', icon: <BookOpen size={24} />, color: isKids ? 'text-fun-pink' : 'text-slate-600' },
     { name: isKids ? 'Live Race' : 'Competitive Race', path: '/race', icon: <Flag size={24} />, color: 'text-red-500' },

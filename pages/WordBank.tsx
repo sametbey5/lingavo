@@ -272,6 +272,14 @@ const WordBank: React.FC = () => {
   
   // Custom word creation form
   const [showAddForm, setShowAddForm] = useState(false);
+  const [currentFlashcardIndex, setCurrentFlashcardIndex] = useState(0);
+  const [isFlipped, setIsFlipped] = useState(false);
+
+  useEffect(() => {
+    setCurrentFlashcardIndex(0);
+    setIsFlipped(false);
+  }, [selectedLevel, searchQuery]);
+  
   const [newWord, setNewWord] = useState('');
   const [newDef, setNewDef] = useState('');
   const [newEx, setNewEx] = useState('');
@@ -402,43 +410,43 @@ const WordBank: React.FC = () => {
   }, [allDictionaryWords, selectedLevel, searchQuery, wordBank]);
 
   return (
-    <div className="p-4 sm:p-6 md:p-10 max-w-6xl mx-auto space-y-10 animate-fade-in">
+    <div className="p-3 sm:p-6 max-w-6xl mx-auto space-y-6 animate-fade-in">
       
       {/* Header Banner */}
-      <div className="relative bg-white rounded-[3rem] p-8 md:p-10 shadow-xl border-4 border-slate-100 overflow-hidden">
+      <div className="relative bg-white rounded-[2rem] p-5 sm:p-8 shadow-xl border-4 border-slate-100 overflow-hidden">
         {/* Decorative ambient blobs */}
-        <div className="absolute top-0 right-0 w-36 h-36 bg-fun-pink/5 rounded-full -mr-16 -mt-16 animate-pulse" />
-        <div className="absolute -bottom-8 left-10 w-24 h-24 bg-fun-blue/5 rounded-full" />
+        <div className="absolute top-0 right-0 w-20 h-20 sm:w-36 sm:h-36 bg-fun-pink/5 rounded-full -mr-10 -mt-10 sm:-mr-16 sm:-mt-16 animate-pulse" />
+        <div className="absolute -bottom-6 left-8 w-14 h-14 sm:w-24 sm:h-24 bg-fun-blue/5 rounded-full" />
         
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative z-10">
           <div>
-            <div className="flex items-center gap-3 mb-2">
-              <span className="bg-fun-pink text-white text-xs font-black uppercase px-3 py-1 rounded-full tracking-wider animate-float shrink-0">
+            <div className="flex items-center gap-2 mb-1">
+              <span className="bg-fun-pink text-white text-[10px] sm:text-xs font-black uppercase px-2 py-0.5 rounded-full tracking-wider animate-float shrink-0">
                 Level-Adaptive
               </span>
-              <BookOpen className="text-fun-blue shrink-0" size={24} />
+              <BookOpen className="text-fun-blue shrink-0 w-5 h-5 sm:w-6 sm:h-6" />
             </div>
-            <h1 className="text-4xl md:text-5xl font-black text-slate-800 uppercase tracking-tight">
-              Adaptive Dictionary
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-800 uppercase tracking-tight leading-none">
+              Dictionary
             </h1>
-            <p className="text-slate-500 font-bold text-lg mt-2">
-              Browse, hear, and bookmark words crafted matching the <span className="text-fun-pink font-black">{cefrLevel || 'A1'} Level</span>!
+            <p className="text-slate-500 font-bold text-sm sm:text-base mt-2">
+              Browse and hear vocabulary for <span className="text-fun-pink font-black">{cefrLevel || 'A1'} Level</span>!
             </p>
           </div>
-          <div className="flex items-center gap-4 bg-slate-50 border-4 border-slate-100 p-4 rounded-3xl shrink-0">
-            <div className="w-12 h-12 bg-fun-blue rounded-2xl flex items-center justify-center text-white text-2xl font-black">
+          <div className="hidden sm:flex items-center gap-4 bg-slate-50 border-4 border-slate-100 p-3 rounded-3xl shrink-0">
+            <div className="w-10 h-10 bg-fun-blue rounded-2xl flex items-center justify-center text-white text-xl font-black">
               {cefrLevel || 'A1'}
             </div>
             <div>
               <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">Your Level Indicator</p>
-              <h4 className="font-black text-slate-800 text-lg mt-1">Recommended Starting Point</h4>
+              <h4 className="font-black text-slate-800 text-base mt-1">Recommended Starting Point</h4>
             </div>
           </div>
         </div>
       </div>
 
       {/* Tabs and Searching Hub */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-slate-50 p-4 sm:p-5 rounded-[2.5rem] border-2 border-slate-100 shadow-inner">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-50 p-3 sm:p-5 rounded-[2rem] border-2 border-slate-100 shadow-inner">
         {/* Level Filters */}
         <div className="flex flex-wrap gap-2">
           {(['A1', 'A2', 'B1', 'B2', 'C1', 'C2'] as const).map(level => {
@@ -451,7 +459,7 @@ const WordBank: React.FC = () => {
                   setSelectedLevel(level);
                   setSearchQuery('');
                 }}
-                className={`px-4 sm:px-6 py-3 rounded-2xl font-black text-sm uppercase transition-all duration-300 flex items-center gap-2 transform active:scale-95 ${
+                className={`px-3 sm:px-5 py-2 sm:py-3 rounded-xl sm:rounded-2xl font-black text-xs sm:text-sm uppercase transition-all duration-300 flex items-center gap-1 sm:gap-2 transform active:scale-95 ${
                   isSelected
                     ? 'bg-fun-blue text-white shadow-md scale-105 border-b-4 border-blue-800'
                     : 'bg-white text-slate-600 hover:bg-slate-100 border-2 border-slate-200'
@@ -459,10 +467,10 @@ const WordBank: React.FC = () => {
               >
                 <span>{level}</span>
                 {isUserLevel && (
-                  <span className={`text-[9px] font-black px-1.5 py-0.5 rounded-full shrink-0 ${
+                  <span className={`hidden sm:inline-block text-[8px] sm:text-[9px] font-black px-1.5 py-0.5 rounded-full shrink-0 ${
                     isSelected ? 'bg-white text-fun-blue' : 'bg-fun-pink text-white animate-pulse'
                   }`}>
-                    RECOMMENDED
+                    REC.
                   </span>
                 )}
               </button>
@@ -474,151 +482,34 @@ const WordBank: React.FC = () => {
               setSelectedLevel('saved');
               setSearchQuery('');
             }}
-            className={`px-4 sm:px-6 py-3 rounded-2xl font-black text-sm uppercase transition-all duration-300 flex items-center gap-2 transform active:scale-95 ${
+            className={`px-3 sm:px-5 py-2 sm:py-3 rounded-xl sm:rounded-2xl font-black text-xs sm:text-sm uppercase transition-all duration-300 flex items-center gap-1 sm:gap-2 transform active:scale-95 ${
               selectedLevel === 'saved'
                 ? 'bg-fun-pink text-white shadow-md scale-105 border-b-4 border-pink-800'
                 : 'bg-white text-slate-600 hover:bg-slate-100 border-2 border-slate-200'
             }`}
           >
-            <Bookmark size={16} className="fill-current" />
+            <Bookmark className="w-3 h-3 sm:w-4 sm:h-4 fill-current" />
             <span>My Saves</span>
-            <span className="text-[10px] bg-black/10 px-2 py-0.5 rounded-full">{wordBank.length}</span>
+            <span className="text-[10px] bg-black/10 px-1.5 sm:px-2 py-0.5 rounded-full">{wordBank.length}</span>
           </button>
         </div>
 
         {/* Live Search Block */}
-        <div className="relative w-full md:max-w-xs">
+        <div className="relative w-full md:max-w-xs shrink-0">
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder={`Search ${selectedLevel === 'saved' ? 'saved' : selectedLevel} words...`}
-            className="w-full pl-12 pr-4 py-3 rounded-2xl border-4 border-slate-200 focus:border-fun-blue bg-white font-bold text-slate-700 placeholder-slate-400 outline-none transition-all shadow-inner"
+            className="w-full pl-10 sm:pl-12 pr-4 py-2 sm:py-3 rounded-xl sm:rounded-2xl border-4 border-slate-200 focus:border-fun-blue bg-white font-bold text-xs sm:text-sm text-slate-700 placeholder-slate-400 outline-none transition-all shadow-inner"
           />
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+          <Search className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4 sm:w-[18px] sm:h-[18px]" />
         </div>
       </div>
 
-      {/* Suggest Custom Word Toggle & Form */}
-      <div className="flex justify-end px-2">
-        <button
-          onClick={() => setShowAddForm(!showAddForm)}
-          className="flex items-center gap-2 font-black text-sm text-fun-blue hover:text-blue-600 uppercase border-2 border-dashed border-fun-blue/30 px-5 py-2.5 rounded-2xl transition hover:bg-fun-blue/5"
-        >
-          <PlusCircle size={18} />
-          {showAddForm ? 'Close Word Panel' : 'Suggest / Add Custom Word'}
-        </button>
-      </div>
 
-      {/* New Custom Word Dialog form modal */}
-      <AnimatePresence>
-        {showAddForm && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="overflow-hidden"
-          >
-            <form onSubmit={handleAddCustomWord} className="bg-white p-6 sm:p-8 rounded-[2.5rem] border-4 border-slate-100 shadow-xl space-y-6">
-              <h3 className="text-2xl font-black text-slate-800 flex items-center gap-2 uppercase">
-                <Sparkles className="text-fun-yellow shrink-0 animate-pulse" /> Add Custom Word Entry
-              </h3>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="text-xs font-black text-slate-400 uppercase tracking-wider block">Word Title</label>
-                  <input
-                    type="text"
-                    required
-                    value={newWord}
-                    onChange={e => setNewWord(e.target.value)}
-                    placeholder="e.g., Pragmatic"
-                    className="w-full p-4 rounded-xl border-2 border-slate-200 focus:border-fun-blue font-bold outline-none"
-                  />
-                </div>
 
-                <div className="space-y-2">
-                  <label className="text-xs font-black text-slate-400 uppercase tracking-wider block">Phonetic Pronunciation</label>
-                  <input
-                    type="text"
-                    value={newPron}
-                    onChange={e => setNewPron(e.target.value)}
-                    placeholder="e.g., /præɡˈmæt.ɪk/"
-                    className="w-full p-4 rounded-xl border-2 border-slate-200 focus:border-fun-blue font-bold outline-none"
-                  />
-                </div>
-
-                <div className="space-y-2 md:col-span-2">
-                  <label className="text-xs font-black text-slate-400 uppercase tracking-wider block">Definition / Meaning</label>
-                  <input
-                    type="text"
-                    required
-                    value={newDef}
-                    onChange={e => setNewDef(e.target.value)}
-                    placeholder="A sensible, realistic way of solving problems based on practical conditions."
-                    className="w-full p-4 rounded-xl border-2 border-slate-200 focus:border-fun-blue font-bold outline-none"
-                  />
-                </div>
-
-                <div className="space-y-2 md:col-span-2">
-                  <label className="text-xs font-black text-slate-400 uppercase tracking-wider block">Example Sentence</label>
-                  <input
-                    type="text"
-                    value={newEx}
-                    onChange={e => setNewEx(e.target.value)}
-                    placeholder="Let's find a pragmatic solution instead of debating."
-                    className="w-full p-4 rounded-xl border-2 border-slate-200 focus:border-fun-blue font-bold outline-none"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-xs font-black text-slate-400 uppercase tracking-wider block">Speech Category</label>
-                  <select
-                    value={newCategory}
-                    onChange={e => setNewCategory(e.target.value)}
-                    className="w-full p-4 rounded-xl border-2 border-slate-200 focus:border-fun-blue font-bold outline-none bg-white"
-                  >
-                    <option>Noun</option>
-                    <option>Verb</option>
-                    <option>Adjective</option>
-                    <option>Adverb</option>
-                    <option>Interjection</option>
-                  </select>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-xs font-black text-slate-400 uppercase tracking-wider block">CEFR Target Level</label>
-                  <div className="flex gap-2">
-                    {(['A1', 'A2', 'B1', 'B2', 'C1', 'C2'] as const).map(lvl => (
-                      <button
-                        key={lvl}
-                        type="button"
-                        onClick={() => setNewLevel(lvl)}
-                        className={`flex-1 py-3 rounded-xl font-bold text-sm transition ${
-                          newLevel === lvl ? 'bg-fun-blue text-white shadow-md' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
-                        }`}
-                      >
-                        {lvl}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex justify-end gap-3 pt-4">
-                <Button type="button" variant="secondary" onClick={() => setShowAddForm(false)}>
-                  Cancel
-                </Button>
-                <Button type="submit" variant="success">
-                  Save Entry (+15 XP)
-                </Button>
-              </div>
-            </form>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Main Words Grid Area */}
+      {/* Main Flashcard Area */}
       {filteredWords.length === 0 ? (
         <div className="bg-white rounded-[2.5rem] p-12 text-center shadow-lg border-2 border-slate-100 max-w-lg mx-auto">
           <BookOpen size={48} className="text-fun-pink mx-auto mb-4" />
@@ -628,146 +519,173 @@ const WordBank: React.FC = () => {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          <AnimatePresence mode="popLayout">
-            {filteredWords.map((wordObj, idx) => {
-              const bookmarked = isBookmarked(wordObj.word);
-              const customOwned = customWords.some(cw => cw.word === wordObj.word);
-              
-              return (
-                <motion.div
-                  key={wordObj.word}
-                  layout
-                  initial={{ opacity: 0, scale: 0.9, y: 15 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.8 }}
-                  transition={{ duration: 0.2, delay: Math.min(idx * 0.05, 0.4) }}
-                  className={`bg-white rounded-[2rem] p-6 sm:p-8 flex flex-col justify-between shadow-xl border-4 transition-all hover:scale-105 hover:shadow-2xl relative group overflow-hidden ${
-                    bookmarked ? 'border-fun-green' : 'border-slate-100 hover:border-fun-blue'
-                  }`}
-                  style={{ contentVisibility: 'auto' }}
+        <div className="max-w-2xl mx-auto">
+          <div className="text-center font-bold text-slate-400 mb-2 sm:mb-4 tracking-widest uppercase text-[10px] sm:text-xs">
+            {currentFlashcardIndex + 1} OF {filteredWords.length}
+          </div>
+          <div className="relative h-[250px] sm:h-[350px] md:h-[400px] w-full perspective-1000 mb-4 sm:mb-8 z-10" onClick={() => setIsFlipped(!isFlipped)}>
+            <motion.div
+              className="w-full h-full relative transform-style-3d cursor-pointer"
+              animate={{ rotateY: isFlipped ? 180 : 0 }}
+              transition={{ duration: 0.6, type: "spring", stiffness: 260, damping: 20 }}
+            >
+              {/* Front side */}
+              <div 
+                className="absolute w-full h-full backface-hidden bg-white rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-8 shadow-2xl border-4 border-slate-100 flex flex-col items-center justify-center text-center group"
+                style={{ backfaceVisibility: 'hidden' }}
+              >
+                <div className="absolute top-4 sm:top-6 left-4 sm:left-6 right-4 sm:right-6 flex justify-between items-center z-10">
+                  <span className="px-2 sm:px-3 py-1 bg-slate-100 border-2 border-slate-200 text-[10px] sm:text-xs rounded-xl text-slate-500 font-black uppercase tracking-wider">
+                    {filteredWords[currentFlashcardIndex].category || 'Noun'}
+                  </span>
+                  <div className="flex gap-1 sm:gap-2">
+                    <span className="px-2 sm:px-3 py-1 bg-fun-pink/10 text-fun-pink font-black text-[10px] sm:text-xs rounded-xl tracking-wider">
+                      {filteredWords[currentFlashcardIndex].level}
+                    </span>
+                  </div>
+                </div>
+
+                <h4 className="text-4xl sm:text-5xl md:text-6xl font-black text-slate-850 tracking-tight leading-none mb-2 sm:mb-4 group-hover:scale-105 transition-transform duration-300">
+                  {filteredWords[currentFlashcardIndex].word}
+                </h4>
+                
+                {filteredWords[currentFlashcardIndex].pronunciation && (
+                  <p className="text-sm sm:text-base font-semibold font-mono text-slate-400 tracking-widest uppercase bg-slate-50 py-1 px-2 sm:py-1.5 sm:px-3 rounded-lg inline-block">
+                    {filteredWords[currentFlashcardIndex].pronunciation}
+                  </p>
+                )}
+
+                <div className="absolute bottom-4 sm:bottom-6 left-0 w-full text-center text-slate-300 font-black text-[10px] sm:text-xs uppercase tracking-widest animate-pulse">
+                  Click to reveal meaning
+                </div>
+                
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    speakWord(filteredWords[currentFlashcardIndex].word);
+                  }}
+                  className="absolute bottom-3 right-3 sm:bottom-6 sm:right-6 bg-slate-50 hover:bg-fun-blue hover:text-white p-2 sm:p-3 rounded-2xl transition text-slate-400 shadow-sm border-2 border-slate-100 z-20"
                 >
-                  {/* Decorative background number list */}
-                  <div className="absolute top-2 right-2 text-[10px] font-black text-slate-200 select-none">
-                    #{idx + 1}
+                  <Volume2 className="w-5 h-5 sm:w-6 sm:h-6" />
+                </button>
+              </div>
+
+              {/* Back side */}
+              <div 
+                className="absolute w-full h-full bg-slate-800 text-white rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-8 shadow-2xl border-4 border-slate-700 flex flex-col items-center justify-center text-center rotate-y-180 group"
+                style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
+              >
+                <h4 className="text-2xl sm:text-3xl font-black mb-2 sm:mb-4 tracking-tight text-yellow-300">
+                  {filteredWords[currentFlashcardIndex].word}
+                </h4>
+                
+                <p className="text-sm sm:text-lg md:text-xl font-bold mb-4 sm:mb-6 leading-relaxed max-w-sm px-2">
+                  {filteredWords[currentFlashcardIndex].definition}
+                </p>
+
+                {filteredWords[currentFlashcardIndex].exampleSentence && (
+                  <div className="bg-white/10 rounded-2xl p-3 sm:p-5 border border-white/20 italic text-slate-300 text-xs sm:text-sm max-w-md w-full relative">
+                    <span className="absolute -top-2 sm:-top-3 left-4 bg-slate-800 px-2 text-[8px] sm:text-[10px] font-black tracking-widest text-slate-400 uppercase">Example</span>
+                    <p className="pt-1 sm:pt-2">"{filteredWords[currentFlashcardIndex].exampleSentence}"</p>
                   </div>
+                )}
+                
+                <div className="absolute bottom-4 sm:bottom-6 left-0 w-full flex justify-center text-white/30 font-black text-[10px] sm:text-xs uppercase tracking-widest">
+                  Tap to flip back
+                </div>
+              </div>
+            </motion.div>
+          </div>
 
-                  <div>
-                    {/* Top line with Level and category */}
-                    <div className="flex items-center justify-between mb-4">
-                      <span className="px-2.5 py-0.5 bg-slate-100 border-2 border-slate-200 text-[10px] rounded-lg text-slate-500 font-black uppercase tracking-wider">
-                        {wordObj.category || 'Noun'}
-                      </span>
-                      <div className="flex gap-1">
-                        <span className="px-2 py-0.5 bg-fun-pink/10 text-fun-pink font-black text-[10px] rounded-lg tracking-wider">
-                          {wordObj.level}
-                        </span>
-                        {wordObj.level === cefrLevel && (
-                          <span className="px-2 py-0.5 bg-fun-blue/10 text-fun-blue font-black text-[10px] rounded-lg">
-                            ★ YOUR LEVEL
-                          </span>
-                        )}
-                      </div>
-                    </div>
+          {/* Flashcard Controls */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 mt-6">
+            <div className="flex w-full sm:w-auto gap-3">
+              <Button 
+                variant="secondary"
+                onClick={() => {
+                    setIsFlipped(false);
+                    setTimeout(() => setCurrentFlashcardIndex(prev => Math.max(0, prev - 1)), 150);
+                }}
+                disabled={currentFlashcardIndex === 0}
+                className="flex-1 sm:w-32"
+              >
+                  Prev
+              </Button>
+              <Button 
+                variant="primary"
+                onClick={() => {
+                    setIsFlipped(false);
+                    setTimeout(() => setCurrentFlashcardIndex(prev => Math.min(filteredWords.length - 1, prev + 1)), 150);
+                }}
+                disabled={currentFlashcardIndex === filteredWords.length - 1}
+                className="flex-1 sm:w-32 block sm:hidden"
+              >
+                  Next
+              </Button>
+            </div>
+            
+            <div className="flex w-full sm:w-auto flex-col gap-2 shrink-0">
+               {(() => {
+                 const currentWordObj = filteredWords[currentFlashcardIndex];
+                 const bookmarked = isBookmarked(currentWordObj.word);
+                 const customOwned = customWords.some(cw => cw.word === currentWordObj.word);
 
-                    {/* Word and Speak Row */}
-                    <div className="flex items-center justify-between gap-2 mb-2">
-                      <h4 className="text-3xl font-black text-slate-850 tracking-tight leading-none truncate select-all">
-                        {wordObj.word}
-                      </h4>
-                      <button
-                        onClick={() => speakWord(wordObj.word)}
-                        className="bg-slate-50 hover:bg-fun-blue hover:text-white p-2.5 rounded-xl transition text-slate-400 shrink-0 shadow-sm border border-slate-100 focus:scale-95"
-                        title="Pronounce aloud"
-                      >
-                        <Volume2 size={16} />
-                      </button>
-                    </div>
+                 return (
+                   <div className="flex gap-2 w-full">
+                     {customOwned && (
+                       <button
+                         onClick={() => {
+                            handleDeleteCustomWord(currentWordObj.word);
+                            setCurrentFlashcardIndex(prev => Math.max(0, prev - 1));
+                         }}
+                         className="bg-rose-50 hover:bg-rose-100 text-rose-500 p-3 flex-shrink-0 flex items-center justify-center rounded-2xl transition shadow-sm border-2 border-rose-100"
+                         title="Delete custom word"
+                       >
+                         <Trash2 size={24} />
+                       </button>
+                     )}
+                     <button
+                       onClick={() => toggleBookmark(currentWordObj)}
+                       disabled={bookmarked}
+                       className={`w-full px-4 sm:px-8 py-3 rounded-2xl font-black text-xs sm:text-sm uppercase shadow-md flex items-center justify-center gap-2 transition-all ${
+                         bookmarked
+                           ? 'bg-fun-green text-white cursor-default border-b-4 border-green-800 shadow-none'
+                           : 'bg-fun-pink text-white hover:bg-pink-500 active:scale-95 border-b-4 border-pink-800'
+                       }`}
+                     >
+                       {bookmarked ? (
+                         <>
+                           <Check className="w-4 h-4 sm:w-5 sm:h-5 stroke-[3]" />
+                           Learned
+                         </>
+                       ) : (
+                         <>
+                           <Bookmark className="w-4 h-4 sm:w-5 sm:h-5 fill-current" />
+                           Got It (+10 XP)
+                         </>
+                       )}
+                     </button>
+                   </div>
+                 );
+               })()}
+            </div>
 
-                    {/* Pronunciation phonetics */}
-                    {wordObj.pronunciation && (
-                      <p className="text-xs font-semibold font-mono text-slate-400 mb-4 tracking-wider uppercase bg-slate-50 py-1 px-2 rounded-md inline-block">
-                        {wordObj.pronunciation}
-                      </p>
-                    )}
-
-                    {/* Short separator */}
-                    <div className="h-0.5 w-12 bg-slate-100 mb-4" />
-
-                    {/* Definition */}
-                    <p className="text-slate-600 font-bold text-sm mb-4 leading-relaxed">
-                      {wordObj.definition}
-                    </p>
-
-                    {/* Example Sentence inside styled bubble */}
-                    {wordObj.exampleSentence && (
-                      <div className="bg-slate-50 rounded-2xl p-4 border border-slate-100 italic text-slate-500 text-xs text-left relative mt-4">
-                        <span className="absolute top-2 left-2 text-[10px] font-black tracking-widest text-slate-305 uppercase select-none leading-none">Example</span>
-                        <p className="pt-3">"{wordObj.exampleSentence}"</p>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Operational Footer action button */}
-                  <div className="mt-8 pt-4 border-t-2 border-slate-100 flex items-center justify-between gap-2">
-                    {customOwned ? (
-                      <button
-                        onClick={() => handleDeleteCustomWord(wordObj.word)}
-                        className="bg-rose-50 hover:bg-rose-100 text-rose-500 p-2.5 rounded-xl transition shadow-sm"
-                        title="Delete custom word"
-                      >
-                        <Trash2 size={16} />
-                      </button>
-                    ) : (
-                      <div className="w-4" />
-                    )}
-
-                    <button
-                      onClick={() => toggleBookmark(wordObj)}
-                      disabled={bookmarked}
-                      className={`px-4 py-2.5 rounded-xl font-black text-xs uppercase shadow-md flex items-center gap-1.5 transition-all outline-none ${
-                        bookmarked
-                          ? 'bg-fun-green text-white cursor-default shadow-none border-b-2 border-green-800'
-                          : 'bg-fun-pink text-white hover:bg-pink-500 active:scale-95 border-b-4 border-pink-800'
-                      }`}
-                    >
-                      {bookmarked ? (
-                        <>
-                          <Check size={14} className="stroke-[3]" />
-                          Learned
-                        </>
-                      ) : (
-                        <>
-                          <Bookmark size={12} className="fill-current" />
-                          Got It (+10 XP)
-                        </>
-                      )}
-                    </button>
-                  </div>
-                </motion.div>
-              );
-            })}
-          </AnimatePresence>
+            <Button 
+               variant="primary"
+               onClick={() => {
+                   setIsFlipped(false);
+                   setTimeout(() => setCurrentFlashcardIndex(prev => Math.min(filteredWords.length - 1, prev + 1)), 150);
+               }}
+               disabled={currentFlashcardIndex === filteredWords.length - 1}
+               className="hidden sm:block sm:w-32 flex-shrink-0"
+            >
+               Next
+            </Button>
+          </div>
         </div>
       )}
 
-      {/* Spaced repetition review reminder footer inside dictionary */}
-      <div className="bg-white rounded-[3rem] p-6 sm:p-8 border-4 border-slate-100 shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
-        <div className="flex items-center gap-4">
-          <div className="w-14 h-14 bg-gradient-to-br from-yellow-300 to-fun-yellow rounded-2xl flex items-center justify-center text-white text-3xl shadow-md">
-            🤝
-          </div>
-          <div>
-            <h4 className="font-black text-xl text-slate-800 uppercase leading-none">Dynamic Adaptive Practice</h4>
-            <p className="text-slate-400 font-bold text-sm mt-1">
-              Words bookmarked as "Learned" here will feed directly into your dynamic vocab challenges!
-            </p>
-          </div>
-        </div>
-        <div className="text-slate-400 font-bold text-xs uppercase tracking-wider flex items-center gap-1 shrink-0">
-          <Brain size={16} className="text-slate-400 animate-pulse" /> Active Bookmarks: <span className="bg-slate-100 py-1 px-2 rounded-lg font-black text-slate-500">{wordBank.length} words</span>
-        </div>
-      </div>
+
     </div>
   );
 };
