@@ -94,7 +94,7 @@ export interface SkillTree {
   id: string;
   name: string;
   level: number;
-  progress: number; // 0-100 for current level
+  progress: number;
   totalXp: number;
   icon: string;
   color: string;
@@ -109,8 +109,7 @@ export interface UserStats {
   awardedBadges: string[];
   themeColor?: string;
   avatar?: string;
-  
-  // New Skill Trees
+
   skills: {
     vocabulary: SkillTree;
     speaking: SkillTree;
@@ -118,10 +117,10 @@ export interface UserStats {
     grammar: SkillTree;
     realLife: SkillTree;
   };
-  
+
   // Identity
   identityTitle: 'Explorer' | 'Speaker' | 'Communicator' | 'Fluent Hero' | 'Legend';
-  
+
   // Legacy support
   messagesSent?: number;
   vocabGenerated?: number;

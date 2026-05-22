@@ -83,7 +83,7 @@ const BadgeTrading: React.FC = () => {
   const BadgeCard = ({ badge, missing }: { badge: Badge | { name: string, icon: string, color: string }, missing?: boolean }) => {
     if (missing) {
       return (
-        <div className="w-24 h-24 rounded-2xl bg-slate-100 border-4 border-dashed border-slate-300 flex flex-col items-center justify-center opacity-50 grayscale">
+        <div className="w-16 h-16 sm:w-24 sm:h-24 rounded-2xl bg-slate-100 border-4 border-dashed border-slate-300 flex flex-col items-center justify-center opacity-50 grayscale">
            <div className="text-2xl mb-1 opacity-50">🔒</div>
            <span className="text-[10px] font-bold text-slate-400 text-center px-1 leading-tight">Missing Badge</span>
         </div>
@@ -91,13 +91,13 @@ const BadgeTrading: React.FC = () => {
     }
 
     return (
-       <div className={`w-24 h-24 rounded-2xl flex flex-col items-center justify-center text-center shadow-lg ${badge.color || 'bg-slate-500'} border-b-4 border-black/10`}>
+       <div className={`w-16 h-16 sm:w-24 sm:h-24 rounded-2xl flex flex-col items-center justify-center text-center shadow-lg ${badge.color || 'bg-slate-500'} border-b-4 border-black/10`}>
          {'image' in badge && badge.image ? (
             <img src={badge.image} alt={badge.name} className="w-10 h-10 object-contain drop-shadow-md mb-1" />
          ) : (
-            <div className="text-3xl mb-1">{badge.icon}</div>
+            <div className="text-xl sm:text-3xl mb-0.5 sm:mb-1">{badge.icon}</div>
          )}
-         <span className="text-[9px] font-black text-white uppercase px-1 leading-tight line-clamp-2">{badge.name}</span>
+         <span className="text-[7px] sm:text-[9px] font-black text-white uppercase px-1 leading-tight line-clamp-2">{badge.name}</span>
        </div>
     );
   };
@@ -109,16 +109,16 @@ const BadgeTrading: React.FC = () => {
       
       return (
           <div className="fixed inset-0 z-[100] bg-slate-900/90 backdrop-blur-md flex items-center justify-center animate-fade-in">
-              <div className="relative w-full max-w-2xl h-[400px] flex flex-col items-center justify-center">
+              <div className="relative w-full max-w-md sm:max-w-2xl h-[300px] sm:h-[400px] px-4 flex flex-col items-center justify-center">
                   {status === 'complete' && <Confetti />}
                   
-                  <h2 className="text-4xl font-black text-white mb-12 animate-bounce">
+                  <h2 className="text-2xl sm:text-4xl font-black text-white mb-8 sm:mb-12 animate-bounce text-center">
                       {status === 'opening' ? 'INITIATING TRADE...' : status === 'swapping' ? 'TRADING...' : 'TRADE COMPLETE!'}
                   </h2>
 
-                  <div className="flex items-center gap-12 relative">
+                  <div className="flex items-center gap-4 sm:gap-12 relative">
                       {/* Sender Item */}
-                      <div className={`transition-all duration-1000 transform ${status === 'swapping' || status === 'complete' ? 'translate-x-[150px] scale-125 rotate-12' : ''}`}>
+                      <div className={`transition-all duration-1000 transform ${status === 'swapping' || status === 'complete' ? 'translate-x-[70px] sm:translate-x-[150px] scale-125 rotate-12' : ''}`}>
                           <div className="text-white text-center font-bold mb-2 uppercase text-xs">Incoming</div>
                           <BadgeCard badge={trade.offeredBadge} />
                       </div>
@@ -129,8 +129,8 @@ const BadgeTrading: React.FC = () => {
                       </div>
                       
                       {/* You (Just receiving visually for now, P2P logic can be bidirectional later) */}
-                      <div className={`transition-all duration-1000 transform ${status === 'swapping' || status === 'complete' ? '-translate-x-[150px] opacity-0' : ''}`}>
-                         <div className="w-24 h-24 rounded-full bg-white/10 border-4 border-dashed border-white/20 flex items-center justify-center">
+                      <div className={`transition-all duration-1000 transform ${status === 'swapping' || status === 'complete' ? '-translate-x-[70px] sm:translate-x-[150px] opacity-0' : ''}`}>
+                         <div className="w-16 h-16 sm:w-24 sm:h-24 rounded-full bg-white/10 border-4 border-dashed border-white/20 flex items-center justify-center">
                             <span className="text-4xl">😎</span>
                          </div>
                       </div>
@@ -145,62 +145,62 @@ const BadgeTrading: React.FC = () => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto space-y-8 animate-fade-in pb-20">
+    <div className="max-w-5xl mx-auto space-y-4 sm:space-y-8 animate-fade-in pb-8 sm:pb-20 px-3 sm:px-4">
       {justTraded && <Confetti />}
       <TradingSessionModal />
       
-      <div className="text-center space-y-4">
+      <div className="text-center space-y-2 sm:space-y-4">
         <div className="inline-block relative">
            <button 
              onClick={handleRefresh}
              className={`transition-all duration-500 ${isRefreshing ? 'rotate-180 scale-125' : 'hover:scale-110'}`}
            >
-              <Store size={80} className="text-fun-orange mx-auto animate-bounce-slow" />
+              <Store size={48} className="text-fun-orange mx-auto animate-bounce-slow sm:w-20 sm:h-20" />
            </button>
            <div className="absolute -top-2 -right-4 bg-fun-green text-white px-3 py-1 rounded-full text-xs font-black rotate-12 shadow-md">OPEN!</div>
            <div className="absolute -bottom-2 -left-4 bg-fun-blue text-white px-2 py-1 rounded-full text-[8px] font-black -rotate-12 shadow-sm flex items-center gap-1">
               <RefreshCcw size={10} /> REFRESH
            </div>
         </div>
-        <h2 className={`text-5xl font-black ${isKids ? 'text-slate-800 rainbow-text' : 'text-slate-800'} tracking-tight`}>
+        <h2 className={`text-3xl sm:text-5xl font-black ${isKids ? 'text-slate-800 rainbow-text' : 'text-slate-800'} tracking-tight`}>
            TRADING POST
         </h2>
-        <p className="text-xl font-bold text-slate-500">
-           Swap badges with friends or the shop!
+        <p className="text-sm sm:text-xl font-bold text-slate-500 px-4">
+           Trade with the merchant or your friends!
         </p>
       </div>
 
       {/* Tabs */}
       <div className="flex justify-center mb-8">
-          <div className="bg-white p-2 rounded-2xl shadow-md border-2 border-slate-100 inline-flex gap-2">
+          <div className="bg-white p-1 rounded-xl shadow-md border border-slate-100 inline-flex gap-1 w-full max-w-md">
               <button 
                 onClick={() => setActiveTab('npc')}
-                className={`px-6 py-3 rounded-xl font-black text-sm flex items-center gap-2 transition-all ${activeTab === 'npc' ? 'bg-fun-orange text-white shadow-md' : 'text-slate-400 hover:bg-slate-50'}`}
+                className={`flex-1 px-3 py-2 rounded-lg font-black text-[11px] sm:text-sm flex items-center justify-center gap-2 transition-all ${activeTab === 'npc' ? 'bg-fun-orange text-white shadow-md' : 'text-slate-400 hover:bg-slate-50'}`}
               >
-                  <Store size={18} /> SHOP KEEPER
+                  <Store size={14} /> TRADER
               </button>
               <button 
                 onClick={() => setActiveTab('p2p')}
-                className={`px-6 py-3 rounded-xl font-black text-sm flex items-center gap-2 transition-all ${activeTab === 'p2p' ? 'bg-fun-blue text-white shadow-md' : 'text-slate-400 hover:bg-slate-50'}`}
+                className={`flex-1 px-3 py-2 rounded-lg font-black text-[11px] sm:text-sm flex items-center justify-center gap-2 transition-all ${activeTab === 'p2p' ? 'bg-fun-blue text-white shadow-md' : 'text-slate-400 hover:bg-slate-50'}`}
               >
-                  <Users size={18} /> FRIENDS (P2P)
+                  <Users size={14} /> FRIENDS (P2P)
               </button>
           </div>
       </div>
 
       {activeTab === 'npc' && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 animate-fade-in">
-            {tradeOffers.map(offer => {
+            {tradeOffers.slice(0,1).map(offer => {
                 const hasRequired = badges.find(b => b.id === offer.requiredBadgeId);
                 return (
-                <div key={offer.id} className="bg-white rounded-[3rem] border-8 border-slate-100 p-8 shadow-2xl relative overflow-hidden group hover:scale-[1.02] transition-transform">
+                <div key={offer.id} className="bg-white rounded-3xl sm:rounded-[3rem] border-4 sm:border-8 border-slate-100 p-4 sm:p-8 shadow-xl sm:shadow-2xl relative overflow-hidden group hover:scale-[1.02] transition-transform">
                     <div className="absolute top-0 left-0 w-full h-4 bg-slate-100" />
                     <div className="absolute top-6 left-6 flex items-center gap-2">
                         <div className="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center text-xl border-2 border-white shadow-md">🤠</div>
                         <span className="font-black text-slate-400 uppercase text-xs tracking-widest">{offer.merchantName}</span>
                     </div>
 
-                    <div className="mt-10 flex items-center justify-between gap-4">
+                    <div className="mt-6 flex items-center justify-between gap-2 sm:gap-4">
                         <div className="flex flex-col items-center gap-2 relative">
                         {hasRequired ? (
                             <div className="relative">
@@ -208,7 +208,7 @@ const BadgeTrading: React.FC = () => {
                                 <div className="absolute -bottom-2 -right-2 bg-red-500 text-white w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs border-2 border-white shadow-sm">-1</div>
                             </div>
                         ) : (
-                            <div className="w-24 h-24 bg-slate-50 rounded-2xl border-4 border-dashed border-slate-200 flex flex-col items-center justify-center text-slate-300">
+                            <div className="w-16 h-16 sm:w-24 sm:h-24 bg-slate-50 rounded-2xl border-4 border-dashed border-slate-200 flex flex-col items-center justify-center text-slate-300">
                                 <Lock />
                                 <span className="text-[10px] font-black mt-1">LOCKED</span>
                             </div>
@@ -216,7 +216,7 @@ const BadgeTrading: React.FC = () => {
                         <span className="text-xs font-black text-slate-400 uppercase">Your Item</span>
                         </div>
 
-                        <ArrowRightLeft className={`text-slate-300 ${hasRequired ? 'animate-pulse text-fun-blue' : ''}`} size={32} />
+                        <ArrowRightLeft className={`text-slate-300 ${hasRequired ? 'animate-pulse text-fun-blue' : ''}`} size={20} />
 
                         <div className="flex flex-col items-center gap-2">
                         <div className="relative">
@@ -232,7 +232,7 @@ const BadgeTrading: React.FC = () => {
                         onClick={() => handleNpcTrade(offer.id)}
                         disabled={!hasRequired}
                         variant={hasRequired ? 'success' : 'secondary'}
-                        className="w-full text-xl py-4 rounded-2xl shadow-lg"
+                        className="w-full text-sm sm:text-xl py-2.5 sm:py-4 rounded-xl sm:rounded-2xl shadow-md"
                         icon={hasRequired ? <RefreshCcw /> : <Lock />}
                         >
                         {hasRequired ? 'TRADE NOW!' : 'NEED BADGE'}
@@ -247,25 +247,25 @@ const BadgeTrading: React.FC = () => {
       {activeTab === 'p2p' && (
          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-fade-in">
              {/* Send Request Column */}
-             <div className="bg-white p-8 rounded-[2.5rem] border-4 border-slate-100 shadow-xl h-fit">
+             <div className="bg-white p-4 sm:p-8 rounded-3xl sm:rounded-[2.5rem] border-2 sm:border-4 border-slate-100 shadow-lg sm:shadow-xl h-fit">
                  <h3 className="font-black text-xl text-slate-800 mb-6 flex items-center gap-2">
-                     <UserPlus className="text-fun-blue" /> START NEW TRADE
+                     <UserPlus className="text-fun-blue" /> FRIEND TRADE
                  </h3>
                  
-                 <form onSubmit={handleSendTrade} className="space-y-6">
+                 <form onSubmit={handleSendTrade} className="space-y-4">
                      <div>
                          <label className="text-xs font-black text-slate-400 uppercase tracking-widest block mb-2 pl-2">Friend's User ID</label>
                          <input 
                              value={recipientId}
                              onChange={e => setRecipientId(e.target.value)}
                              placeholder="e.g. dragon_slayer_99"
-                             className="w-full bg-slate-50 border-4 border-slate-100 rounded-2xl py-4 px-6 font-bold text-slate-700 outline-none focus:border-fun-blue transition-colors"
+                             className="w-full bg-slate-50 border-2 sm:border-4 border-slate-100 rounded-xl sm:rounded-2xl py-3 sm:py-4 px-4 sm:px-6 text-sm sm:text-base font-bold text-slate-700 outline-none focus:border-fun-blue transition-colors"
                          />
                      </div>
 
                      <div>
                          <label className="text-xs font-black text-slate-400 uppercase tracking-widest block mb-2 pl-2">Pick a Badge to Give</label>
-                         <div className="grid grid-cols-3 gap-2 max-h-48 overflow-y-auto p-2 bg-slate-50 rounded-2xl border-4 border-slate-100">
+                         <div className="grid grid-cols-4 sm:grid-cols-3 gap-2 max-h-36 sm:max-h-48 overflow-y-auto p-2 bg-slate-50 rounded-2xl border-4 border-slate-100">
                              {badges.length === 0 && <p className="col-span-3 text-center text-slate-400 py-4 font-bold">No badges to trade!</p>}
                              {badges.map((b, index) => (
                                  <div 
@@ -274,7 +274,7 @@ const BadgeTrading: React.FC = () => {
                                     className={`p-2 rounded-xl cursor-pointer border-2 transition-all ${selectedBadgeId === b.id ? 'bg-white border-fun-blue shadow-md' : 'border-transparent hover:bg-white'}`}
                                  >
                                      <div className="flex flex-col items-center">
-                                         <div className="text-2xl">{b.icon}</div>
+                                         <div className="text-lg sm:text-2xl">{b.icon}</div>
                                          <span className="text-[8px] font-black uppercase text-slate-500 mt-1 truncate w-full text-center">{b.name}</span>
                                      </div>
                                  </div>
@@ -301,7 +301,7 @@ const BadgeTrading: React.FC = () => {
              </div>
 
              {/* Incoming Requests Column */}
-             <div className="space-y-6">
+             <div className="space-y-4">
                  <h3 className="font-black text-xl text-slate-800 pl-4 flex items-center gap-2">
                      <Clock className="text-fun-orange" /> ACTIVE REQUESTS
                  </h3>
@@ -320,7 +320,7 @@ const BadgeTrading: React.FC = () => {
                      if (trade.status !== 'pending') return null;
 
                      return (
-                         <div key={trade.id} className="bg-white p-6 rounded-[2rem] border-4 border-slate-100 shadow-lg relative overflow-hidden animate-fade-in">
+                         <div key={trade.id} className="bg-white p-4 sm:p-6 rounded-2xl sm:rounded-[2rem] border-2 sm:border-4 border-slate-100 shadow-md sm:shadow-lg relative overflow-hidden animate-fade-in">
                              <div className={`absolute top-0 left-0 w-2 h-full ${isIncoming ? 'bg-fun-green' : 'bg-slate-300'}`} />
                              
                              <div className="flex justify-between items-start mb-4 pl-4">
@@ -328,7 +328,7 @@ const BadgeTrading: React.FC = () => {
                                      <span className={`text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded-full ${isIncoming ? 'bg-green-100 text-green-600' : 'bg-slate-100 text-slate-500'}`}>
                                          {isIncoming ? 'INCOMING OFFER' : 'OUTGOING REQUEST'}
                                      </span>
-                                     <h4 className="font-black text-lg text-slate-800 mt-2">
+                                     <h4 className="font-black text-sm sm:text-lg text-slate-800 mt-2 break-all">
                                          {isIncoming ? `From: ${trade.initiatorId}` : `To: ${trade.recipientId}`}
                                      </h4>
                                  </div>
@@ -337,7 +337,7 @@ const BadgeTrading: React.FC = () => {
                                  </div>
                              </div>
 
-                             <div className="bg-slate-50 p-4 rounded-xl flex items-center gap-4 mb-4 ml-4">
+                             <div className="bg-slate-50 p-3 rounded-xl flex items-center gap-3 mb-4 ml-2 sm:ml-4">
                                  <div className="text-3xl">{trade.offeredBadge.icon}</div>
                                  <div>
                                      <div className="text-xs font-black text-slate-400 uppercase">Offered Badge</div>

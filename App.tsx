@@ -26,6 +26,9 @@ import RaceMode from './pages/RaceMode';
 import Teachers from './pages/Teachers';
 import TeacherPanel from './pages/TeacherPanel';
 import WordBank from './pages/WordBank';
+import MyStyle from './pages/MyStyle';
+import TrophyCase from './pages/TrophyCase';
+import YourProgress from './pages/YourProgress';
 import { GamificationProvider, useGamification } from './context/GamificationContext';
 
 // Auth Wrapper Component
@@ -78,6 +81,9 @@ const AppRoutes: React.FC = () => {
       <Route path="/game/racer" element={<AuthWrapper><SpeedRacer /></AuthWrapper>} />
       <Route path="/game/whack" element={<AuthWrapper><WordWhack /></AuthWrapper>} />
       <Route path="/race" element={<AuthWrapper><RaceMode /></AuthWrapper>} />
+      <Route path="/my-style" element={<AuthWrapper><MyStyle /></AuthWrapper>} />
+      <Route path="/trophy-case" element={<AuthWrapper><TrophyCase /></AuthWrapper>} />
+      <Route path="/your-progress" element={<AuthWrapper><YourProgress /></AuthWrapper>} />
     </Routes>
   );
 };
