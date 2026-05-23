@@ -1004,7 +1004,7 @@ export const CAMBRIDGE_DICTIONARY: DictionaryWord[] = [
   {
     word: "Card",
     definition: "Thick, stiff paper used for graphics.",
-    exampleSentence: "I wrote a sweet message on her greeting card.",
+    exampleSentence: "She sent me a Christmas card.",
     pronunciation: "/kɑːd/",
     level: "A1",
     category: "Noun"
@@ -1034,14 +1034,6 @@ export const CAMBRIDGE_DICTIONARY: DictionaryWord[] = [
     category: "Noun"
   },
   {
-    word: "CD",
-    definition: "A circular compact disc storing digital audio.",
-    exampleSentence: "I listened to classical music on a CD.",
-    pronunciation: "/ˌsiːˈdiː/",
-    level: "A1",
-    category: "Noun"
-  },
-  {
     word: "Clean",
     definition: "Free from dirty marks, dust, or bacteria.",
     exampleSentence: "Keep your study desk clean and tidy.",
@@ -1052,7 +1044,7 @@ export const CAMBRIDGE_DICTIONARY: DictionaryWord[] = [
   {
     word: "Climb",
     definition: "To go up something using hands and feet.",
-    exampleSentence: "We climbed up the steep forest path.",
+    exampleSentence: "She climbed up the ladder",
     pronunciation: "/klaɪm/",
     level: "A1",
     category: "Verb"
@@ -1060,7 +1052,7 @@ export const CAMBRIDGE_DICTIONARY: DictionaryWord[] = [
   {
     word: "Clock",
     definition: "An instrument displaying the current time.",
-    exampleSentence: "There is a large clock in the living room.",
+    exampleSentence: "The clock is in the kitchen.",
     pronunciation: "/klɒk/",
     level: "A1",
     category: "Noun"
@@ -1124,7 +1116,7 @@ export const CAMBRIDGE_DICTIONARY: DictionaryWord[] = [
   {
     word: "Colour",
     definition: "Visual hues like red, green, or blue.",
-    exampleSentence: "What is your favorite colour representing autumn?",
+    exampleSentence: "What is your favorite color?",
     pronunciation: "/ˈkʌl.ər/",
     level: "A1",
     category: "Noun"
@@ -1132,7 +1124,7 @@ export const CAMBRIDGE_DICTIONARY: DictionaryWord[] = [
   {
     word: "Come",
     definition: "To move towards or arrive at a place.",
-    exampleSentence: "Come here and read this beautiful poem.",
+    exampleSentence: "Come outside. The weather is nice.",
     pronunciation: "/kʌm/",
     level: "A1",
     category: "Verb"
@@ -1140,44 +1132,11 @@ export const CAMBRIDGE_DICTIONARY: DictionaryWord[] = [
   {
     word: "Company",
     definition: "An organization engaged in business operations.",
-    exampleSentence: "He works for a multinational design company.",
+    exampleSentence: "He works for a design company.",
     pronunciation: "/ˈkʌm.pə.ni/",
     level: "A1",
     category: "Noun"
   },
-  {
-    word: "Hello",
-    definition: "A greeting used when meeting someone.",
-    exampleSentence: "Hello! Nice to meet you.",
-    pronunciation: "/həˈləʊ/",
-    level: "A1",
-    category: "Greeting"
-  },
-  {
-    word: "Family",
-    definition: "A group of parents and children living together.",
-    exampleSentence: "I love spending weekend time with my family.",
-    pronunciation: "/ˈfæm.əl.i/",
-    level: "A1",
-    category: "Noun"
-  },
-  {
-    word: "Journey",
-    definition: "An act of traveling from one place to another.",
-    exampleSentence: "We began our journey across the country.",
-    pronunciation: "/ˈdʒɜː.ni/",
-    level: "A1",
-    category: "Noun"
-  },
-  {
-    word: "Bright",
-    definition: "Giving out or reflecting much light.",
-    exampleSentence: "The sun is very bright today.",
-    pronunciation: "/braɪt/",
-    level: "A1",
-    category: "Adjective"
-  },
-
   // A2 Words
   {
     word: "Adventure",
