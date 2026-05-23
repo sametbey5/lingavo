@@ -11,7 +11,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import warmUpImage from '../src/assets/images/speak.png';
 import learnImage from '../src/assets/images/learn.png';
 import speakImage from '../src/assets/images/speak.png';
-import watchImage from '../src/assets/images/play.png';
+import watchImage from '../src/assets/images/watch.png';
 import reviewImage from '../src/assets/images/play.png';
 import challengeImage from '../src/assets/images/learn.png';
 
@@ -55,9 +55,9 @@ const Dashboard: React.FC = () => {
   );
 
   return (
-    <div className="space-y-4 sm:space-y-6 animate-fade-in pb-10">
+    <div className="space-y-3 sm:space-y-4 animate-fade-in pb-6">
       {/* Header */}
-      <header className={`p-4 sm:p-5 shadow-sm bg-white rounded-[1.5rem] sm:rounded-[2rem] border-[3px] sm:border-4 border-slate-100 relative overflow-hidden`}>
+      <header className={`p-3 sm:p-5 shadow-sm bg-white rounded-[1.5rem] sm:rounded-[2rem] border-[3px] sm:border-4 border-slate-100 relative overflow-hidden`}>
         {/* Top row: avatar + info + stats + notifications */}
         <div className="flex items-center gap-3 justify-between">
           {/* Avatar */}
@@ -122,12 +122,10 @@ const Dashboard: React.FC = () => {
         </div>
       </header>
 
-      <div className="flex flex-col space-y-6">
+      <div className="flex flex-col space-y-3 sm:space-y-4">
         {/* Daily Flow Section with the 4 parent categories */}
-        <div className="bg-white p-4 sm:p-6 rounded-2xl sm:rounded-[2rem] border-[3px] sm:border-4 border-slate-100 shadow-sm relative overflow-hidden">
-            <h3 className="text-xl sm:text-2xl font-black text-slate-800 mb-4 sm:mb-6 flex items-center gap-2 uppercase tracking-tight">
-            </h3>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6">
+        <div className="bg-white p-3 sm:p-5 rounded-2xl sm:rounded-[2rem] border-[3px] sm:border-4 border-slate-100 shadow-sm relative overflow-hidden">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5 sm:gap-5">
                 <ImageFlowCard 
                     imageSrc={learnImage}
                     title="Learn"
@@ -153,14 +151,6 @@ const Dashboard: React.FC = () => {
                     imageSrc={watchImage}
                     title="Watch"
                     onClick={() => navigate('/videos')}
-                />
-                <ImageFlowCard 
-                    imageSrc={challengeImage}
-                    title="Community"
-                    onClick={() => {
-                        setActiveCategory('community');
-                        setShowSocialSubView(false);
-                    }}
                 />
             </div>
         </div>
