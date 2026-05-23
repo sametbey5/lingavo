@@ -700,7 +700,7 @@ export const CAMBRIDGE_DICTIONARY: DictionaryWord[] = [
   {
     word: "Blue",
     definition: "The colour of the clear sky.",
-    exampleSentence: "I bought a gorgeous blue shirt yesterday.",
+    exampleSentence: "Those flowers are light blue",
     pronunciation: "/bluː/",
     level: "A1",
     category: "Adjective"
@@ -716,7 +716,7 @@ export const CAMBRIDGE_DICTIONARY: DictionaryWord[] = [
   {
     word: "Body",
     definition: "The complete physical structures of a living being.",
-    exampleSentence: "Water is essential for a healthy body.",
+    exampleSentence: "Exercise is good for your body. ",
     pronunciation: "/ˈbɒd.i/",
     level: "A1",
     category: "Noun"
@@ -756,7 +756,7 @@ export const CAMBRIDGE_DICTIONARY: DictionaryWord[] = [
   {
     word: "Born",
     definition: "Brought forth by birth or created.",
-    exampleSentence: "My older brother was born in London.",
+    exampleSentence: "I was born in 1995",
     pronunciation: "/bɔːn/",
     level: "A1",
     category: "Verb (Participle)"
@@ -764,7 +764,7 @@ export const CAMBRIDGE_DICTIONARY: DictionaryWord[] = [
   {
     word: "Both",
     definition: "The two together, or one and the other.",
-    exampleSentence: "Both students agreed to collaborate.",
+    exampleSentence: "Both students are very smart.",
     pronunciation: "/bəʊθ/",
     level: "A1",
     category: "Determiner & Pronoun"
@@ -772,7 +772,7 @@ export const CAMBRIDGE_DICTIONARY: DictionaryWord[] = [
   {
     word: "Bottle",
     definition: "A narrow-necked container for liquid.",
-    exampleSentence: "Could I have a bottle of mineral water?",
+    exampleSentence: "I need a bottle of water",
     pronunciation: "/ˈbɒt.əl/",
     level: "A1",
     category: "Noun"
@@ -780,7 +780,7 @@ export const CAMBRIDGE_DICTIONARY: DictionaryWord[] = [
   {
     word: "Bottom",
     definition: "The lowest surface or part of something.",
-    exampleSentence: "Write your signature at the bottom of the page.",
+    exampleSentence: "The bottom of my shoe is dirty",
     pronunciation: "/ˈbɒt.əm/",
     level: "A1",
     category: "Noun & Adjective"
@@ -796,7 +796,7 @@ export const CAMBRIDGE_DICTIONARY: DictionaryWord[] = [
   {
     word: "Boy",
     definition: "A male child or young man.",
-    exampleSentence: "The boy rode his bicycle around the block.",
+    exampleSentence: "That boy is my brother.",
     pronunciation: "/bɔɪ/",
     level: "A1",
     category: "Noun"
@@ -812,7 +812,7 @@ export const CAMBRIDGE_DICTIONARY: DictionaryWord[] = [
   {
     word: "Bread",
     definition: "A common baked food made of flour and water.",
-    exampleSentence: "We bought some fresh bread from the baker.",
+    exampleSentence: "We bought some bread from the baker.",
     pronunciation: "/bred/",
     level: "A1",
     category: "Noun"
@@ -820,7 +820,7 @@ export const CAMBRIDGE_DICTIONARY: DictionaryWord[] = [
   {
     word: "Break",
     definition: "To fracture, or a pause between activities.",
-    exampleSentence: "Let's take a ten-minute coffee break.",
+    exampleSentence: "Be careful, don't break the vase.",
     pronunciation: "/breɪk/",
     level: "A1",
     category: "Noun & Verb"
@@ -836,7 +836,7 @@ export const CAMBRIDGE_DICTIONARY: DictionaryWord[] = [
   {
     word: "Bring",
     definition: "To carry something with you to a place.",
-    exampleSentence: "Please bring your dictionary to class.",
+    exampleSentence: "The dog brings the bone back. ",
     pronunciation: "/brɪŋ/",
     level: "A1",
     category: "Verb"
@@ -852,7 +852,7 @@ export const CAMBRIDGE_DICTIONARY: DictionaryWord[] = [
   {
     word: "Brown",
     definition: "The warm colour of wood or dark chocolate.",
-    exampleSentence: "The brown leaves fell during autumn.",
+    exampleSentence: "The horse is brown. ",
     pronunciation: "/braʊn/",
     level: "A1",
     category: "Adjective"
@@ -860,7 +860,7 @@ export const CAMBRIDGE_DICTIONARY: DictionaryWord[] = [
   {
     word: "Build",
     definition: "To construct something with materials.",
-    exampleSentence: "They plan to build a new library.",
+    exampleSentence: "They are building a new house.",
     pronunciation: "/bɪld/",
     level: "A1",
     category: "Verb"
@@ -884,7 +884,7 @@ export const CAMBRIDGE_DICTIONARY: DictionaryWord[] = [
   {
     word: "Business",
     definition: "The activity of buying or selling goods or services.",
-    exampleSentence: "She runs a very successful local business.",
+    exampleSentence: "He has a small business.",
     pronunciation: "/ˈbɪz.nɪs/",
     level: "A1",
     category: "Noun"
@@ -892,7 +892,7 @@ export const CAMBRIDGE_DICTIONARY: DictionaryWord[] = [
   {
     word: "Busy",
     definition: "Fully occupied with work or activities.",
-    exampleSentence: "He is too busy to join us for dinner.",
+    exampleSentence: "She is too busy to join us for dinner.",
     pronunciation: "/ˈbɪz.i/",
     level: "A1",
     category: "Adjective"
@@ -900,7 +900,7 @@ export const CAMBRIDGE_DICTIONARY: DictionaryWord[] = [
   {
     word: "But",
     definition: "Used to introduce an contrasting statement.",
-    exampleSentence: "I wanted to go, but I was too busy.",
+    exampleSentence: "I like tea but I don't like coffee.",
     pronunciation: "/bʌt/",
     level: "A1",
     category: "Conjunction"
@@ -916,7 +916,7 @@ export const CAMBRIDGE_DICTIONARY: DictionaryWord[] = [
   {
     word: "Buy",
     definition: "To acquire something by paying money.",
-    exampleSentence: "I want to buy a ticket for the concert.",
+    exampleSentence: "I want to buy a gift for my mom.",
     pronunciation: "/baɪ/",
     level: "A1",
     category: "Verb"
@@ -924,7 +924,7 @@ export const CAMBRIDGE_DICTIONARY: DictionaryWord[] = [
   {
     word: "By",
     definition: "In proximity to, or showing the agent of action.",
-    exampleSentence: "The book was written by a famous author.",
+    exampleSentence: "She is sitting by the window.",
     pronunciation: "/baɪ/",
     level: "A1",
     category: "Preposition"
@@ -948,7 +948,7 @@ export const CAMBRIDGE_DICTIONARY: DictionaryWord[] = [
   {
     word: "Cake",
     definition: "A sweet food made from flour, sugar, and baking.",
-    exampleSentence: "I ate a slice of chocolate birthday cake.",
+    exampleSentence: "I ate a slice of strawberry birthday cake.",
     pronunciation: "/keɪk/",
     level: "A1",
     category: "Noun"
