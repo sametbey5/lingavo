@@ -107,64 +107,56 @@ const Dashboard: React.FC = () => {
             <div className="absolute top-0 left-0 w-full h-1 sm:h-1.5 bg-slate-100">
                 <div className="h-full bg-fun-green w-1/3" />
             </div>
-            <h3 className="text-xl sm:text-2xl font-black text-slate-800 mb-4 sm:mb-5 flex items-center gap-2">
-                <Map className="text-fun-blue w-5 h-5 sm:w-6 sm:h-6" /> TODAY'S JOURNEY
+            <h3 className="text-xl sm:text-2xl font-black text-slate-800 mb-4 sm:mb-5 flex items-center gap-2 uppercase">
+                LET'S...
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                 <DailyFlowCard 
-                    title="Warm Up: Word Rush" 
-                    time="2 min • Vocabulary" 
+                    title="Warm Up" 
+                    time="Word Rush" 
                     icon={<Zap />} 
                     color="bg-fun-yellow" 
                     onClick={() => navigate('/vocab')}
                     completed={false}
                 />
                 <DailyFlowCard 
-                    title="Live Race: Compete!" 
-                    time="3 min • Multiplayer" 
-                    icon={<Flag />} 
-                    color="bg-red-500" 
-                    onClick={() => navigate('/race')}
+                    title="Learn" 
+                    time="Grammar & Stories" 
+                    icon={<BookOpen />} 
+                    color="bg-fun-purple" 
+                    onClick={() => navigate('/grammar-lessons')}
                     completed={false}
                 />
                 <DailyFlowCard 
-                    title="Speak: Pronunciation" 
-                    time="3 min • Speaking" 
+                    title="Speak" 
+                    time="Speaking Practice" 
                     icon={<Mic />} 
                     color="bg-fun-green" 
                     onClick={() => navigate('/pronunciation')}
                     completed={false}
                 />
                 <DailyFlowCard 
-                    title="Story: Coffee Run" 
-                    time="5 min • Real Life" 
-                    icon={<BookOpen />} 
+                    title="Watch" 
+                    time="Smart Clips" 
+                    icon={<MonitorPlay />} 
                     color="bg-fun-pink" 
-                    onClick={() => navigate('/story')}
+                    onClick={() => navigate('/videos')}
                     completed={false}
                 />
                 <DailyFlowCard 
-                    title="Learn: Grammar" 
-                    time="10 min • Lessons" 
-                    icon={<BookOpen />} 
-                    color="bg-fun-orange" 
-                    onClick={() => navigate('/grammar-lessons')}
-                    completed={false}
-                />
-                <DailyFlowCard 
-                    title="Review: Scramble" 
-                    time="3 min • Grammar" 
+                    title="Review" 
+                    time="Scramble Master & Coach" 
                     icon={<Brain />} 
                     color="bg-fun-blue" 
                     onClick={() => navigate('/game/scramble')}
                     completed={false}
                 />
                 <DailyFlowCard 
-                    title="Watch: Lingavo" 
-                    time="5 min • Immersive" 
-                    icon={<MonitorPlay />} 
-                    color="bg-[#00F798]" 
-                    onClick={() => navigate('/videos')}
+                    title="Challenge" 
+                    time="Live Race" 
+                    icon={<Flag />} 
+                    color="bg-red-500" 
+                    onClick={() => navigate('/race')}
                     completed={false}
                 />
             </div>
