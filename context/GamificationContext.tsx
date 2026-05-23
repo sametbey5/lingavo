@@ -612,6 +612,7 @@ export const GamificationProvider: React.FC<{ children: ReactNode }> = ({ childr
           
           if (newSkillLevel > skill.level) {
               setNotification({ text: `${skill.name} Level Up! Lvl ${newSkillLevel}`, type: 'level' });
+              setTimeout(() => setNotification(null), 3000);
           }
       }
 
@@ -627,11 +628,13 @@ export const GamificationProvider: React.FC<{ children: ReactNode }> = ({ childr
           // Reset to Level 1, keep prestige (maybe add a prestige counter in future)
           // For now, just cap at 1000 or show a special notification
           setNotification({ text: "PRESTIGE MODE UNLOCKED! You are a Legend!", type: 'level' });
+          setTimeout(() => setNotification(null), 3000);
           newIdentity = 'Legend';
       }
 
       if (newLevel > prev.level) {
         setShowLevelUp(true);
+        setTimeout(() => setShowLevelUp(false), 5000);
       }
 
       if (!skillType) {
@@ -746,6 +749,7 @@ export const GamificationProvider: React.FC<{ children: ReactNode }> = ({ childr
      
      if (res.success && action === 'accept') {
          setNotification({ text: "Trade Completed!", type: 'trade' });
+         setTimeout(() => setNotification(null), 3000);
      }
      return res;
   };
@@ -1063,42 +1067,6 @@ export const GamificationProvider: React.FC<{ children: ReactNode }> = ({ childr
       wordBank, addToWordBank, updateWordBankEntry
     }}>
       {children}
-      
-      {/* Dynamic Notification Popup */}
-      {notification && (
-        <div className="fixed top-10 left-1/2 -translate-x-1/2 z-[100] animate-bounce-slow pointer-events-none">
-          <div className="bg-slate-900 text-white px-8 py-4 rounded-[2rem] shadow-2xl flex items-center gap-4 border-2 border-white/20 backdrop-blur-md">
-            {notification.type === 'xp' && <Zap className="text-yellow-400 fill-current" size={24} />}
-            {notification.type === 'reward' && <Gift className="text-fun-pink fill-current" size={24} />}
-            {notification.type === 'badge' && <Award className="text-fun-green fill-current" size={24} />}
-            {notification.type === 'trade' && <ArrowRightLeft className="text-fun-blue fill-current" size={24} />}
-            <span className="font-black tracking-tight text-lg">{notification.text}</span>
-            <Sparkles className="text-white/20" size={20} />
-          </div>
-        </div>
-      )}
-
-      {/* Level Up Modal */}
-      {showLevelUp && (
-        <div className="fixed inset-0 z-200 flex items-center justify-center p-6 bg-black/60 backdrop-blur-md animate-fade-in">
-          <div className="bg-white rounded-[3rem] p-10 max-w-sm w-full text-center shadow-2xl border-b-[12px] border-fun-blue transform animate-wiggle relative overflow-hidden">
-            <div className="absolute -top-10 -left-10 w-32 h-32 bg-fun-pink/10 rounded-full blur-3xl" />
-            <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-fun-blue/10 rounded-full blur-3xl" />
-            
-            <div className="w-28 h-28 bg-fun-yellow rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl border-4 border-white ring-4 ring-yellow-100">
-              <Star size={56} className="text-white fill-current animate-pulse" />
-            </div>
-            <h2 className="text-4xl font-black text-slate-800 mb-2">LEVEL {stats.level}!</h2>
-            <p className="text-slate-500 font-bold mb-8">Your English is getting super strong! Keep it up!</p>
-            <button 
-              onClick={() => setShowLevelUp(false)}
-              className="w-full py-5 bg-gradient-to-r from-fun-blue to-cyan-400 text-white rounded-2xl font-black text-2xl shadow-lg border-b-8 border-blue-800 active:border-b-0 active:translate-y-2 transition-all"
-            >
-              YAY!
-            </button>
-          </div>
-        </div>
-      )}
     </GamificationContext.Provider>
   );
 };

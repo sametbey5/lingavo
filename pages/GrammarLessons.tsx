@@ -624,37 +624,14 @@ const GrammarLessons: React.FC = () => {
 
     return (
       <div className="max-w-6xl mx-auto space-y-8 animate-fade-in pb-20 px-4">
-        <div className="text-center space-y-4">
-          <h2 className="text-4xl md:text-5xl font-black text-slate-800 tracking-tight uppercase">
+        <div className="text-center space-y-2 sm:space-y-4">
+          <h2 className="text-3xl md:text-5xl font-black text-slate-800 tracking-tight uppercase">
             Grammar Academy
-            {preferredLanguage && preferredLanguage !== 'English' && (
-              <span className="block text-2xl text-fun-blue mt-2 opacity-80">
-                {t('grammar_academy')}
-              </span>
-            )}
           </h2>
-          <p className="text-xl font-bold text-slate-500">
-            Master English from A1 to C2! 🎓
-            {preferredLanguage && preferredLanguage !== 'English' && (
-              <span className="block text-sm text-slate-400 mt-1">
-                {t('master_english')}
-              </span>
-            )}
-          </p>
-          {preferredLanguage && (
-            <div className="inline-block bg-slate-100 text-slate-500 px-4 py-1 rounded-full text-sm font-bold mt-2">
-              🌍 {t('support_language')}: {preferredLanguage}
-            </div>
-          )}
-          <div className="flex justify-center mt-4">
-             <Button onClick={() => navigate('/grammar')} variant="secondary" className="px-6 py-2 text-sm">
-                Play Scramble Game {preferredLanguage && preferredLanguage !== 'English' && <span className="ml-1 opacity-70">({t('play_scramble')})</span>} 🎮
-             </Button>
-          </div>
         </div>
 
         {/* Level Tabs */}
-        <div className="flex flex-wrap justify-center gap-4 mt-8">
+        <div className="flex flex-wrap justify-center gap-2 sm:gap-4 mt-6">
           {LEVELS.map((lvl) => {
             const locked = isLevelLocked(lvl.id);
             return (
@@ -667,61 +644,51 @@ const GrammarLessons: React.FC = () => {
                 }
               }}
               disabled={locked}
-              className={`relative px-6 py-4 rounded-2xl border-b-4 transition-all flex flex-col items-center min-w-[100px] ${
+              className={`relative px-2 py-1.5 sm:px-4 sm:py-3 rounded-lg sm:rounded-xl border-b-2 sm:border-b-4 transition-all flex flex-col items-center min-w-[55px] sm:min-w-[80px] ${
                 selectedLevel === lvl.id 
-                  ? `${lvl.color} border-black/20 text-white shadow-lg scale-110 z-10` 
+                  ? `${lvl.color} border-black/20 text-white shadow-md sm:scale-105 scale-[1.02] z-10` 
                   : locked 
                     ? 'bg-slate-100 border-slate-200 text-slate-300 cursor-not-allowed grayscale'
-                    : 'bg-white border-slate-200 text-slate-400 hover:bg-slate-50 hover:scale-105'
+                    : 'bg-white border-slate-200 text-slate-400 hover:bg-slate-50 hover:scale-[1.02]'
               }`}
             >
-              {locked && <Lock size={16} className="absolute top-2 right-2 opacity-50" />}
-              <span className="text-2xl font-black">{lvl.id}</span>
-              <span className="text-[10px] font-bold uppercase tracking-wider opacity-90">{lvl.title}</span>
+              {locked && <Lock size={10} className="absolute top-1 right-1 sm:top-2 sm:right-2 opacity-50 block sm:w-3 sm:h-3" />}
+              <span className="text-sm sm:text-xl font-black">{lvl.id}</span>
+              <span className="text-[8px] sm:text-[10px] font-bold uppercase tracking-wider opacity-90 truncate w-full text-center">{lvl.title}</span>
             </button>
           )})}
         </div>
 
-        {/* Current Level Info */}
-        <div className="bg-white p-6 sm:p-8 rounded-[2rem] border-4 border-slate-100 shadow-sm text-center max-w-2xl mx-auto">
-           <h3 className="text-2xl font-black text-slate-800 mb-2">
-             {LEVELS.find(l => l.id === selectedLevel)?.title} Level
-           </h3>
-           <p className="text-slate-500 font-medium">
-             {LEVELS.find(l => l.id === selectedLevel)?.desc}
-           </p>
-        </div>
-
         {/* Segmented Control to Choose Between Interactive Lessons and Video Lessons */}
-        <div className="flex justify-center p-1 bg-slate-100/80 backdrop-blur rounded-2xl max-w-sm sm:max-w-md mx-auto my-6 border-2 border-slate-200/50">
+        <div className="flex justify-center p-1 bg-slate-100/80 backdrop-blur rounded-xl sm:rounded-2xl max-w-sm sm:max-w-md mx-auto my-4 sm:my-6 border-2 border-slate-200/50">
           <button 
             onClick={() => setActiveTab('lessons')}
-            className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-black text-sm uppercase tracking-wide transition-all ${
+            className={`flex-1 flex items-center justify-center gap-1 sm:gap-2 py-2 sm:py-3 rounded-lg sm:rounded-xl font-black text-[11px] sm:text-sm uppercase tracking-wide transition-all ${
               activeTab === 'lessons' 
                 ? 'bg-white shadow-md text-fun-blue scale-[1.02]' 
                 : 'text-slate-500 hover:text-slate-800'
             }`}
           >
-            <BookOpen size={16} />
+            <BookOpen size={14} className="sm:w-4 sm:h-4" />
             Lessons
           </button>
           <button 
             onClick={() => setActiveTab('videos')}
-            className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-black text-sm uppercase tracking-wide transition-all relative ${
+            className={`flex-1 flex items-center justify-center gap-1 sm:gap-2 py-2 sm:py-3 rounded-lg sm:rounded-xl font-black text-[11px] sm:text-sm uppercase tracking-wide transition-all relative ${
               activeTab === 'videos' 
                 ? 'bg-white shadow-md text-fun-blue scale-[1.02]' 
                 : 'text-slate-500 hover:text-slate-800'
             }`}
           >
-            <div className="absolute -top-1 right-2 bg-fun-pink w-2 h-2 rounded-full animate-ping" />
-            <Tv size={16} />
+            <div className="absolute top-1 sm:-top-1 right-1 sm:right-2 bg-fun-pink w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full animate-ping" />
+            <Tv size={14} className="sm:w-4 sm:h-4" />
             Video Lounge
           </button>
         </div>
 
         {/* Lessons Tab */}
         {activeTab === 'lessons' && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 mt-4 sm:mt-8">
             {paginatedLessons.map((lesson) => {
               const isCompleted = completedLessons.includes(lesson.id);
               const isExam = lesson.id.includes('exam');
@@ -730,39 +697,39 @@ const GrammarLessons: React.FC = () => {
               <div 
                 key={lesson.id}
                 onClick={() => handleStartLesson(lesson)}
-                className={`p-6 rounded-[2rem] border-4 shadow-lg cursor-pointer hover:shadow-xl hover:-translate-y-1 transition-all group relative overflow-hidden ${
+                className={`p-4 sm:p-6 rounded-2xl sm:rounded-[2rem] border-2 sm:border-4 shadow-md sm:shadow-lg cursor-pointer hover:shadow-xl hover:-translate-y-1 transition-all group relative overflow-hidden ${
                   isExam 
                     ? 'bg-gradient-to-br from-yellow-50 to-orange-50 border-yellow-200 hover:border-yellow-400'
                     : 'bg-white border-slate-100 hover:border-fun-blue'
                 }`}
               >
                 {isCompleted && (
-                  <div className="absolute top-4 right-4 bg-fun-green text-white p-2 rounded-full shadow-md z-10">
-                    <CheckCircle size={20} />
+                  <div className="absolute top-2 right-2 sm:top-4 sm:right-4 bg-fun-green text-white p-1 sm:p-2 rounded-full shadow-md z-10">
+                    <CheckCircle size={16} className="sm:w-5 sm:h-5" />
                   </div>
                 )}
                 
-                <div className={`w-16 h-16 ${isExam ? 'bg-orange-500' : LEVELS.find(l => l.id === lesson.level)?.color || 'bg-blue-500'} text-white rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-md`}>
-                  {isExam ? <Star size={32} fill="white" /> : <BookOpen size={32} />}
+                <div className={`w-10 h-10 sm:w-16 sm:h-16 ${isExam ? 'bg-orange-500' : LEVELS.find(l => l.id === lesson.level)?.color || 'bg-blue-500'} text-white rounded-xl sm:rounded-2xl flex items-center justify-center mb-2 sm:mb-4 group-hover:scale-110 transition-transform shadow-md`}>
+                  {isExam ? <Star size={20} className="sm:w-8 sm:h-8" fill="white" /> : <BookOpen size={20} className="sm:w-8 sm:h-8" />}
                 </div>
                 
-                <span className={`text-xs font-black uppercase tracking-widest ${isExam ? 'text-orange-600' : 'text-slate-400'}`}>
+                <span className={`text-[10px] sm:text-xs font-black uppercase tracking-widest ${isExam ? 'text-orange-600' : 'text-slate-400'}`}>
                   {lesson.topic}
                 </span>
-                <h3 className={`text-xl font-black mt-1 mb-2 leading-tight ${isExam ? 'text-slate-800' : 'text-slate-800'}`}>
+                <h3 className={`text-sm sm:text-xl font-black mt-1 mb-1 sm:mb-2 leading-tight ${isExam ? 'text-slate-800' : 'text-slate-800'}`}>
                   {lesson.title}
                 </h3>
                 {preferredLanguage && preferredLanguage !== 'English' && lesson.translations && lesson.translations[preferredLanguage] && (
-                  <p className="text-fun-blue font-bold text-sm flex items-center gap-1 mb-2">
-                    <Globe size={14} /> {lesson.translations[preferredLanguage].title}
+                  <p className="text-fun-blue font-bold text-[10px] sm:text-sm flex items-center gap-1 mb-1 sm:mb-2">
+                    <Globe size={10} className="sm:w-3 sm:h-3" /> {lesson.translations[preferredLanguage].title}
                   </p>
                 )}
-                <p className={`font-medium mb-4 text-sm ${isExam ? 'text-orange-700/70' : 'text-slate-500'}`}>
+                <p className={`font-medium mb-2 sm:mb-4 text-[10px] sm:text-sm ${isExam ? 'text-orange-700/70' : 'text-slate-500'}`}>
                   {lesson.exercises.length} interactive exercises
                 </p>
                 
-                <div className={`flex items-center font-bold group-hover:translate-x-2 transition-transform text-sm ${isExam ? 'text-orange-600' : 'text-fun-blue'}`}>
-                  {isExam ? 'Start Exam' : t('start_lesson')} <ChevronRight size={16} className="ml-1" />
+                <div className={`flex items-center font-bold group-hover:translate-x-2 transition-transform text-[10px] sm:text-sm ${isExam ? 'text-orange-600' : 'text-fun-blue'}`}>
+                  {isExam ? 'Start' : t('start_lesson')} <ChevronRight size={14} className="ml-1 sm:w-4 sm:h-4" />
                 </div>
               </div>
             )})}

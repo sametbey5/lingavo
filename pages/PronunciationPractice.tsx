@@ -188,24 +188,24 @@ const PronunciationPractice: React.FC = () => {
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="max-w-6xl mx-auto space-y-8 pb-20 px-4"
+        className="max-w-6xl mx-auto space-y-4 sm:space-y-8 pb-20 px-4"
       >
-        <div className="text-center space-y-4">
-          <div className="inline-block bg-fun-blue/10 p-4 rounded-full mb-2">
-              <BookOpen size={48} className="text-fun-blue" />
+        <div className="text-center space-y-2 sm:space-y-4">
+          <div className="inline-block bg-fun-blue/10 p-2 sm:p-4 rounded-full mb-1 sm:mb-2">
+              <BookOpen size={28} className="sm:w-12 sm:h-12 text-fun-blue" />
           </div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-800 tracking-tight">
-             PHRASE LIBRARY
+          <h2 className="text-2xl md:text-5xl font-black text-slate-800 tracking-tight uppercase leading-tight">
+             Phrase Library <br className="sm:hidden" /> & Speaking Practice
           </h2>
-          <p className="text-lg sm:text-xl font-bold text-slate-500 max-w-2xl mx-auto">
+          <p className="text-xs sm:text-xl font-bold text-slate-500 max-w-2xl mx-auto">
              Choose a phrase to practice your pronunciation! 📚
           </p>
         </div>
 
-        <div className="flex flex-wrap justify-center gap-3 mb-8">
+        <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-4 sm:mb-8">
           <button 
             onClick={() => setSelectedCategory('All')}
-            className={`px-6 py-2 rounded-full font-black text-sm transition-all ${selectedCategory === 'All' ? 'bg-fun-blue text-white shadow-lg' : 'bg-white text-slate-500 border-2 border-slate-100 hover:bg-slate-50'}`}
+            className={`px-3 py-1.5 sm:px-6 sm:py-2 rounded-full font-black text-[10px] sm:text-sm transition-all ${selectedCategory === 'All' ? 'bg-fun-blue text-white shadow-md sm:shadow-lg' : 'bg-white text-slate-500 border-2 border-slate-100 hover:bg-slate-50'}`}
           >
             ALL
           </button>
@@ -213,36 +213,36 @@ const PronunciationPractice: React.FC = () => {
             <button 
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`px-6 py-2 rounded-full font-black text-sm transition-all ${selectedCategory === cat ? 'bg-fun-blue text-white shadow-lg' : 'bg-white text-slate-500 border-2 border-slate-100 hover:bg-slate-50'}`}
+              className={`px-3 py-1.5 sm:px-6 sm:py-2 rounded-full font-black text-[10px] sm:text-sm transition-all ${selectedCategory === cat ? 'bg-fun-blue text-white shadow-md sm:shadow-lg' : 'bg-white text-slate-500 border-2 border-slate-100 hover:bg-slate-50'}`}
             >
               {cat.toUpperCase()}
             </button>
           ))}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
           {filteredPhrases.map((phrase, idx) => (
             <motion.div
               key={idx}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => selectPhrase(idx)}
-              className="bg-white p-6 rounded-[2rem] border-4 border-slate-100 shadow-xl cursor-pointer hover:border-fun-blue transition-all group"
+              className="bg-white p-3 sm:p-6 rounded-2xl sm:rounded-[2rem] border-2 sm:border-4 border-slate-100 shadow-sm cursor-pointer hover:border-fun-blue transition-all group flex flex-col justify-between"
             >
-              <div className="flex justify-between items-start mb-4">
-                <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
+              <div className="flex flex-col sm:flex-row justify-between items-start mb-2 sm:mb-4 gap-1">
+                <span className={`px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-[8px] sm:text-[10px] font-black uppercase tracking-widest leading-none ${
                   phrase.difficulty === 'Beginner' ? 'bg-green-100 text-green-600' :
                   phrase.difficulty === 'Intermediate' ? 'bg-blue-100 text-blue-600' :
                   'bg-purple-100 text-purple-600'
                 }`}>
                   {phrase.difficulty}
                 </span>
-                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{phrase.category}</span>
+                <span className="text-[8px] sm:text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">{phrase.category}</span>
               </div>
-              <h4 className="text-xl font-bold text-slate-800 mb-6 group-hover:text-fun-blue transition-colors">"{phrase.text}"</h4>
-              <div className="flex items-center justify-between text-fun-blue font-black text-sm">
-                <span>Practice Now</span>
-                <ArrowRight size={20} />
+              <h4 className="text-base sm:text-xl font-bold text-slate-800 mb-2 sm:mb-6 group-hover:text-fun-blue transition-colors leading-tight">"{phrase.text}"</h4>
+              <div className="flex items-center justify-between text-fun-blue font-black text-[10px] sm:text-sm mt-auto">
+                <span>Practice</span>
+                <ArrowRight size={14} className="sm:w-5 sm:h-5" />
               </div>
             </motion.div>
           ))}

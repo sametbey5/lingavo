@@ -2,7 +2,7 @@
 import React, { ReactNode, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import Sidebar from './Sidebar';
-import { Menu, X, LayoutDashboard, MessageCircle, BookOpen, PenTool, Trophy, Gamepad2, Briefcase, MonitorPlay, Crown, Store, ArrowRightLeft, LogOut, User, HelpCircle, Globe, ChevronDown, Bell, Flag, ShieldCheck } from 'lucide-react';
+import { Menu, X, LayoutDashboard, MessageCircle, BookOpen, PenTool, Trophy, Gamepad2, Briefcase, MonitorPlay, Crown, Store, ArrowRightLeft, LogOut, User, HelpCircle, Globe, ChevronDown, Bell, Flag, ShieldCheck, Zap, Gift, Award, Sparkles, Star } from 'lucide-react';
 import { useGamification } from '../context/GamificationContext';
 import ContactModal from './ContactModal';
 import { SUPPORTED_LANGUAGES } from '../constants';
@@ -14,7 +14,7 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
-  const { mode, userId, logout, setIsContactOpen, preferredLanguage, updateProfile, isAdmin } = useGamification();
+  const { mode, userId, logout, setIsContactOpen, preferredLanguage, updateProfile, isAdmin, notification, showLevelUp, stats, closeLevelUp } = useGamification();
   const isKids = mode === 'kids';
 
   const handleLanguageChange = async (lang: string) => {
@@ -68,6 +68,40 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               referrerPolicy="no-referrer"
             />
         </div>
+        
+        <div className="flex-1 px-2 flex justify-center flex-col items-center overflow-hidden relative min-h-[40px]">
+           {notification && (
+              <div className="absolute inset-0 flex items-center justify-center animate-fade-in z-50">
+                 <div className={`text-white px-2 py-1 mb-1 rounded-full shadow-md flex items-center gap-1 border border-white/20 whitespace-nowrap overflow-hidden bg-slate-800`}>
+                    {notification.type === 'xp' && <Zap className="text-yellow-400 fill-current shrink-0" size={12} />}
+                    {notification.type === 'reward' && <Gift className="text-fun-pink fill-current shrink-0" size={12} />}
+                    {notification.type === 'badge' && <Award className="text-fun-green fill-current shrink-0" size={12} />}
+                    {notification.type === 'trade' && <ArrowRightLeft className="text-fun-blue fill-current shrink-0" size={12} />}
+                    <span className="font-bold text-[10px] truncate max-w-[120px]">{notification.text}</span>
+                 </div>
+              </div>
+           )}
+           
+           {showLevelUp && !notification && (
+              <div className="absolute inset-0 flex items-center justify-center animate-bounce-slow z-50">
+                 <div onClick={closeLevelUp} className="bg-gradient-to-r from-fun-blue to-cyan-400 text-white px-3 py-1 mb-1 rounded-full shadow-md flex items-center gap-1 border border-white/20 cursor-pointer hover:scale-105 transition-transform">
+                    <Star className="text-fun-yellow fill-current animate-pulse shrink-0" size={14} />
+                    <span className="font-black text-[10px] whitespace-nowrap">LEVEL {stats.level}!</span>
+                 </div>
+              </div>
+           )}
+        </div>
+        
+        <div className="flex items-center gap-2 ml-auto mr-2">
+            {/* Notifications */}
+            <NavLink 
+                to="/notifications"
+                className="p-2 text-fun-orange bg-orange-50 hover:bg-orange-100 rounded-xl transition-colors"
+            >
+                <Bell size={20} />
+            </NavLink>
+        </div>
+
         <button 
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           className="p-2 text-slate-600 hover:bg-slate-100 rounded-xl transition-colors"
@@ -145,7 +179,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                     >
                         <div className="flex items-center gap-2">
                             <Globe size={18} className="text-fun-blue" />
-                            <span>{preferredLanguage || 'Turkish'}</span>
+                            <span>{preferredLanguage || 'English'}</span>
                         </div>
                         <ChevronDown size={18} className={`transition-transform ${isLangMenuOpen ? 'rotate-180' : ''}`} />
                     </button>
@@ -189,6 +223,30 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           </div>
         </div>
       )}
+
+      {/* Desktop Notifications / LevelUp */}
+      <div className="hidden md:flex fixed top-4 left-1/2 -translate-x-1/2 z-[100] flex-col items-center gap-2 pointer-events-none">
+           {notification && (
+              <div className="animate-fade-in pointer-events-auto">
+                 <div className="bg-slate-900 text-white px-4 py-2 rounded-full shadow-2xl flex items-center gap-3 border border-white/20 whitespace-nowrap bg-opacity-95 backdrop-blur-md">
+                    {notification.type === 'xp' && <Zap className="text-yellow-400 fill-current" size={18} />}
+                    {notification.type === 'reward' && <Gift className="text-fun-pink fill-current" size={18} />}
+                    {notification.type === 'badge' && <Award className="text-fun-green fill-current" size={18} />}
+                    {notification.type === 'trade' && <ArrowRightLeft className="text-fun-blue fill-current" size={18} />}
+                    <span className="font-bold text-sm">{notification.text}</span>
+                 </div>
+              </div>
+           )}
+           
+           {showLevelUp && !notification && (
+              <div className="animate-bounce-slow pointer-events-auto">
+                 <div onClick={closeLevelUp} className="bg-gradient-to-r from-fun-blue to-cyan-400 text-white px-5 py-2.5 rounded-full shadow-2xl flex items-center gap-3 border border-white/20 hover:scale-105 transition-transform cursor-pointer">
+                    <Star className="text-fun-yellow fill-current animate-pulse" size={20} />
+                    <span className="font-black text-sm tracking-wide">LEVEL {stats.level}!</span>
+                 </div>
+              </div>
+           )}
+      </div>
 
       {/* Main Content Area - Reduced padding for Pro mode */}
       <main className={`md:ml-${isKids ? '72' : '64'} p-3 sm:p-4 md:p-${isKids ? '10' : '8'} max-w-7xl mx-auto transition-all`}>
