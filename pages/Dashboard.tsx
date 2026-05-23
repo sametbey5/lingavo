@@ -58,27 +58,26 @@ const Dashboard: React.FC = () => {
     <div className="space-y-3 sm:space-y-4 animate-fade-in pb-6">
       {/* Header */}
       <header className={`p-3 sm:p-5 shadow-sm bg-white rounded-[1.5rem] sm:rounded-[2rem] border-[3px] sm:border-4 border-slate-100 relative overflow-hidden`}>
-        {/* Top row: avatar + info + stats + notifications */}
+        {/* Top row: avatar + info + stats + level */}
         <div className="flex items-center gap-3 justify-between">
           {/* Avatar */}
           <div className="flex items-center gap-3 min-w-0">
-            <div onClick={() => navigate('/my-style')} className={`w-12 h-12 sm:w-16 sm:h-16 shrink-0 ${stats.themeColor || 'bg-fun-blue'} rounded-xl sm:rounded-[1rem] border-[3px] border-white shadow-md flex items-center justify-center animate-float cursor-pointer hover:scale-110 transition-transform relative group overflow-hidden`}>
+            <div onClick={() => navigate('/my-style')} className={`w-16 h-16 sm:w-20 sm:h-20 shrink-0 ${stats.themeColor || 'bg-fun-blue'} rounded-xl sm:rounded-[1rem] border-[3px] border-white shadow-md flex items-center justify-center cursor-pointer hover:scale-110 transition-transform relative group overflow-hidden`}>
               <img src={stats.avatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix'} alt="User Avatar" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
               <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                 <Palette className="text-white w-4 h-4 sm:w-5 sm:h-5" />
               </div>
             </div>
             <div className="min-w-0 flex flex-col justify-center">
-              <h2 className="text-base sm:text-lg font-black text-slate-800 tracking-tight flex items-center gap-1 leading-none mb-1 truncate">
-                {stats.identityTitle || 'Explorer'} <Sparkles className="text-fun-yellow animate-pulse shrink-0 w-4 h-4" />
+              <h2 className="text-base sm:text-xl font-black text-slate-800 tracking-tight flex items-center gap-1 leading-none mb-1 truncate">
+                {displayName} <Sparkles className="text-fun-yellow animate-pulse shrink-0 w-4 h-4" />
               </h2>
-              <p className="text-slate-500 font-bold text-[11px] sm:text-xs leading-tight">Lv.{stats.level} • <span className="text-fun-pink">{displayName}</span></p>
-              <div className="mt-1 flex flex-wrap gap-1">
-                <span className="px-1.5 py-0.5 bg-slate-100 rounded-md text-[9px] sm:text-[10px] font-black text-slate-500 uppercase tracking-widest border border-slate-200">{userId}</span>
-              </div>
+              <p className="text-slate-500 font-bold text-[11px] sm:text-xs leading-tight">
+                {stats.identityTitle || 'Explorer'}
+              </p>
             </div>
           </div>
-          {/* Stats + bell */}
+          {/* Stats: Streak + XP + Level */}
           <div className="flex items-center gap-2 shrink-0">
             <div className="flex flex-col items-center px-2 sm:px-3 py-1 sm:py-1.5 bg-orange-100 border-b-2 border-orange-200 rounded-xl text-orange-600 font-black">
               <Flame className="w-4 h-4 sm:w-5 sm:h-5 fill-current animate-pulse mb-0.5" />
@@ -88,9 +87,10 @@ const Dashboard: React.FC = () => {
               <Star className="w-4 h-4 sm:w-5 sm:h-5 fill-current mb-0.5" />
               <span className="text-sm sm:text-base leading-none">{stats.points}</span>
             </div>
-            <button onClick={() => navigate('/notifications')} className="p-2 bg-slate-100 hover:bg-fun-orange hover:text-white rounded-xl transition-all text-slate-500 flex items-center justify-center h-full">
-              <Bell className="w-5 h-5 sm:w-6 sm:h-6" />
-            </button>
+            <div className="flex flex-col items-center px-2 sm:px-3 py-1 sm:py-1.5 bg-blue-100 border-b-2 border-blue-200 rounded-xl text-blue-600 font-black">
+              <Award className="w-4 h-4 sm:w-5 sm:h-5 fill-current mb-0.5" />
+              <span className="text-sm sm:text-base leading-none">Lv.{stats.level}</span>
+            </div>
           </div>
         </div>
 

@@ -98,7 +98,53 @@ const ScrollToTop: React.FC = () => {
   return null;
 };
 
+const playClickSound = () => {
+  try {
+    const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+    const osc = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+    
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.08);
+    
+    gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+    
+    osc.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.09);
+  } catch (error) {
+    // Ignore autoplay restriction errors gracefully
+  }
+};
+
 const App: React.FC = () => {
+  React.useEffect(() => {
+    const handleGlobalClick = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target) return;
+      
+      const isClickable = target.closest('button') || 
+                          target.closest('a') || 
+                          target.closest('[role="button"]') ||
+                          target.closest('.cursor-pointer') ||
+                          (target.tagName === 'INPUT' && (target as HTMLInputElement).type === 'submit') ||
+                          (target.tagName === 'INPUT' && (target as HTMLInputElement).type === 'button');
+                          
+      if (isClickable) {
+        playClickSound();
+      }
+    };
+    
+    document.addEventListener('click', handleGlobalClick, { capture: true });
+    return () => {
+      document.removeEventListener('click', handleGlobalClick, { capture: true });
+    };
+  }, []);
+
   return (
     <GamificationProvider>
       <Router>
