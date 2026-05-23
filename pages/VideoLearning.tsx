@@ -1,11 +1,12 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Heart, MessageCircle, Share2, BookOpen, Bookmark, Music2, Volume2, VolumeX, ArrowLeft, Star, Sparkles, Users, User, Loader2 } from 'lucide-react';
+import { Heart, MessageCircle, Share2, BookOpen, Bookmark, Music2, Volume2, VolumeX, ArrowLeft, Star, Sparkles, Users, User, Loader2, ChevronRight } from 'lucide-react';
 import { useGamification } from '../context/GamificationContext';
 import ReactPlayer from 'react-player';
 import { motion, AnimatePresence } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
 import { db } from '../services/db';
+import smartClipsLogo from '../src/assets/images/smartclips_logo_1779575804023.png';
 
 interface Video {
   id: string;
@@ -51,10 +52,31 @@ const FALLBACK_VIDEOS: Video[] = [
   }
 ];
 
+const VIDEO_VOCABULARY: Record<string, { words: string[]; phrases: string[] }> = {
+  'movie-1': {
+    words: ['About', 'Actor', 'Activity', 'Address'],
+    phrases: ['Hello, how are you today?', 'Nice to meet you.']
+  },
+  'movie-2': {
+    words: ['Above', 'Across', 'Action', 'Adult'],
+    phrases: ['Good morning, everyone.', 'It is important to practice speaking every day.']
+  }
+};
+
+const getVocabularyForVideo = (video: Video) => {
+  if (VIDEO_VOCABULARY[video.id]) {
+    return VIDEO_VOCABULARY[video.id];
+  }
+  return {
+    words: ['About', 'Action', 'Activity', 'Actor'],
+    phrases: ['Hello, how are you today?', 'It is important to practice speaking every day.']
+  };
+};
+
 const VideoItem: React.FC<{ video: Video, isActive: boolean }> = ({ video, isActive }) => {
-  const [isLiked, setIsLiked] = useState(false);
   const { awardPoints } = useGamification();
   const [hasAwarded, setHasAwarded] = useState(false);
+  const [showVocab, setShowVocab] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -63,14 +85,6 @@ const VideoItem: React.FC<{ video: Video, isActive: boolean }> = ({ video, isAct
       setHasAwarded(true);
     }
   }, [isActive, hasAwarded, awardPoints]);
-
-  const handleProfileClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    // Navigate to profile or channel page
-    // Assuming we have a route or just showing an alert for now as requested "make functional"
-    // Ideally: navigate(`/channel/${video.author}`);
-    alert(`Navigating to ${video.author}'s profile!`);
-  };
 
   return (
     <div className="relative h-full w-full bg-black flex items-center justify-center overflow-hidden snap-start">
@@ -99,41 +113,26 @@ const VideoItem: React.FC<{ video: Video, isActive: boolean }> = ({ video, isAct
 
       {/* Right Side Actions - z-20 to sit above interaction layer */}
       <div className="absolute right-4 bottom-32 z-20 flex flex-col items-center gap-6" onClick={(e) => e.stopPropagation()}>
-        <div className="flex flex-col items-center gap-1 cursor-pointer" onClick={handleProfileClick}>
-          <div className="w-12 h-12 rounded-full border-2 border-white overflow-hidden bg-slate-200">
-            <img 
-              src={video.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${video.author}`} 
-              alt="avatar" 
-              className="w-full h-full object-cover"
-            />
-          </div>
-          <div className="bg-fun-pink text-white rounded-full p-0.5 -mt-3">
-             <Star size={12} fill="currentColor" />
-          </div>
-        </div>
-
+        {/* Vocabulary Button */}
         <button 
-          onClick={(e) => { e.stopPropagation(); setIsLiked(!isLiked); }}
-          className="flex flex-col items-center gap-1"
+          onClick={(e) => { e.stopPropagation(); setShowVocab(true); }}
+          className="flex flex-col items-center gap-1 group"
         >
-          <div className={`p-3 rounded-full backdrop-blur-md transition-all ${isLiked ? 'bg-fun-pink text-white scale-110' : 'bg-black/20 text-white'}`}>
-            <Heart size={28} fill={isLiked ? "currentColor" : "none"} />
+          <div className="p-3.5 rounded-full bg-black/40 backdrop-blur-md text-[#df7e80] ring-2 ring-[#df7e80]/40 hover:scale-105 hover:bg-black/60 active:scale-95 transition-all">
+            <BookOpen size={28} />
           </div>
-          <span className="text-white text-xs font-bold shadow-sm">{video.likes}</span>
+          <span className="text-white text-xs font-black shadow-sm uppercase tracking-wide">Vocab</span>
         </button>
 
-        <button className="flex flex-col items-center gap-1">
-          <div className="p-3 rounded-full bg-black/20 backdrop-blur-md text-white">
-            <MessageCircle size={28} />
-          </div>
-          <span className="text-white text-xs font-bold shadow-sm">{video.comments}</span>
-        </button>
-
-        <button className="flex flex-col items-center gap-1">
-          <div className="p-3 rounded-full bg-black/20 backdrop-blur-md text-white">
+        {/* Share Button */}
+        <button 
+          onClick={(e) => { e.stopPropagation(); if (navigator.share) { navigator.share({ title: video.title, text: video.description, url: window.location.href }).catch(() => {}); } else { alert("Link copied to clipboard!"); } }}
+          className="flex flex-col items-center gap-1 group"
+        >
+          <div className="p-3.5 rounded-full bg-black/40 backdrop-blur-md text-white hover:scale-105 hover:bg-black/60 active:scale-95 transition-all">
             <Share2 size={28} />
           </div>
-          <span className="text-white text-xs font-bold shadow-sm">Share</span>
+          <span className="text-white text-xs font-black shadow-sm uppercase tracking-wide">Share</span>
         </button>
       </div>
 
@@ -141,27 +140,37 @@ const VideoItem: React.FC<{ video: Video, isActive: boolean }> = ({ video, isAct
       {/* Bottom Info */}
       <div className="absolute bottom-0 left-0 right-0 p-6 z-20 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
         <div className="space-y-3 max-w-[80%]">
-          <div className="flex items-center gap-2">
-            <h3 className="text-white font-black text-xl">{video.author}</h3>
-            <span className="bg-[#00F798] text-black text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">Verified</span>
-          </div>
+          <h3 className="text-white font-black text-xl">{video.author}</h3>
           
           <p className="text-white/90 text-sm font-medium line-clamp-2">
             {video.description}
           </p>
 
-          {video.lessonId && (
+          <div className="flex flex-wrap gap-2.5 mt-2.5">
+            {video.lessonId && (
+              <button 
+                onClick={(e) => { 
+                  e.stopPropagation(); 
+                  navigate(`/grammar?lessonId=${video.lessonId}`); 
+                }}
+                className="bg-fun-blue/80 hover:bg-fun-blue text-white px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider flex items-center justify-center gap-1.5 backdrop-blur-md transition-all shadow-xl"
+              >
+                <BookOpen size={14} />
+                Learn Topic
+              </button>
+            )}
+
             <button 
               onClick={(e) => { 
                 e.stopPropagation(); 
-                navigate(`/grammar?lessonId=${video.lessonId}`); 
+                setShowVocab(true);
               }}
-              className="mt-2 bg-fun-blue/80 hover:bg-fun-blue text-white px-4 py-2 rounded-xl text-sm font-bold flex items-center justify-center gap-2 backdrop-blur-md transition-all shadow-xl"
+              className="bg-[#df7e80] hover:bg-[#df7e80]/90 text-black px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider flex items-center justify-center gap-1.5 backdrop-blur-md transition-all shadow-xl"
             >
-              <BookOpen size={16} />
-              Learn About This Topic
+              <Sparkles size={14} />
+              vocabulary
             </button>
-          )}
+          </div>
 
           <div className="flex items-center gap-2 text-white/80 text-sm mt-3">
             <Music2 size={14} className="animate-spin-slow" />
@@ -172,13 +181,94 @@ const VideoItem: React.FC<{ video: Video, isActive: boolean }> = ({ video, isAct
             </div>
           </div>
 
-          <div className="flex gap-2">
-             <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest text-white ${video.color || 'bg-fun-blue'}`}>
-                {video.category}
-             </span>
-          </div>
+
         </div>
       </div>
+
+      {/* Vocabulary Modal/Sheet Overlay */}
+      <AnimatePresence>
+        {showVocab && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowVocab(false)}
+            className="absolute inset-0 bg-black/80 backdrop-blur-md z-40 flex flex-col justify-end"
+          >
+            <motion.div 
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-slate-900 border-t-4 border-fun-blue rounded-t-[2.5rem] p-6 max-h-[75vh] overflow-y-auto space-y-6"
+            >
+              <div className="flex justify-between items-center pb-3 border-b border-slate-800">
+                <div>
+                  <span className="text-xs font-black text-[#df7e80] tracking-widest uppercase">Clip Vocabulary</span>
+                  <h3 className="text-base font-black text-white line-clamp-1">{video.title}</h3>
+                </div>
+                <button 
+                  onClick={() => setShowVocab(false)}
+                  className="text-white font-black bg-slate-800 hover:bg-slate-700 px-4 py-2 rounded-full text-xs uppercase tracking-wider"
+                >
+                  Close
+                </button>
+              </div>
+
+              {/* Words Section */}
+              <div className="space-y-3">
+                <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-1.5">
+                  <span>📚 Key Words (Dictionary)</span>
+                </h4>
+                <div className="grid grid-cols-2 gap-3.5">
+                  {getVocabularyForVideo(video).words.map(word => (
+                    <button
+                      key={word}
+                      onClick={() => {
+                        setShowVocab(false);
+                        navigate(`/wordbank?search=${encodeURIComponent(word)}`);
+                      }}
+                      className="flex items-center justify-between p-3.5 bg-slate-800/60 hover:bg-fun-blue/20 hover:border-fun-blue/50 border border-slate-800 rounded-2xl text-left transition-all group"
+                    >
+                      <div>
+                        <p className="font-extrabold text-[#df7e80] text-sm group-hover:text-white transition-colors">{word}</p>
+                        <p className="text-[10px] text-slate-400">View in Dictionary</p>
+                      </div>
+                      <ChevronRight size={14} className="text-slate-500 group-hover:text-white group-hover:translate-x-0.5 transition-all" />
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Phrases Section */}
+              <div className="space-y-3">
+                <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-1.5">
+                  <span>🗣️ Key Phrases (Phrase Library)</span>
+                </h4>
+                <div className="space-y-2.5">
+                  {getVocabularyForVideo(video).phrases.map(phrase => (
+                    <button
+                      key={phrase}
+                      onClick={() => {
+                        setShowVocab(false);
+                        navigate(`/pronunciation?search=${encodeURIComponent(phrase)}`);
+                      }}
+                      className="w-full flex items-center justify-between p-4 bg-slate-800/60 hover:bg-fun-purple/20 hover:border-fun-purple/50 border border-slate-800 rounded-2xl text-left transition-all group"
+                    >
+                      <div className="flex-1 pr-3">
+                        <p className="font-extrabold text-white text-sm italic group-hover:text-[#df7e80] transition-colors">"{phrase}"</p>
+                        <p className="text-[10px] text-slate-400 mt-1">Practice Pronunciation</p>
+                      </div>
+                      <ChevronRight size={14} className="text-slate-500 group-hover:text-[#df7e80] group-hover:translate-x-0.5 transition-all shrink-0" />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
@@ -231,13 +321,12 @@ const VideoLearning: React.FC = () => {
         </button>
         
         <div className="flex flex-col items-center">
-          <h2 className="text-white text-xl font-black uppercase tracking-widest flex items-center gap-2">
-             🎬 Movie Clips
-          </h2>
-        </div>
-
-        <div className="w-10 h-10 flex items-center justify-center text-white/60">
-           <Sparkles size={24} />
+          <img 
+            src={smartClipsLogo} 
+            alt="smartclips" 
+            className="h-8 sm:h-10 object-contain"
+            referrerPolicy="no-referrer"
+          />
         </div>
       </div>
 
@@ -249,7 +338,7 @@ const VideoLearning: React.FC = () => {
       >
         {isLoading ? (
           <div className="h-full w-full flex flex-col items-center justify-center text-white gap-4">
-            <Loader2 size={48} className="animate-spin text-[#00F798]" />
+            <Loader2 size={48} className="animate-spin text-[#df7e80]" />
             <p className="font-black animate-pulse">Loading Lingavo Learns...</p>
           </div>
         ) : (

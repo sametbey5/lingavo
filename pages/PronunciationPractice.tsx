@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useGamification } from '../context/GamificationContext';
+import { useSearchParams } from 'react-router-dom';
 import Button from '../components/Button';
 import { Mic, MicOff, Play, RotateCcw, CheckCircle2, AlertCircle, Trophy, Star, ArrowRight, Volume2, BookOpen } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
@@ -49,6 +50,7 @@ const CATEGORIES = Array.from(new Set(PHRASES.map(p => p.category)));
 
 const PronunciationPractice: React.FC = () => {
   const { awardPoints, mode } = useGamification();
+  const [searchParams] = useSearchParams();
   const isKids = mode === 'kids';
 
   const [view, setView] = useState<'selection' | 'practice'>('selection');
@@ -62,6 +64,19 @@ const PronunciationPractice: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | 'All'>('All');
 
   const recognitionRef = useRef<any>(null);
+
+  useEffect(() => {
+    const qPhrase = searchParams.get('phrase') || searchParams.get('search');
+    if (qPhrase) {
+      const decodedPhrase = decodeURIComponent(qPhrase);
+      const foundIdx = PHRASES.findIndex(p => p.text.toLowerCase().includes(decodedPhrase.toLowerCase()) || decodedPhrase.toLowerCase().includes(p.text.toLowerCase()));
+      if (foundIdx !== -1) {
+        setSelectedCategory('All');
+        setCurrentPhraseIndex(foundIdx);
+        setView('practice');
+      }
+    }
+  }, [searchParams]);
 
   const filteredPhrases = selectedCategory === 'All' 
     ? PHRASES 

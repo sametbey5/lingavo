@@ -2,6 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { useGamification } from '../context/GamificationContext';
 import { BookOpen, Search, Sparkles, Volume2, Bookmark, PlusCircle, Trash2, Brain, ChevronRight, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { useSearchParams } from 'react-router-dom';
 import Button from '../components/Button';
 import { VocabWord } from '../types';
 import { CAMBRIDGE_DICTIONARY, DictionaryWord } from '../constants/dictionary';
@@ -17,10 +18,39 @@ const getWordImage = (word: string): string => {
 
 const WordBank: React.FC = () => {
   const { cefrLevel, wordBank, addToWordBank, awardPoints } = useGamification();
+  const [searchParams] = useSearchParams();
+  const queryWord = searchParams.get('search');
 
   // Pick user's CEFR level as the starting tab
   const [selectedLevel, setSelectedLevel] = useState<'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2' | 'saved'>(cefrLevel || 'A1');
   const [searchQuery, setSearchQuery] = useState('');
+  
+  // Combine static dict and custom words matching format
+  const [customWords, setCustomWords] = useState<DictionaryWord[]>(() => {
+    const saved = localStorage.getItem('custom_dict_words');
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  const allDictionaryWords = useMemo(() => {
+    return [...CAMBRIDGE_DICTIONARY, ...customWords];
+  }, [customWords]);
+
+  useEffect(() => {
+    if (queryWord) {
+      const decoded = decodeURIComponent(queryWord);
+      setSearchQuery(decoded);
+      // Try to find matching level in allDictionaryWords
+      const found = allDictionaryWords.find(w => w.word.toLowerCase() === decoded.toLowerCase());
+      if (found) {
+        setSelectedLevel(found.level);
+      } else {
+        const foundSaved = wordBank.some(w => w.word.toLowerCase() === decoded.toLowerCase());
+        if (foundSaved) {
+          setSelectedLevel('saved');
+        }
+      }
+    }
+  }, [queryWord, allDictionaryWords, wordBank]);
   
   // Custom word creation form
   const [showAddForm, setShowAddForm] = useState(false);
@@ -38,22 +68,6 @@ const WordBank: React.FC = () => {
   const [newPron, setNewPron] = useState('');
   const [newCategory, setNewCategory] = useState('Noun');
   const [newLevel, setNewLevel] = useState<'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2'>('A2');
-  const [customWords, setCustomWords] = useState<DictionaryWord[]>(() => {
-    const saved = localStorage.getItem('custom_dict_words');
-    return saved ? JSON.parse(saved) : [];
-  });
-
-  // Handle defaulting the level accurately if it shifts
-  useEffect(() => {
-    if (cefrLevel) {
-      setSelectedLevel(cefrLevel);
-    }
-  }, [cefrLevel]);
-
-  // Combine static dict and custom words matching format
-  const allDictionaryWords = useMemo(() => {
-    return [...CAMBRIDGE_DICTIONARY, ...customWords];
-  }, [customWords]);
 
   // Speak word via standard audio synthesis
   const speakWord = (word: string) => {

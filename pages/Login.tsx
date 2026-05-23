@@ -82,7 +82,7 @@ const Login: React.FC = () => {
           </div>
           <p className="text-slate-500 font-bold">
             {authMode === 'login' 
-                ? (isSignUp ? "Create your hero account!" : "Welcome back, Hero!")
+                ? (isSignUp ? "Create your account" : "Sign In to Continue")
                 : (authMode === 'reset-request' ? "Reset your password" : "Enter reset code")}
           </p>
         </div>
