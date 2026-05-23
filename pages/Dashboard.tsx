@@ -7,6 +7,13 @@ import { Badge } from '../types';
 import { useGamification } from '../context/GamificationContext';
 import UserRoleBadge from '../components/UserRoleBadge';
 
+import warmUpImage from '../src/assets/images/warm_up_button_1779508278650.png';
+import learnImage from '../src/assets/images/learn_button_1779508296021.png';
+import speakImage from '../src/assets/images/speak_button_1779508313149.png';
+import watchImage from '../src/assets/images/watch_button_1779508330353.png';
+import reviewImage from '../src/assets/images/review_button_1779508350867.png';
+import challengeImage from '../src/assets/images/challenge_button_1779508368287.png';
+
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   const { stats, quests, mode, userId, isPremium, isAdmin, isVerifiedTeacher } = useGamification();
@@ -20,16 +27,13 @@ const Dashboard: React.FC = () => {
   const currentLevelPoints = stats.points % pointsPerLevel;
   const progressPercent = (currentLevelPoints / pointsPerLevel) * 100;
 
-  const DailyFlowCard = ({ title, time, icon, color, onClick, completed }: any) => (
-      <div onClick={onClick} className={`flex items-center gap-3 p-3 sm:p-4 rounded-[1.25rem] sm:rounded-[1.5rem] border-[3px] sm:border-4 transition-all cursor-pointer ${completed ? 'bg-slate-50 border-slate-100 opacity-60' : 'bg-white border-slate-100 hover:border-fun-blue hover:shadow-sm'}`}>
-          <div className={`w-10 h-10 sm:w-12 sm:h-12 ${completed ? 'bg-slate-200' : color} rounded-xl sm:rounded-xl flex items-center justify-center text-white text-lg sm:text-2xl shadow-sm shrink-0`}>
-              {completed ? <CheckCircle2 className="w-5 h-5 sm:w-6 sm:h-6" /> : React.cloneElement(icon as React.ReactElement, { className: "w-5 h-5 sm:w-6 sm:h-6" })}
-          </div>
-          <div className="flex-1 min-w-0">
-              <h4 className={`font-black text-sm sm:text-base leading-tight truncate ${completed ? 'text-slate-400 line-through' : 'text-slate-800'}`}>{title}</h4>
-              <p className="text-[10px] sm:text-xs font-bold text-slate-400 truncate mt-0.5">{time}</p>
-          </div>
-          {!completed && <div className="bg-slate-100 p-1.5 sm:p-2 rounded-full text-slate-400 shrink-0"><PlayCircle className="w-5 h-5 sm:w-6 sm:h-6" /></div>}
+  const ImageFlowCard = ({ imageSrc, onClick }: any) => (
+      <div 
+         onClick={onClick} 
+         className="relative w-full aspect-square rounded-2xl sm:rounded-[2rem] border-4 border-slate-100 overflow-hidden cursor-pointer hover:border-fun-blue hover:shadow-xl hover:-translate-y-1 transition-all group bg-slate-50"
+      >
+          <img src={imageSrc} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Action button" />
+          <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors pointer-events-none" />
       </div>
   );
 
@@ -110,54 +114,30 @@ const Dashboard: React.FC = () => {
             <h3 className="text-xl sm:text-2xl font-black text-slate-800 mb-4 sm:mb-5 flex items-center gap-2 uppercase">
                 LET'S...
             </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-                <DailyFlowCard 
-                    title="Warm Up" 
-                    time="Word Rush" 
-                    icon={<Zap />} 
-                    color="bg-fun-yellow" 
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
+                <ImageFlowCard 
+                    imageSrc={warmUpImage}
                     onClick={() => navigate('/vocab')}
-                    completed={false}
                 />
-                <DailyFlowCard 
-                    title="Learn" 
-                    time="Grammar & Stories" 
-                    icon={<BookOpen />} 
-                    color="bg-fun-purple" 
+                <ImageFlowCard 
+                    imageSrc={learnImage}
                     onClick={() => navigate('/grammar-lessons')}
-                    completed={false}
                 />
-                <DailyFlowCard 
-                    title="Speak" 
-                    time="Speaking Practice" 
-                    icon={<Mic />} 
-                    color="bg-fun-green" 
+                <ImageFlowCard 
+                    imageSrc={speakImage}
                     onClick={() => navigate('/pronunciation')}
-                    completed={false}
                 />
-                <DailyFlowCard 
-                    title="Watch" 
-                    time="Smart Clips" 
-                    icon={<MonitorPlay />} 
-                    color="bg-fun-pink" 
+                <ImageFlowCard 
+                    imageSrc={watchImage}
                     onClick={() => navigate('/videos')}
-                    completed={false}
                 />
-                <DailyFlowCard 
-                    title="Review" 
-                    time="Scramble Master & Coach" 
-                    icon={<Brain />} 
-                    color="bg-fun-blue" 
+                <ImageFlowCard 
+                    imageSrc={reviewImage}
                     onClick={() => navigate('/game/scramble')}
-                    completed={false}
                 />
-                <DailyFlowCard 
-                    title="Challenge" 
-                    time="Live Race" 
-                    icon={<Flag />} 
-                    color="bg-red-500" 
+                <ImageFlowCard 
+                    imageSrc={challengeImage}
                     onClick={() => navigate('/race')}
-                    completed={false}
                 />
             </div>
         </div>
