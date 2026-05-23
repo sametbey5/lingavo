@@ -11,8 +11,8 @@ import { motion, AnimatePresence } from 'motion/react';
 import warmUpImage from '../src/assets/images/speak.png';
 import learnImage from '../src/assets/images/learn.png';
 import speakImage from '../src/assets/images/speak.png';
-import watchImage from '../src/assets/images/speak.png';
-import reviewImage from '../src/assets/images/speak.png';
+import watchImage from '../src/assets/images/play.png';
+import reviewImage from '../src/assets/images/play.png';
 import challengeImage from '../src/assets/images/learn.png';
 
 const Dashboard: React.FC = () => {
