@@ -58,104 +58,27 @@ const YourProgress: React.FC = () => {
         </div>
 
         {/* Stats strip */}
-        <div className="grid grid-cols-3 gap-1 border-t border-slate-100 pt-2.5">
-          <div className="flex flex-col items-center">
-            <div className="flex items-center gap-1">
-              <Star className="text-fun-yellow fill-current w-3.5 h-3.5" />
-              <span className="text-xs sm:text-sm font-black text-slate-800 leading-none">{points}</span>
+        <div className="grid grid-cols-2 gap-2 border-t border-slate-100 pt-3">
+          <div className="flex flex-col items-center justify-center">
+            <div className="flex items-center gap-1.5">
+              <Star className="text-fun-yellow fill-current w-5 h-5" />
+              <span className="text-base sm:text-lg font-black text-slate-800 leading-none">{points}</span>
             </div>
-            <span className="text-[8px] font-black text-slate-400 uppercase tracking-wider mt-0.5">Total XP</span>
+            <span className="text-[10px] sm:text-xs font-black text-slate-400 uppercase tracking-wider mt-1">Total XP</span>
           </div>
 
-          <div className="flex flex-col items-center border-x border-slate-100">
-            <div className="flex items-center gap-1">
-              <Flame className="text-orange-500 fill-current w-3.5 h-3.5" />
-              <span className="text-xs sm:text-sm font-black text-slate-800 leading-none">{streakDays}d</span>
+          <div className="flex flex-col items-center justify-center border-l border-slate-100">
+            <div className="flex items-center gap-1.5">
+              <Flame className="text-orange-500 fill-current w-5 h-5 animate-pulse" />
+              <span className="text-base sm:text-lg font-black text-slate-800 leading-none">{streakDays}d</span>
             </div>
-            <span className="text-[8px] font-black text-slate-400 uppercase tracking-wider mt-0.5">Streak</span>
-          </div>
-
-          <div className="flex flex-col items-center">
-            <div className="flex items-center gap-1">
-              <CheckCircle2 className="text-fun-green w-3.5 h-3.5" />
-              <span className="text-xs sm:text-sm font-black text-slate-800 leading-none">{completedQuests.length}</span>
-            </div>
-            <span className="text-[8px] font-black text-slate-400 uppercase tracking-wider mt-0.5">Completed</span>
+            <span className="text-[10px] sm:text-xs font-black text-slate-400 uppercase tracking-wider mt-1">Streak</span>
           </div>
         </div>
       </div>
 
       {/* Progress Tracker Grid of 4 Skills with custom background images */}
       <ProgressTracker hideHeader={true} />
-
-      {/* Accordion Toggle for Quests */}
-      <div className="bg-white rounded-2xl border-2 border-slate-100 overflow-hidden shadow-sm">
-        <button
-          onClick={() => setShowQuests(!showQuests)}
-          className="w-full px-4 py-2.5 sm:py-3 flex items-center justify-between text-slate-600 hover:text-slate-800 transition-colors bg-slate-50/50"
-        >
-          <div className="flex items-center gap-1.5">
-            <Zap className="text-fun-yellow w-4 h-4 fill-current" />
-            <span className="text-xs font-black uppercase tracking-wider">
-              Quests & Challenges ({activeQuests.length + completedQuests.length})
-            </span>
-          </div>
-          {showQuests ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-        </button>
-
-        {showQuests && (
-          <div className="p-3 border-t-2 border-slate-100 space-y-4 max-h-48 overflow-y-auto animate-fade-in">
-            {/* Active Quests */}
-            {activeQuests.length > 0 && (
-              <div className="space-y-1.5">
-                <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                  ⚡ Active
-                </h3>
-                <div className="space-y-1.5">
-                  {activeQuests.map(quest => (
-                    <div key={quest.id} className="flex items-center gap-2 p-2 bg-slate-50 rounded-xl border border-slate-100">
-                      <Zap className="text-fun-yellow w-3.5 h-3.5 shrink-0" />
-                      <div className="flex-1 min-w-0">
-                        <p className="font-black text-xs text-slate-800 leading-tight truncate">{quest.title}</p>
-                        <p className="text-[9px] font-bold text-slate-400 truncate">{quest.description}</p>
-                      </div>
-                      <span className="px-1.5 py-0.5 bg-fun-blue/10 text-fun-blue font-black text-[9px] rounded-lg shrink-0">
-                        +{quest.xpReward} XP
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Completed Quests */}
-            {completedQuests.length > 0 && (
-              <div className="space-y-1.5">
-                <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                  ✅ Completed
-                </h3>
-                <div className="space-y-1.5">
-                  {completedQuests.map(quest => (
-                    <div key={quest.id} className="flex items-center gap-2 p-2 bg-slate-50 rounded-xl border border-slate-100 opacity-60">
-                      <CheckCircle2 className="text-fun-green w-3.5 h-3.5 shrink-0" />
-                      <div className="flex-1 min-w-0">
-                        <p className="font-black text-xs text-slate-500 line-through leading-tight truncate">{quest.title}</p>
-                      </div>
-                      <span className="px-1.5 py-0.5 bg-slate-100 text-slate-400 font-black text-[9px] rounded-lg shrink-0">
-                        +{quest.xpReward} XP
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-            
-            {activeQuests.length === 0 && completedQuests.length === 0 && (
-              <p className="text-center text-xs text-slate-400 py-3 font-bold">No quests available today.</p>
-            )}
-          </div>
-        )}
-      </div>
     </div>
   );
 };

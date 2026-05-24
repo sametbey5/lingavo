@@ -20,28 +20,28 @@ const ProgressTracker: React.FC<ProgressTrackerProps> = () => {
       label: 'Vocabulary', 
       icon: <BookOpen size={16} />, 
       bgImage: learnImg, 
-      barColor: 'bg-amber-600'
+      barColor: 'bg-yellow-500'
     },
     { 
       id: 'speaking', 
       label: 'Speaking', 
       icon: <Mic size={16} />, 
       bgImage: speakImg, 
-      barColor: 'bg-emerald-600'
+      barColor: 'bg-red-500'
     },
     { 
       id: 'listening', 
       label: 'Listening', 
       icon: <Ear size={16} />, 
       bgImage: playImg, 
-      barColor: 'bg-rose-600'
+      barColor: 'bg-green-500'
     },
     { 
       id: 'grammar', 
       label: 'Grammar', 
       icon: <PenTool size={16} />, 
       bgImage: watchImg, 
-      barColor: 'bg-sky-600'
+      barColor: 'bg-blue-500'
     },
   ];
 
@@ -55,7 +55,7 @@ const ProgressTracker: React.FC<ProgressTrackerProps> = () => {
         return (
           <div 
             key={skill.id} 
-            className="relative rounded-2xl border-[3px] border-slate-100 p-3 overflow-hidden shadow-sm flex flex-col justify-between h-28 sm:h-32 hover:scale-[1.02] hover:shadow-md transition-all duration-300 group"
+            className="relative rounded-2xl border-[3px] border-slate-100 p-3 overflow-hidden shadow-sm flex flex-col justify-between h-36 sm:h-44 hover:scale-[1.02] hover:shadow-md transition-all duration-300 group"
           >
             {/* Background image covering card */}
             <div 
