@@ -2,10 +2,10 @@ import React from 'react';
 import { useGamification } from '../context/GamificationContext';
 import { BookOpen, Mic, Ear, PenTool } from 'lucide-react';
 
-import learnImg from '../src/assets/images/vocabulary.png';
-import speakImg from '../src/assets/images/speaking.png';
-import playImg from '../src/assets/images/listening.png';
-import watchImg from '../src/assets/images/grammar.png';
+import learnImg from '../src/assets/images/vocabularysmall.png';
+import speakImg from '../src/assets/images/speakingsmall.png';
+import playImg from '../src/assets/images/listeningsmall.png';
+import watchImg from '../src/assets/images/grammarsmall.png';
 
 interface ProgressTrackerProps {
   hideHeader?: boolean;

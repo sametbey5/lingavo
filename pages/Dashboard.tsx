@@ -15,10 +15,10 @@ import watchImage from '../src/assets/images/watch.png';
 import reviewImage from '../src/assets/images/play.png';
 import challengeImage from '../src/assets/images/learn.png';
 
-import grammarImg from '../src/assets/images/grammar.png';
-import vocImg from '../src/assets/images/vocabulary.png';
-import listenImg from '../src/assets/images/listening.png';
-import speakImg2 from '../src/assets/images/speaking.png';
+import grammarImg from '../src/assets/images/grammarsmall.png';
+import vocImg from '../src/assets/images/vocabularysmall.png';
+import listenImg from '../src/assets/images/listeningsmall.png';
+import speakImg2 from '../src/assets/images/speakingsmall.png';
 
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
