@@ -108,7 +108,7 @@ const ScrambleMaster: React.FC = () => {
       </div>
 
       <div className="bg-white p-6 sm:p-12 rounded-[2.5rem] sm:rounded-[4rem] shadow-2xl border-4 border-slate-100 min-h-[350px] sm:min-h-[450px] flex flex-col justify-between items-center gap-6 sm:gap-10 relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none" style={{ backgroundImage: 'radial-gradient(#BA68C8 2px, transparent 2px)', backgroundSize: '24px 24px' }} />
+        <div className="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none" style={{ backgroundImage: 'radial-gradient(#b6fef4 2px, transparent 2px)', backgroundSize: '24px 24px' }} />
         
         {loading ? (
           <div className="flex flex-col items-center gap-4 py-20">

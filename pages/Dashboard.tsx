@@ -1,35 +1,25 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Zap, Brain, Star, Flame, CheckCircle2, PlayCircle, Sparkles, Wand2, Award, Palette, Mic, Map, Flag, MonitorPlay, Target, Bell, BookOpen, Users, ChevronRight, X, ArrowLeft, Heart, Medal } from 'lucide-react';
 import Button from '../components/Button';
 import { Badge } from '../types';
 import { useGamification } from '../context/GamificationContext';
 import UserRoleBadge from '../components/UserRoleBadge';
-import { motion, AnimatePresence } from 'motion/react';
 
-import warmUpImage from '../src/assets/images/speak.png';
-import learnImage from '../src/assets/images/learn.png';
 import speakImage from '../src/assets/images/speak.png';
 import watchImage from '../src/assets/images/watch.png';
-import reviewImage from '../src/assets/images/play.png';
-import challengeImage from '../src/assets/images/learn.png';
 
-import leaderImage from '../src/assets/images/speakingsmall.png';
-import tradeImage from '../src/assets/images/vocabularysmall.png';
-
-import grammarImg from '../src/assets/images/grammarbutton.png';
-import vocImg from '../src/assets/images/dictionarybutton.png';
-import listenImg from '../src/assets/images/scramblebutton.png';
-import speakImg2 from '../src/assets/images/dictionarybutton.png';
+import grammarImg from '../src/assets/images/grammar.png';
+import vocImg from '../src/assets/images/dictionary.png';
+import scrambleImg from '../src/assets/images/scramble.png';
+import wordRushImg from '../src/assets/images/race.png';
 
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   const { stats, quests, mode, userId, isPremium, isAdmin, isVerifiedTeacher } = useGamification();
   
   const isKids = true; // Forced to kids mode
-
-  const [activeCategory, setActiveCategory] = useState<'learn' | 'play' | 'speak' | 'community' | null>(null);
 
   // Helper to format username
   const displayName = userId ? userId.charAt(0).toUpperCase() + userId.slice(1) : `Hero ${stats.level}`;
@@ -38,26 +28,12 @@ const Dashboard: React.FC = () => {
   const currentLevelPoints = stats.points % pointsPerLevel;
   const progressPercent = (currentLevelPoints / pointsPerLevel) * 100;
 
-  const ImageFlowCard = ({ imageSrc, onClick, isActive }: any) => (
+  const ImageFlowCard = ({ imageSrc, onClick }: any) => (
       <div 
          onClick={onClick} 
-         className={`relative w-full aspect-square rounded-[1.25rem] sm:rounded-[1.75rem] border-[3px] overflow-hidden cursor-pointer hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group bg-slate-100 ${isActive ? 'border-fun-blue ring-4 ring-fun-blue/20' : 'border-slate-100 ring-4 ring-transparent hover:ring-fun-blue/20'}`}
+         className="relative w-full aspect-square rounded-[1.25rem] sm:rounded-[1.75rem] border-[3px] border-slate-100 overflow-hidden cursor-pointer hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group bg-slate-100 ring-4 ring-transparent hover:ring-fun-blue/20"
       >
           <img src={imageSrc} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Activity" referrerPolicy="no-referrer" />
-      </div>
-  );
-
-  const ImageSubCard = ({ imageSrc, onClick, alt }: any) => (
-      <div 
-          onClick={onClick}
-          className="w-full h-9 sm:h-12 rounded-lg overflow-hidden cursor-pointer hover:shadow-md hover:-translate-y-0.5 active:scale-[0.98] border border-slate-100 hover:border-fun-blue/50 transition-all duration-200 bg-white"
-      >
-          <img 
-              src={imageSrc} 
-              className="w-full h-full object-fill pointer-events-none" 
-              alt={alt} 
-              referrerPolicy="no-referrer" 
-          />
       </div>
   );
 
@@ -127,103 +103,55 @@ const Dashboard: React.FC = () => {
       </header>
 
       <div className="flex flex-col space-y-2.5 sm:space-y-3.5">
-        {/* Daily Flow Section with the 6 parent categories */}
+        {/* Daily Flow Section with exactly the 6 main buttons */}
         <div className="bg-white p-2 sm:p-4 rounded-[1.25rem] sm:rounded-[1.75rem] border-[3px] border-slate-100 shadow-sm relative flex flex-col gap-3">
             <div className="grid grid-cols-3 md:grid-cols-6 gap-2 sm:gap-3.5 items-start">
                 
-                {/* Learn Column */}
-                <div className="flex flex-col gap-2 relative">
+                {/* 1. Grammar */}
+                <div className="flex flex-col gap-2">
                     <ImageFlowCard 
-                        imageSrc={learnImage}
-                        isActive={activeCategory === 'learn'}
-                        onClick={() => setActiveCategory(activeCategory === 'learn' ? null : 'learn')}
+                        imageSrc={grammarImg}
+                        onClick={() => navigate('/grammar-lessons')}
                     />
-                    <AnimatePresence>
-                        {activeCategory === 'learn' && (
-                            <motion.div 
-                                initial={{ opacity: 0, y: -10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -10 }}
-                                className="absolute top-[102%] left-0 w-[140px] sm:w-[180px] mt-1 z-50 flex flex-col gap-1.5 bg-white/95 backdrop-blur rounded-xl shadow-xl border-2 border-slate-100 p-1.5"
-                            >
-                                <ImageSubCard 
-                                    imageSrc={grammarImg}
-                                    alt="Grammar Academy"
-                                    onClick={() => navigate('/grammar-lessons')}
-                                />
-                                <ImageSubCard 
-                                    imageSrc={vocImg}
-                                    alt="English Dictionary"
-                                    onClick={() => navigate('/wordbank')}
-                                />
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
                 </div>
 
-                {/* Play Column */}
-                <div className="flex flex-col gap-2 relative">
+                {/* 2. Dictionary */}
+                <div className="flex flex-col gap-2">
                     <ImageFlowCard 
-                        imageSrc={reviewImage}
-                        isActive={activeCategory === 'play'}
-                        onClick={() => setActiveCategory(activeCategory === 'play' ? null : 'play')}
+                        imageSrc={vocImg}
+                        onClick={() => navigate('/wordbank')}
                     />
-                    <AnimatePresence>
-                        {activeCategory === 'play' && (
-                            <motion.div 
-                                initial={{ opacity: 0, y: -10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -10 }}
-                                className="absolute top-[102%] left-1/2 -translate-x-1/2 md:left-0 md:translate-x-0 w-[140px] sm:w-[180px] mt-1 z-50 flex flex-col gap-1.5 bg-white/95 backdrop-blur rounded-xl shadow-xl border-2 border-slate-100 p-1.5"
-                            >
-                                <ImageSubCard 
-                                    imageSrc={speakImg2}
-                                    alt="Word Rush"
-                                    onClick={() => navigate('/vocab')}
-                                />
-                                <ImageSubCard 
-                                    imageSrc={listenImg}
-                                    alt="Scramble Master"
-                                    onClick={() => navigate('/game/scramble')}
-                                />
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
                 </div>
 
-                {/* Speak Column */}
+                {/* 3. Word Rush */}
+                <div className="flex flex-col gap-2">
+                    <ImageFlowCard 
+                        imageSrc={wordRushImg}
+                        onClick={() => navigate('/vocab')}
+                    />
+                </div>
+
+                {/* 4. Scramble */}
+                <div className="flex flex-col gap-2">
+                    <ImageFlowCard 
+                        imageSrc={scrambleImg}
+                        onClick={() => navigate('/game/scramble')}
+                    />
+                </div>
+
+                {/* 5. Speak */}
                 <div className="flex flex-col gap-2">
                     <ImageFlowCard 
                         imageSrc={speakImage}
-                        isActive={false}
                         onClick={() => navigate('/pronunciation')}
                     />
                 </div>
 
-                {/* Watch Column */}
+                {/* 6. Watch */}
                 <div className="flex flex-col gap-2">
                     <ImageFlowCard 
                         imageSrc={watchImage}
-                        isActive={false}
                         onClick={() => navigate('/videos')}
-                    />
-                </div>
-
-                {/* Rank Column */}
-                <div className="flex flex-col gap-2">
-                    <ImageFlowCard 
-                        imageSrc={leaderImage}
-                        isActive={false}
-                        onClick={() => navigate('/leaderboard')}
-                    />
-                </div>
-
-                {/* Shop / Trade Column */}
-                <div className="flex flex-col gap-2">
-                    <ImageFlowCard 
-                        imageSrc={tradeImage}
-                        isActive={false}
-                        onClick={() => navigate('/trading')}
                     />
                 </div>
 

@@ -118,7 +118,7 @@ const VideoItem: React.FC<{ video: Video, isActive: boolean }> = ({ video, isAct
           onClick={(e) => { e.stopPropagation(); setShowVocab(true); }}
           className="flex flex-col items-center gap-1 group"
         >
-          <div className="p-3.5 rounded-full bg-black/40 backdrop-blur-md text-[#df7e80] ring-2 ring-[#df7e80]/40 hover:scale-105 hover:bg-black/60 active:scale-95 transition-all">
+          <div className="p-3.5 rounded-full bg-black/40 backdrop-blur-md text-[#9cb6d4] ring-2 ring-[#9cb6d4]/40 hover:scale-105 hover:bg-black/60 active:scale-95 transition-all">
             <BookOpen size={28} />
           </div>
           <span className="text-white text-xs font-black shadow-sm uppercase tracking-wide">Vocab</span>
@@ -165,7 +165,7 @@ const VideoItem: React.FC<{ video: Video, isActive: boolean }> = ({ video, isAct
                 e.stopPropagation(); 
                 setShowVocab(true);
               }}
-              className="bg-[#df7e80] hover:bg-[#df7e80]/90 text-black px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider flex items-center justify-center gap-1.5 backdrop-blur-md transition-all shadow-xl"
+              className="bg-[#9cb6d4] hover:bg-[#9cb6d4]/90 text-black px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider flex items-center justify-center gap-1.5 backdrop-blur-md transition-all shadow-xl"
             >
               <Sparkles size={14} />
               vocabulary
@@ -205,7 +205,7 @@ const VideoItem: React.FC<{ video: Video, isActive: boolean }> = ({ video, isAct
             >
               <div className="flex justify-between items-center pb-3 border-b border-slate-800">
                 <div>
-                  <span className="text-xs font-black text-[#df7e80] tracking-widest uppercase">Clip Vocabulary</span>
+                  <span className="text-xs font-black text-[#9cb6d4] tracking-widest uppercase">Clip Vocabulary</span>
                   <h3 className="text-base font-black text-white line-clamp-1">{video.title}</h3>
                 </div>
                 <button 
@@ -232,7 +232,7 @@ const VideoItem: React.FC<{ video: Video, isActive: boolean }> = ({ video, isAct
                       className="flex items-center justify-between p-3.5 bg-slate-800/60 hover:bg-fun-blue/20 hover:border-fun-blue/50 border border-slate-800 rounded-2xl text-left transition-all group"
                     >
                       <div>
-                        <p className="font-extrabold text-[#df7e80] text-sm group-hover:text-white transition-colors">{word}</p>
+                        <p className="font-extrabold text-[#9cb6d4] text-sm group-hover:text-white transition-colors">{word}</p>
                         <p className="text-[10px] text-slate-400">View in Dictionary</p>
                       </div>
                       <ChevronRight size={14} className="text-slate-500 group-hover:text-white group-hover:translate-x-0.5 transition-all" />
@@ -257,10 +257,10 @@ const VideoItem: React.FC<{ video: Video, isActive: boolean }> = ({ video, isAct
                       className="w-full flex items-center justify-between p-4 bg-slate-800/60 hover:bg-fun-purple/20 hover:border-fun-purple/50 border border-slate-800 rounded-2xl text-left transition-all group"
                     >
                       <div className="flex-1 pr-3">
-                        <p className="font-extrabold text-white text-sm italic group-hover:text-[#df7e80] transition-colors">"{phrase}"</p>
+                        <p className="font-extrabold text-white text-sm italic group-hover:text-[#9cb6d4] transition-colors">"{phrase}"</p>
                         <p className="text-[10px] text-slate-400 mt-1">Practice Pronunciation</p>
                       </div>
-                      <ChevronRight size={14} className="text-slate-500 group-hover:text-[#df7e80] group-hover:translate-x-0.5 transition-all shrink-0" />
+                      <ChevronRight size={14} className="text-slate-500 group-hover:text-[#9cb6d4] group-hover:translate-x-0.5 transition-all shrink-0" />
                     </button>
                   ))}
                 </div>
@@ -338,7 +338,7 @@ const VideoLearning: React.FC = () => {
       >
         {isLoading ? (
           <div className="h-full w-full flex flex-col items-center justify-center text-white gap-4">
-            <Loader2 size={48} className="animate-spin text-[#df7e80]" />
+            <Loader2 size={48} className="animate-spin text-[#9cb6d4]" />
             <p className="font-black animate-pulse">Loading Lingavo Learns...</p>
           </div>
         ) : (
