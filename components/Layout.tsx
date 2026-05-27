@@ -1,5 +1,5 @@
 
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import { Menu, X, LayoutDashboard, MessageCircle, BookOpen, PenTool, Trophy, Gamepad2, Briefcase, MonitorPlay, Crown, Store, ArrowRightLeft, LogOut, User, HelpCircle, Globe, ChevronDown, Bell, Flag, ShieldCheck, Zap, Gift, Award, Sparkles, Star } from 'lucide-react';
@@ -17,10 +17,44 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { mode, userId, logout, setIsContactOpen, preferredLanguage, updateProfile, isAdmin, notification, showLevelUp, stats, closeLevelUp } = useGamification();
   const isKids = mode === 'kids';
 
+  useEffect(() => {
+    // Inject Google Translate only if not present
+    if (!document.getElementById('google-translate-script')) {
+      (window as any).googleTranslateElementInit = () => {
+        new (window as any).google.translate.TranslateElement(
+          { pageLanguage: 'en', autoDisplay: false },
+          'google_translate_element'
+        );
+      };
+      const script = document.createElement('script');
+      script.id = 'google-translate-script';
+      script.type = 'text/javascript';
+      script.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+      document.body.appendChild(script);
+    }
+  }, []);
+
+  const triggerGoogleTranslate = (langName: string) => {
+    // English is 'en', otherwise find the matching code
+    let code = 'en';
+    if (langName !== 'English') {
+      const match = SUPPORTED_LANGUAGES.find(l => l.name === langName);
+      if (match) code = match.code;
+    }
+
+    const select = document.querySelector('.goog-te-combo') as HTMLSelectElement | null;
+    if (select) {
+      select.value = code;
+      select.dispatchEvent(new Event('change'));
+    }
+  };
+
   const handleLanguageChange = async (lang: string) => {
     await updateProfile({ preferredLanguage: lang });
+    triggerGoogleTranslate(lang);
     setIsLangMenuOpen(false);
   };
+
 
   const navItems = [
     { name: isKids ? 'My Dashboard' : 'Dashboard', path: '/', icon: <LayoutDashboard size={24} />, color: isKids ? 'text-fun-blue' : 'text-slate-600' },
@@ -41,18 +75,25 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <div className={`min-h-screen ${isKids ? 'font-sans bg-white' : 'font-adult bg-slate-50 text-slate-900'}`}>
+      <div id="google_translate_element" className="absolute opacity-0 pointer-events-none w-0 h-0 overflow-hidden"></div>
       <style>
         {isKids ? `
           body {
             background-image: radial-gradient(#e0f7fa 2px, transparent 2px);
             background-size: 30px 30px;
             background-color: #ffffff;
+            top: 0 !important;
           }
+          .goog-te-banner-frame { display: none !important; }
+          .skiptranslate { display: none !important; }
         ` : `
           body {
             background-image: none;
             background-color: #f8fafc;
+            top: 0 !important;
           }
+          .goog-te-banner-frame { display: none !important; }
+          .skiptranslate { display: none !important; }
         `}
       </style>
       <Sidebar />
@@ -93,6 +134,15 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </div>
         
         <div className="flex items-center gap-2 ml-auto mr-2">
+            {/* Language Switch */}
+            <button 
+              onClick={() => handleLanguageChange(preferredLanguage === 'English' ? 'Turkish' : 'English')}
+              className={`p-2 rounded-xl transition-colors flex items-center justify-center ${preferredLanguage !== 'English' && preferredLanguage ? 'bg-blue-100 text-fun-blue' : 'text-slate-400 bg-slate-50 hover:bg-slate-100'}`}
+              title="Translate to Turkish"
+            >
+              <Globe size={20} />
+            </button>
+
             {/* Notifications */}
             <NavLink 
                 to="/notifications"

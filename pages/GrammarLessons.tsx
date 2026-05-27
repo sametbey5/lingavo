@@ -622,16 +622,16 @@ const GrammarLessons: React.FC = () => {
     const totalPages = Math.ceil(filteredLessons.length / itemsPerPage);
 
     return (
-      <div className="max-w-6xl mx-auto space-y-3 sm:space-y-4 animate-fade-in pb-6 px-4">
-        <div className="text-center space-y-1 sm:space-y-2 pt-2">
-          <h2 className="text-2xl md:text-3xl font-black text-slate-800 tracking-tight uppercase">
+      <div className="max-w-4xl mx-auto space-y-2 lg:space-y-3 animate-fade-in pb-4 px-2 lg:px-4">
+        <div className="text-center space-y-1 pt-1 lg:pt-2">
+          <h2 className="text-xl md:text-2xl font-black text-slate-800 tracking-tight uppercase">
             Grammar Academy
           </h2>
         </div>
 
         {/* Level Pills */}
-        <div className="w-full max-w-4xl mx-auto mt-2">
-          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 px-1">
+        <div className="w-full max-w-4xl mx-auto mt-1">
+          <div className="flex flex-wrap items-center justify-center gap-1 sm:gap-1.5 px-1">
             {LEVELS.map((lvl) => {
               const locked = isLevelLocked(lvl.id);
               const isActive = selectedLevel === lvl.id;
@@ -645,17 +645,17 @@ const GrammarLessons: React.FC = () => {
                     }
                   }}
                   disabled={locked}
-                  className={`flex flex-col sm:flex-row items-center gap-0.5 sm:gap-1.5 px-2 py-1 sm:px-3 sm:py-1.5 rounded-[0.75rem] sm:rounded-full border-[2px] transition-all duration-300 ${
+                  className={`flex flex-col sm:flex-row items-center gap-0.5 sm:gap-1 px-1.5 py-1 sm:px-2 sm:py-1 rounded-[0.5rem] sm:rounded-full border transition-all duration-300 ${
                     isActive 
                       ? 'border-fun-blue bg-fun-blue/5 shadow-sm scale-105' 
                       : 'border-slate-100 bg-white hover:border-slate-200 hover:bg-slate-50'
                   } ${locked ? 'opacity-50 grayscale cursor-not-allowed' : 'cursor-pointer'}`}
                 >
                   <div className="flex items-center justify-center relative">
-                    <span className={`text-[11px] sm:text-sm font-black ${locked && !isActive ? 'text-slate-400' : lvl.color.replace('bg-', 'text-')}`}>{lvl.id}</span>
-                    {locked && <Lock size={8} className="absolute -top-1 -right-1.5 text-slate-400" />}
+                    <span className={`text-[10px] sm:text-xs font-black ${locked && !isActive ? 'text-slate-400' : lvl.color.replace('bg-', 'text-')}`}>{lvl.id}</span>
+                    {locked && <Lock size={8} className="absolute -top-0.5 -right-1 text-slate-400" />}
                   </div>
-                  <span className={`text-[8px] sm:text-[9px] font-bold uppercase tracking-widest ${isActive ? 'text-slate-700' : 'text-slate-400'}`}>
+                  <span className={`hidden sm:inline-block text-[8px] font-bold uppercase tracking-widest ${isActive ? 'text-slate-700' : 'text-slate-400'}`}>
                     {lvl.title}
                   </span>
                 </button>
@@ -665,22 +665,22 @@ const GrammarLessons: React.FC = () => {
         </div>
 
         {/* Pagination */ }
-        <div className="flex items-center justify-center gap-2 max-w-sm sm:max-w-md mx-auto my-2 sm:my-3">
+        <div className="flex items-center justify-center gap-2 max-w-sm mx-auto my-1 lg:my-2">
           <button
             onClick={() => setCurrentLessonPage(p => Math.max(1, p - 1))}
             disabled={currentLessonPage === 1}
-            className={`p-1.5 sm:p-2 rounded-xl flex items-center justify-center transition-all border-2 shrink-0 ${
+            className={`p-1 lg:p-1.5 rounded-lg flex items-center justify-center transition-all border shrink-0 ${
               currentLessonPage === 1
-                ? 'bg-slate-50 border-slate-100 text-slate-300 cursor-not-allowed hidden' // hide if page 1 to save space? or keep it visible
+                ? 'bg-slate-50 border-slate-100 text-slate-300 cursor-not-allowed hidden'
                 : 'bg-white border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-slate-700 shadow-sm'
             }`}
              style={{ visibility: currentLessonPage === 1 ? 'hidden' : 'visible' }}
           >
-            <ChevronLeft size={16} className="sm:w-5 sm:h-5" />
+            <ChevronLeft size={14} className="sm:w-4 sm:h-4" />
           </button>
           
           <div className="flex-1 flex items-center justify-center">
-            <span className="font-bold text-[10px] sm:text-xs text-slate-400 uppercase tracking-widest">
+            <span className="font-bold text-[9px] sm:text-[10px] text-slate-400 uppercase tracking-widest">
               Page {currentLessonPage} of {totalPages}
             </span>
           </div>
@@ -688,19 +688,19 @@ const GrammarLessons: React.FC = () => {
           <button
             onClick={() => setCurrentLessonPage(p => Math.min(totalPages, p + 1))}
             disabled={currentLessonPage === totalPages}
-            className={`p-1.5 sm:p-2 rounded-xl flex items-center justify-center transition-all border-2 shrink-0 ${
+            className={`p-1 lg:p-1.5 rounded-lg flex items-center justify-center transition-all border shrink-0 ${
               currentLessonPage === totalPages
                 ? 'bg-slate-50 border-slate-100 text-slate-300 cursor-not-allowed hidden'
                 : 'bg-white border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-slate-700 shadow-sm'
             }`}
              style={{ visibility: currentLessonPage === totalPages ? 'hidden' : 'visible' }}
           >
-            <ChevronRight size={16} className="sm:w-5 sm:h-5" />
+            <ChevronRight size={14} className="sm:w-4 sm:h-4" />
           </button>
         </div>
 
         {/* Lessons Tab */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 mt-2 sm:mt-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 lg:gap-3 mt-1 lg:mt-2">
           {paginatedLessons.map((lesson) => {
             const isCompleted = completedLessons.includes(lesson.id);
             const isExam = lesson.id.includes('exam');
@@ -709,43 +709,43 @@ const GrammarLessons: React.FC = () => {
             <div 
               key={lesson.id}
               onClick={() => handleStartLesson(lesson)}
-              className={`p-3 sm:p-4 rounded-2xl border-2 shadow-sm cursor-pointer hover:shadow-md hover:-translate-y-1 transition-all group relative overflow-hidden flex items-center gap-3 sm:gap-4 ${
+              className={`p-2.5 sm:p-3 rounded-[1rem] border-2 shadow-sm cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-all group relative overflow-hidden flex items-center gap-2.5 sm:gap-3 ${
                 isExam 
                   ? 'bg-gradient-to-br from-yellow-50 to-orange-50 border-yellow-200 hover:border-yellow-400'
                   : 'bg-white border-slate-100 hover:border-fun-blue'
               }`}
             >
-              <div className={`w-10 h-10 sm:w-12 sm:h-12 ${isExam ? 'bg-orange-500' : LEVELS.find(l => l.id === lesson.level)?.color || 'bg-blue-500'} text-white rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-md shrink-0`}>
-                {isExam ? <Star size={16} fill="white" className="sm:w-5 sm:h-5" /> : <BookOpen size={16} className="sm:w-5 sm:h-5" />}
+              <div className={`w-10 h-10 lg:w-12 lg:h-12 ${isExam ? 'bg-orange-500' : LEVELS.find(l => l.id === lesson.level)?.color || 'bg-blue-500'} text-white rounded-lg lg:rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-md shrink-0`}>
+                {isExam ? <Star size={16} fill="white" className="lg:w-5 lg:h-5" /> : <BookOpen size={16} className="lg:w-5 lg:h-5" />}
               </div>
               
               <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-0.5">
-                  <span className={`text-[9px] sm:text-[10px] font-black uppercase tracking-widest ${isExam ? 'text-orange-600' : 'text-slate-400'}`}>
+                <div className="flex items-center gap-1.5 mb-0.5 lg:mb-1">
+                  <span className={`text-[8px] lg:text-[9px] font-black uppercase tracking-widest ${isExam ? 'text-orange-600' : 'text-slate-400'}`}>
                     {lesson.topic}
                   </span>
                   {isCompleted && (
                     <CheckCircle size={10} className="text-fun-green" />
                   )}
                 </div>
-                <h3 className={`text-sm font-black truncate leading-tight ${isExam ? 'text-slate-800' : 'text-slate-800'}`}>
+                <h3 className={`text-xs lg:text-sm font-black truncate leading-tight ${isExam ? 'text-slate-800' : 'text-slate-800'}`}>
                   {lesson.title}
                 </h3>
-                <p className={`font-medium mt-0.5 text-[9px] sm:text-[10px] ${isExam ? 'text-orange-700/70' : 'text-slate-500'}`}>
-                  {lesson.exercises.length} interactive exercises
+                <p className={`font-medium mt-0.5 lg:mt-1 text-[8px] lg:text-[9px] ${isExam ? 'text-orange-700/70' : 'text-slate-500'}`}>
+                  {lesson.exercises.length} activities
                 </p>
               </div>
               
-              <div className={`flex items-center justify-center w-6 h-6 sm:w-8 sm:h-8 rounded-full shrink-0 ${isExam ? 'bg-orange-100 text-orange-600' : 'bg-fun-blue/10 text-fun-blue'} group-hover:translate-x-1 group-hover:scale-110 transition-all shadow-sm`}>
-                <ChevronRight size={14} className="sm:w-4 sm:h-4" />
+              <div className={`flex items-center justify-center w-6 h-6 lg:w-8 lg:h-8 rounded-full shrink-0 ${isExam ? 'bg-orange-100 text-orange-600' : 'bg-fun-blue/10 text-fun-blue'} group-hover:translate-x-1 group-hover:scale-110 transition-all shadow-sm`}>
+                <ChevronRight size={14} className="lg:w-4 lg:h-4" />
               </div>
             </div>
           )})}
           
           {filteredLessons.length === 0 && (
-            <div className="col-span-full text-center py-8 text-slate-400 font-bold">
-              <Lock size={32} className="mx-auto mb-2 opacity-50" />
-              <p className="text-sm">{t('lessons_coming_soon')}</p>
+            <div className="col-span-full text-center py-6 text-slate-400 font-bold">
+              <Lock size={24} className="mx-auto mb-1 opacity-50" />
+              <p className="text-xs">{t('lessons_coming_soon')}</p>
             </div>
           )}
         </div>

@@ -30,8 +30,22 @@ const Sidebar: React.FC = () => {
     { name: 'Leaderboard', path: '/leaderboard', icon: <Trophy size={24} />, color: 'text-fun-green' },
   ];
 
-  const handleLanguageChange = (lang: string) => {
-    updateProfile({ preferredLanguage: lang });
+  const handleLanguageChange = (langName: string) => {
+    updateProfile({ preferredLanguage: langName });
+    
+    // Trigger google translate
+    let code = 'en';
+    if (langName !== 'English') {
+      const match = SUPPORTED_LANGUAGES.find(l => l.name === langName);
+      if (match) code = match.code;
+    }
+
+    const select = document.querySelector('.goog-te-combo') as HTMLSelectElement | null;
+    if (select) {
+      select.value = code;
+      select.dispatchEvent(new Event('change'));
+    }
+
     setIsLangMenuOpen(false);
   };
 
