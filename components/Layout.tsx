@@ -299,7 +299,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       </div>
 
       {/* Main Content Area - Reduced padding for Pro mode */}
-      <main className={`md:ml-${isKids ? '72' : '64'} p-3 sm:p-4 md:p-${isKids ? '10' : '8'} max-w-7xl mx-auto transition-all`}>
+      <main className={`md:ml-${isKids ? '72' : '64'} p-3 sm:p-4 md:px-${isKids ? '10' : '8'} md:pt-${isKids ? '10' : '8'} md:pb-4 max-w-7xl mx-auto transition-all`}>
         {children}
       </main>
     </div>

@@ -622,9 +622,9 @@ const GrammarLessons: React.FC = () => {
     const totalPages = Math.ceil(filteredLessons.length / itemsPerPage);
 
     return (
-      <div className="max-w-4xl mx-auto space-y-2 lg:space-y-3 animate-fade-in pb-4 px-2 lg:px-4">
-        <div className="text-center space-y-1 pt-1 lg:pt-2">
-          <h2 className="text-xl md:text-2xl font-black text-slate-800 tracking-tight uppercase">
+      <div className="max-w-4xl mx-auto space-y-2 lg:space-y-3 animate-fade-in pb-2 px-2 lg:px-4">
+        <div className="text-center space-y-1 pt-1 lg:pt-2 mb-1">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-800 tracking-tight uppercase">
             Grammar Academy
           </h2>
         </div>
@@ -645,17 +645,17 @@ const GrammarLessons: React.FC = () => {
                     }
                   }}
                   disabled={locked}
-                  className={`flex flex-col sm:flex-row items-center gap-0.5 sm:gap-1 px-1.5 py-1 sm:px-2 sm:py-1 rounded-[0.5rem] sm:rounded-full border transition-all duration-300 ${
+                  className={`flex flex-col sm:flex-row items-center gap-1 sm:gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl sm:rounded-full border transition-all duration-300 ${
                     isActive 
                       ? 'border-fun-blue bg-fun-blue/5 shadow-sm scale-105' 
                       : 'border-slate-100 bg-white hover:border-slate-200 hover:bg-slate-50'
-                  } ${locked ? 'opacity-50 grayscale cursor-not-allowed' : 'cursor-pointer'}`}
+                  } ${locked ? 'opacity-50 grayscale cursor-not-allowed' : 'cursor-pointer'} flex-1 sm:flex-none min-w-[60px]`}
                 >
                   <div className="flex items-center justify-center relative">
-                    <span className={`text-[10px] sm:text-xs font-black ${locked && !isActive ? 'text-slate-400' : lvl.color.replace('bg-', 'text-')}`}>{lvl.id}</span>
-                    {locked && <Lock size={8} className="absolute -top-0.5 -right-1 text-slate-400" />}
+                    <span className={`text-xs sm:text-sm lg:text-base font-black ${locked && !isActive ? 'text-slate-400' : lvl.color.replace('bg-', 'text-')}`}>{lvl.id}</span>
+                    {locked && <Lock size={10} className="absolute -top-1 -right-1.5 text-slate-400" />}
                   </div>
-                  <span className={`hidden sm:inline-block text-[8px] font-bold uppercase tracking-widest ${isActive ? 'text-slate-700' : 'text-slate-400'}`}>
+                  <span className={`hidden sm:inline-block text-[9px] sm:text-[10px] lg:text-[11px] font-bold uppercase tracking-widest ${isActive ? 'text-slate-700' : 'text-slate-400'}`}>
                     {lvl.title}
                   </span>
                 </button>
@@ -665,22 +665,22 @@ const GrammarLessons: React.FC = () => {
         </div>
 
         {/* Pagination */ }
-        <div className="flex items-center justify-center gap-2 max-w-sm mx-auto my-1 lg:my-2">
+        <div className="flex items-center justify-center gap-3 sm:gap-4 max-w-sm mx-auto my-1 lg:my-2">
           <button
             onClick={() => setCurrentLessonPage(p => Math.max(1, p - 1))}
             disabled={currentLessonPage === 1}
-            className={`p-1 lg:p-1.5 rounded-lg flex items-center justify-center transition-all border shrink-0 ${
+            className={`p-1.5 sm:p-2 lg:p-2.5 rounded-lg flex items-center justify-center transition-all border shrink-0 ${
               currentLessonPage === 1
                 ? 'bg-slate-50 border-slate-100 text-slate-300 cursor-not-allowed hidden'
                 : 'bg-white border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-slate-700 shadow-sm'
             }`}
              style={{ visibility: currentLessonPage === 1 ? 'hidden' : 'visible' }}
           >
-            <ChevronLeft size={14} className="sm:w-4 sm:h-4" />
+            <ChevronLeft size={16} className="sm:w-5 sm:h-5" />
           </button>
           
           <div className="flex-1 flex items-center justify-center">
-            <span className="font-bold text-[9px] sm:text-[10px] text-slate-400 uppercase tracking-widest">
+            <span className="font-bold text-[10px] sm:text-xs text-slate-400 uppercase tracking-widest">
               Page {currentLessonPage} of {totalPages}
             </span>
           </div>
@@ -688,14 +688,14 @@ const GrammarLessons: React.FC = () => {
           <button
             onClick={() => setCurrentLessonPage(p => Math.min(totalPages, p + 1))}
             disabled={currentLessonPage === totalPages}
-            className={`p-1 lg:p-1.5 rounded-lg flex items-center justify-center transition-all border shrink-0 ${
+            className={`p-1.5 sm:p-2 lg:p-2.5 rounded-lg flex items-center justify-center transition-all border shrink-0 ${
               currentLessonPage === totalPages
                 ? 'bg-slate-50 border-slate-100 text-slate-300 cursor-not-allowed hidden'
                 : 'bg-white border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-slate-700 shadow-sm'
             }`}
              style={{ visibility: currentLessonPage === totalPages ? 'hidden' : 'visible' }}
           >
-            <ChevronRight size={14} className="sm:w-4 sm:h-4" />
+            <ChevronRight size={16} className="sm:w-5 sm:h-5" />
           </button>
         </div>
 
@@ -709,35 +709,35 @@ const GrammarLessons: React.FC = () => {
             <div 
               key={lesson.id}
               onClick={() => handleStartLesson(lesson)}
-              className={`p-2.5 sm:p-3 rounded-[1rem] border-2 shadow-sm cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-all group relative overflow-hidden flex items-center gap-2.5 sm:gap-3 ${
+              className={`p-3 sm:p-4 rounded-[1rem] border-2 shadow-sm cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-all group relative overflow-hidden flex items-center gap-3 sm:gap-4 lg:gap-5 ${
                 isExam 
                   ? 'bg-gradient-to-br from-yellow-50 to-orange-50 border-yellow-200 hover:border-yellow-400'
                   : 'bg-white border-slate-100 hover:border-fun-blue'
               }`}
             >
-              <div className={`w-10 h-10 lg:w-12 lg:h-12 ${isExam ? 'bg-orange-500' : LEVELS.find(l => l.id === lesson.level)?.color || 'bg-blue-500'} text-white rounded-lg lg:rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-md shrink-0`}>
-                {isExam ? <Star size={16} fill="white" className="lg:w-5 lg:h-5" /> : <BookOpen size={16} className="lg:w-5 lg:h-5" />}
+              <div className={`w-12 h-12 lg:w-14 lg:h-14 ${isExam ? 'bg-orange-500' : LEVELS.find(l => l.id === lesson.level)?.color || 'bg-blue-500'} text-white rounded-[1rem] flex items-center justify-center group-hover:scale-110 transition-transform shadow-md shrink-0`}>
+                {isExam ? <Star size={20} fill="white" className="lg:w-6 lg:h-6" /> : <BookOpen size={20} className="lg:w-6 lg:h-6" />}
               </div>
               
               <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-1.5 mb-0.5 lg:mb-1">
-                  <span className={`text-[8px] lg:text-[9px] font-black uppercase tracking-widest ${isExam ? 'text-orange-600' : 'text-slate-400'}`}>
+                <div className="flex items-center gap-1.5 mb-1">
+                  <span className={`text-[10px] lg:text-xs font-black uppercase tracking-widest ${isExam ? 'text-orange-600' : 'text-slate-400'}`}>
                     {lesson.topic}
                   </span>
                   {isCompleted && (
-                    <CheckCircle size={10} className="text-fun-green" />
+                    <CheckCircle size={14} className="text-fun-green" />
                   )}
                 </div>
-                <h3 className={`text-xs lg:text-sm font-black truncate leading-tight ${isExam ? 'text-slate-800' : 'text-slate-800'}`}>
+                <h3 className={`text-base sm:text-lg lg:text-xl font-black truncate leading-tight ${isExam ? 'text-slate-800' : 'text-slate-800'}`}>
                   {lesson.title}
                 </h3>
-                <p className={`font-medium mt-0.5 lg:mt-1 text-[8px] lg:text-[9px] ${isExam ? 'text-orange-700/70' : 'text-slate-500'}`}>
+                <p className={`font-medium mt-1 text-[10px] lg:text-xs ${isExam ? 'text-orange-700/70' : 'text-slate-500'}`}>
                   {lesson.exercises.length} activities
                 </p>
               </div>
               
-              <div className={`flex items-center justify-center w-6 h-6 lg:w-8 lg:h-8 rounded-full shrink-0 ${isExam ? 'bg-orange-100 text-orange-600' : 'bg-fun-blue/10 text-fun-blue'} group-hover:translate-x-1 group-hover:scale-110 transition-all shadow-sm`}>
-                <ChevronRight size={14} className="lg:w-4 lg:h-4" />
+              <div className={`flex items-center justify-center w-8 h-8 lg:w-10 lg:h-10 rounded-full shrink-0 ${isExam ? 'bg-orange-100 text-orange-600' : 'bg-fun-blue/10 text-fun-blue'} group-hover:translate-x-1 group-hover:scale-110 transition-all shadow-sm`}>
+                <ChevronRight size={18} className="lg:w-5 lg:h-5" />
               </div>
             </div>
           )})}

@@ -38,38 +38,38 @@ const Dashboard: React.FC = () => {
   );
 
   return (
-    <div className="space-y-2.5 sm:space-y-3.5 animate-fade-in pb-2">
+    <div className="space-y-2 sm:space-y-2.5 animate-fade-in">
       {/* Header */}
       <header className={`p-3 sm:p-4.5 shadow-sm bg-white rounded-[1.25rem] sm:rounded-[1.75rem] border-[3px] border-slate-100 relative overflow-hidden`}>
         {/* Top row: avatar + info + stats + level */}
         <div className="flex items-center gap-3 justify-between">
-          {/* Avatar */}
-          <div className="flex items-center gap-3 min-w-0">
-            <div onClick={() => navigate('/my-style')} className={`w-16 h-16 sm:w-20 sm:h-20 shrink-0 ${stats.themeColor || 'bg-fun-blue'} rounded-2xl border-4 border-white shadow-md flex items-center justify-center cursor-pointer hover:scale-110 transition-transform relative group overflow-hidden`}>
+          {/* Avatar & Stats */}
+          <div className="flex items-center gap-3 sm:gap-5 min-w-0 flex-1">
+            <div onClick={() => navigate('/my-style')} className={`w-20 h-20 sm:w-24 sm:h-24 shrink-0 ${stats.themeColor || 'bg-fun-blue'} rounded-2xl border-4 border-white shadow-md flex items-center justify-center cursor-pointer hover:scale-110 transition-transform relative group overflow-hidden`}>
               <img src={stats.avatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix'} alt="User Avatar" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
               <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                <Palette className="text-white w-5 h-5 sm:w-6 sm:h-6" />
+                <Palette className="text-white w-6 h-6 sm:w-8 sm:h-8" />
               </div>
             </div>
-            <div className="min-w-0 flex flex-col justify-center">
-              <h2 className="text-2xl sm:text-3xl font-black text-slate-800 tracking-tight flex items-center leading-none truncate">
+            <div className="min-w-0 flex flex-col justify-center flex-1 pr-2 gap-2 mt-1">
+              <h2 className="text-2xl sm:text-4xl font-black text-slate-800 tracking-tight flex items-center leading-none truncate w-full">
                 {displayName}
               </h2>
-            </div>
-          </div>
-          {/* Stats: Streak + XP + Level */}
-          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-            <div className="flex flex-col items-center px-2.5 sm:px-4 py-1.5 sm:py-2 bg-orange-100 border-b-4 border-orange-200 rounded-2xl text-orange-600 font-black">
-              <Flame className="w-5 h-5 sm:w-7 sm:h-7 fill-current animate-pulse mb-0.5" />
-              <span className="text-sm sm:text-lg leading-none">{stats.streakDays}</span>
-            </div>
-            <div className="flex flex-col items-center px-2.5 sm:px-4 py-1.5 sm:py-2 bg-yellow-100 border-b-4 border-yellow-200 rounded-2xl text-yellow-600 font-black">
-              <Star className="w-5 h-5 sm:w-7 sm:h-7 fill-current mb-0.5" />
-              <span className="text-sm sm:text-lg leading-none">{stats.points}</span>
-            </div>
-            <div className="flex flex-col items-center px-2.5 sm:px-4 py-1.5 sm:py-2 bg-blue-100 border-b-4 border-blue-200 rounded-2xl text-blue-600 font-black">
-              <Award className="w-5 h-5 sm:w-7 sm:h-7 fill-current mb-0.5" />
-              <span className="text-sm sm:text-lg leading-none">Lv.{stats.level}</span>
+              {/* Stats: Streak + XP + Level */}
+              <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+                <div className="flex flex-col items-center px-2.5 sm:px-4 py-1.5 sm:py-2 bg-orange-100 border-b-4 border-orange-200 rounded-2xl text-orange-600 font-black flex-1 sm:flex-none">
+                  <Flame className="w-5 h-5 sm:w-7 sm:h-7 fill-current animate-pulse mb-0.5" />
+                  <span className="text-sm sm:text-lg leading-none">{stats.streakDays}</span>
+                </div>
+                <div className="flex flex-col items-center px-2.5 sm:px-4 py-1.5 sm:py-2 bg-yellow-100 border-b-4 border-yellow-200 rounded-2xl text-yellow-600 font-black flex-1 sm:flex-none">
+                  <Star className="w-5 h-5 sm:w-7 sm:h-7 fill-current mb-0.5" />
+                  <span className="text-sm sm:text-lg leading-none">{stats.points}</span>
+                </div>
+                <div className="flex flex-col items-center px-2.5 sm:px-4 py-1.5 sm:py-2 bg-blue-100 border-b-4 border-blue-200 rounded-2xl text-blue-600 font-black flex-1 sm:flex-none">
+                  <Award className="w-5 h-5 sm:w-7 sm:h-7 fill-current mb-0.5" />
+                  <span className="text-sm sm:text-lg leading-none">Lv.{stats.level}</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -102,9 +102,9 @@ const Dashboard: React.FC = () => {
         </div>
       </header>
 
-      <div className="flex flex-col space-y-2.5 sm:space-y-3.5">
+      <div className="flex flex-col space-y-2 sm:space-y-3 pb-2 sm:pb-4">
         {/* Daily Flow Section with exactly the 6 main buttons */}
-        <div className="bg-white p-3 sm:p-5 rounded-[1.5rem] sm:rounded-[2rem] border-[3px] border-slate-100 shadow-sm relative flex flex-col gap-3 sm:gap-4 mt-2">
+        <div className="bg-white p-3 sm:p-4 rounded-[1.5rem] sm:rounded-[2rem] border-[3px] border-slate-100 shadow-sm relative flex flex-col gap-2 sm:gap-3">
             
             {/* 1. Grammar (Large Horizontal Card) */}
             <div 

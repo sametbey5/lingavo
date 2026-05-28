@@ -182,7 +182,7 @@ const WordBank: React.FC = () => {
       <div className="bg-white rounded-xl p-2.5 sm:p-3 shadow-md border-2 border-slate-100 flex flex-col gap-2">
         <div className="flex items-center justify-between gap-2.5">
           <div className="flex items-center gap-2">
-            <h1 className="text-lg sm:text-xl font-black text-slate-800 uppercase tracking-tight">
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-black text-slate-800 uppercase tracking-tight">
               Dictionary
             </h1>
             <div className="px-1.5 py-0.5 bg-fun-blue/10 text-fun-blue text-[9px] font-black rounded-md uppercase tracking-wider shrink-0">
@@ -215,7 +215,7 @@ const WordBank: React.FC = () => {
                   setSelectedLevel(level);
                   setSearchQuery('');
                 }}
-                className={`px-2 py-1 rounded-lg font-bold text-[10px] md:text-11px uppercase transition-all duration-200 flex items-center gap-0.5 transform active:scale-95 shrink-0 ${
+                className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl font-bold text-xs sm:text-sm uppercase transition-all duration-200 flex items-center gap-1 transform active:scale-95 shrink-0 ${
                   isSelected
                     ? 'bg-fun-blue text-white shadow-sm border-b-2 border-blue-800'
                     : 'bg-white text-slate-600 hover:bg-slate-105 border border-slate-200'
@@ -223,7 +223,7 @@ const WordBank: React.FC = () => {
               >
                 <span>{level}</span>
                 {isUserLevel && (
-                  <span className={`text-[7px] font-black px-1 py-0.2 rounded-md shrink-0 ${
+                  <span className={`text-[9px] sm:text-[10px] font-black px-1.5 py-0.5 rounded-md shrink-0 ${
                     isSelected ? 'bg-white text-fun-blue' : 'bg-fun-pink text-white animate-pulse'
                   }`}>
                     REC
@@ -238,15 +238,15 @@ const WordBank: React.FC = () => {
               setSelectedLevel('saved');
               setSearchQuery('');
             }}
-            className={`px-2 py-1 rounded-lg font-bold text-[10px] md:text-11px uppercase transition-all duration-200 flex items-center gap-1 transform active:scale-95 shrink-0 ${
+            className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl font-bold text-xs sm:text-sm uppercase transition-all duration-200 flex items-center gap-1.5 transform active:scale-95 shrink-0 ${
               selectedLevel === 'saved'
                 ? 'bg-fun-pink text-white shadow-sm border-b-2 border-pink-805'
                 : 'bg-white text-slate-600 hover:bg-slate-105 border border-slate-200'
             }`}
           >
-            <Bookmark className="w-2.5 h-2.5 fill-current" />
+            <Bookmark className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-current" />
             <span>Saves</span>
-            <span className="text-[9px] bg-black/10 px-1 py-0.2 rounded-md font-black">{wordBank.length}</span>
+            <span className="text-[10px] sm:text-xs bg-black/10 px-1.5 py-0.5 rounded-md font-black">{wordBank.length}</span>
           </button>
         </div>
       </div>
@@ -287,7 +287,7 @@ const WordBank: React.FC = () => {
                   </div>
                 </div>
 
-                <h4 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-850 tracking-tight leading-none mb-1 group-hover:scale-105 transition-transform duration-300">
+                <h4 className="text-4xl sm:text-5xl md:text-6xl font-black text-slate-850 tracking-tight leading-none mb-2 group-hover:scale-105 transition-transform duration-300">
                   {filteredWords[currentFlashcardIndex].word}
                 </h4>
                 
@@ -327,17 +327,17 @@ const WordBank: React.FC = () => {
                 className="absolute w-full h-full bg-slate-800 text-white rounded-2xl md:rounded-[2rem] p-4 sm:p-6 shadow-xl border-2 border-slate-700 flex flex-col items-center justify-center text-center rotate-y-180 group"
                 style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
               >
-                <h4 className="text-2xl sm:text-3xl font-black mb-1 sm:mb-2 tracking-tight text-yellow-300">
+                <h4 className="text-4xl sm:text-5xl md:text-6xl font-black mb-2 sm:mb-3 tracking-tight text-yellow-300">
                   {filteredWords[currentFlashcardIndex].word}
                 </h4>
                 
-                <p className="text-xs sm:text-sm md:text-base font-bold mb-2 sm:mb-3 leading-snug max-w-sm px-2">
+                <p className="text-base sm:text-lg md:text-xl font-bold mb-3 sm:mb-4 leading-snug max-w-sm px-2">
                   {filteredWords[currentFlashcardIndex].definition}
                 </p>
 
                 {filteredWords[currentFlashcardIndex].exampleSentence && (
-                  <div className="bg-white/10 rounded-xl p-2 sm:p-3 border border-white/20 italic text-slate-300 text-[10px] sm:text-xs max-w-md w-full relative">
-                    <span className="absolute -top-2 left-4 bg-slate-800 px-1.5 text-[8px] font-black tracking-widest text-slate-400 uppercase">Example</span>
+                  <div className="bg-white/10 rounded-xl p-3 sm:p-4 border border-white/20 italic text-slate-300 text-sm sm:text-base max-w-md w-full relative">
+                    <span className="absolute -top-2 left-4 bg-slate-800 px-1.5 text-[9px] font-black tracking-widest text-slate-400 uppercase">Example</span>
                     <p className="pt-1">"{filteredWords[currentFlashcardIndex].exampleSentence}"</p>
                   </div>
                 )}
