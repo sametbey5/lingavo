@@ -1,5 +1,5 @@
 
-import { UserProfile, Quest, Badge, LeaderboardEntry, UserTrade, ContactRequest, TeacherApplication, TeacherHelpRequest } from '../types';
+import { UserProfile, Quest, Badge, LeaderboardEntry, UserTrade, ContactRequest } from '../types';
 import { supabase } from './supabaseClient';
 
 const INITIAL_QUESTS: Quest[] = [
@@ -57,12 +57,6 @@ export const db = {
       }
       if (parsed.isPremium === undefined) {
           parsed.isPremium = false;
-      }
-      if (parsed.isVerifiedTeacher === undefined) {
-          parsed.isVerifiedTeacher = false;
-      }
-      if (!parsed.teacherStatus) {
-          parsed.teacherStatus = 'none';
       }
       if (!parsed.email) {
           parsed.email = '';
@@ -697,158 +691,6 @@ export const db = {
     } catch (e) {
       console.error("Failed to delete race room", e);
       return false;
-    }
-  },
-  async applyForTeacher(userId: string, username: string, specialty: string, experience: string): Promise<boolean> {
-    try {
-      const { error } = await supabase
-        .from('teacher_applications')
-        .insert([{ user_id: userId, username, specialty, experience }]);
-      
-      if (error) throw error;
-      return true;
-    } catch (e) {
-      console.error("Teacher application error", e);
-      return false;
-    }
-  },
-
-  async getTeacherApplications(): Promise<any[]> {
-    try {
-      const { data, error } = await supabase
-        .from('teacher_applications')
-        .select('*')
-        .order('created_at', { ascending: false });
-      
-      if (error) throw error;
-      return (data || []).map(app => ({
-        id: app.id,
-        userId: app.user_id || app.userId,
-        username: app.username,
-        specialty: app.specialty,
-        experience: app.experience,
-        status: app.status,
-        createdAt: app.created_at || app.createdAt
-      }));
-    } catch (e) {
-      console.error("Fetch teacher applications error", e);
-      return [];
-    }
-  },
-
-  async updateTeacherApplicationStatus(appId: string, status: 'approved' | 'rejected'): Promise<boolean> {
-    try {
-      const { error } = await supabase
-        .from('teacher_applications')
-        .update({ status })
-        .eq('id', appId);
-      
-      if (error) throw error;
-      return true;
-    } catch (e) {
-      console.error("Update teacher application status error", e);
-      return false;
-    }
-  },
-
-  async createHelpRequest(studentId: string, studentName: string, subject: string, message: string): Promise<boolean> {
-    try {
-      const { error } = await supabase
-        .from('help_requests')
-        .insert([{ student_id: studentId, student_name: studentName, subject, message }]);
-      
-      if (error) throw error;
-      return true;
-    } catch (e) {
-      console.error("Create help request error", e);
-      return false;
-    }
-  },
-
-  async getHelpRequests(): Promise<any[]> {
-    try {
-      const { data, error } = await supabase
-        .from('help_requests')
-        .select('*')
-        .order('created_at', { ascending: false });
-      
-      if (error) throw error;
-      return (data || []).map(req => ({
-        id: req.id,
-        studentId: req.student_id || req.studentId,
-        studentName: req.student_name || req.studentName,
-        topic: req.subject || req.topic,
-        message: req.message,
-        status: req.status,
-        teacherId: req.teacher_id || req.teacherId,
-        teacherName: req.teacher_name || req.teacherName,
-        answer: req.answer,
-        createdAt: req.created_at || req.createdAt,
-        answeredAt: req.answered_at || req.answeredAt
-      }));
-    } catch (e) {
-      console.error("Fetch help requests error", e);
-      return [];
-    }
-  },
-
-  async answerHelpRequest(requestId: string, teacherId: string, teacherName: string, answer: string): Promise<boolean> {
-    try {
-      const { error } = await supabase
-        .from('help_requests')
-        .update({ 
-          status: 'answered', 
-          teacher_id: teacherId, 
-          teacher_name: teacherName, 
-          answer, 
-          answered_at: new Date().toISOString() 
-        })
-        .eq('id', requestId);
-      
-      if (error) throw error;
-      return true;
-    } catch (e) {
-      console.error("Answer help request error", e);
-      return false;
-    }
-  },
-  async getVerifiedTeachers(): Promise<any[]> {
-    try {
-      // First get approved applications
-      const { data: apps, error: appError } = await supabase
-        .from('teacher_applications')
-        .select('*')
-        .eq('status', 'approved')
-        .order('created_at', { ascending: false });
-      
-      if (appError) throw appError;
-      if (!apps || apps.length === 0) return [];
-
-      // Then get profiles for these users to get their avatars
-      const userIds = apps.map(app => app.user_id || app.userId);
-      const { data: profiles, error: profileError } = await supabase
-        .from('profiles')
-        .select('id, data')
-        .in('id', userIds);
-
-      if (profileError) throw profileError;
-
-      return apps.map(app => {
-        const profile = profiles?.find(p => p.id === (app.user_id || app.userId));
-        return {
-          id: app.id,
-          userId: app.user_id || app.userId,
-          username: app.username,
-          specialty: app.specialty,
-          experience: app.experience,
-          status: app.status,
-          avatar: profile?.data?.stats?.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${app.username}`,
-          createdAt: app.created_at || app.createdAt
-        };
-      });
-    } catch (e) {
-      console.error("Fetch verified teachers error", e);
-      return [];
     }
   },
   async getLingavoLearnsVideos(): Promise<any[]> {

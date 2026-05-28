@@ -8,7 +8,7 @@ import { SUPPORTED_LANGUAGES } from '../constants';
 import UserRoleBadge from './UserRoleBadge';
 
 const Sidebar: React.FC = () => {
-  const { userId, logout, isAdmin, setIsContactOpen, preferredLanguage, updateProfile, stats, isVerifiedTeacher, isPremium, wordBank } = useGamification();
+  const { userId, logout, isAdmin, setIsContactOpen, preferredLanguage, updateProfile, stats, isPremium, wordBank } = useGamification();
   const isKids = true; // Forced to kids mode
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
 
@@ -23,7 +23,6 @@ const Sidebar: React.FC = () => {
     { name: 'Speak Clear', path: '/pronunciation', icon: <Volume2 size={24} />, color: 'text-fun-blue' },
     { name: 'Word Rush', path: '/vocab', icon: <Zap size={24} />, color: 'text-fun-yellow' },
     { name: 'Live Race', path: '/race', icon: <Flag size={24} />, color: 'text-red-500' },
-    { name: 'Teachers', path: '/teachers', icon: <User size={24} />, color: 'text-fun-blue' },
     { name: 'Grammar Coach', path: '/grammar', icon: <GraduationCap size={24} />, color: 'text-fun-purple' },
     { name: 'Scramble', path: '/game/scramble', icon: <Brain size={24} />, color: 'text-fun-purple' },
     { name: 'Trading Post', path: '/trading', icon: <Store size={24} />, color: 'text-teal-500' },
@@ -128,23 +127,6 @@ const Sidebar: React.FC = () => {
           </NavLink>
         )}
 
-        {(isVerifiedTeacher || isAdmin) && (
-           <NavLink
-              to="/teacher-panel"
-              className={({ isActive }) =>
-                `flex items-center px-6 py-4 transition-all duration-200 group text-lg font-black rounded-3xl border-4 ${
-                  isActive 
-                    ? 'bg-fun-blue/10 text-fun-blue border-fun-blue shadow-sm' 
-                    : 'text-fun-blue border-fun-blue/20 bg-fun-blue/5 hover:bg-fun-blue/10 hover:scale-105'
-                }`
-              }
-            >
-              <span className="mr-4">
-                <GraduationCap size={24} />
-              </span>
-              TEACHER PANEL
-          </NavLink>
-        )}
       </nav>
 
       <div className="p-8 border-t-4 border-slate-50 space-y-4">
@@ -193,7 +175,6 @@ const Sidebar: React.FC = () => {
                 </div>
                 <div className="flex flex-wrap gap-1 mt-0.5">
                   {isAdmin && <UserRoleBadge role="admin" size="sm" showText={true} />}
-                  {isVerifiedTeacher && <UserRoleBadge role="teacher" size="sm" showText={true} />}
                   {isPremium && <UserRoleBadge role="premium" size="sm" showText={true} />}
                 </div>
               </div>

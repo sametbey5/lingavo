@@ -9,8 +9,6 @@ import ScrambleMaster from './pages/ScrambleMaster';
 import GrammarLessons from './pages/GrammarLessons';
 import Leaderboard from './pages/Leaderboard';
 import VideoLearning from './pages/VideoLearning';
-import GrammarGalaxy from './pages/GrammarGalaxy';
-import BossBattle from './pages/BossBattle';
 import SpeedRacer from './pages/SpeedRacer';
 import WordWhack from './pages/WordWhack';
 import BadgeTrading from './pages/BadgeTrading';
@@ -23,8 +21,6 @@ import StoryMode from './pages/StoryMode';
 import PronunciationPractice from './pages/PronunciationPractice';
 import Notifications from './pages/Notifications';
 import RaceMode from './pages/RaceMode';
-import Teachers from './pages/Teachers';
-import TeacherPanel from './pages/TeacherPanel';
 import WordBank from './pages/WordBank';
 import MyStyle from './pages/MyStyle';
 import TrophyCase from './pages/TrophyCase';
@@ -72,12 +68,8 @@ const AppRoutes: React.FC = () => {
       <Route path="/settings" element={<AuthWrapper><AccountSettings /></AuthWrapper>} />
       <Route path="/notifications" element={<AuthWrapper><Notifications /></AuthWrapper>} />
       <Route path="/admin" element={<AuthWrapper><AdminPanel /></AuthWrapper>} />
-      <Route path="/teachers" element={<AuthWrapper><Teachers /></AuthWrapper>} />
-      <Route path="/teacher-panel" element={<AuthWrapper><TeacherPanel /></AuthWrapper>} />
       
       {/* Game Routes */}
-      <Route path="/game/galaxy" element={<AuthWrapper><GrammarGalaxy /></AuthWrapper>} />
-      <Route path="/game/boss" element={<AuthWrapper><BossBattle /></AuthWrapper>} />
       <Route path="/game/racer" element={<AuthWrapper><SpeedRacer /></AuthWrapper>} />
       <Route path="/game/whack" element={<AuthWrapper><WordWhack /></AuthWrapper>} />
       <Route path="/race" element={<AuthWrapper><RaceMode /></AuthWrapper>} />

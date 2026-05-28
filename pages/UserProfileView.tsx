@@ -66,7 +66,6 @@ const UserProfileView: React.FC = () => {
                             </h2>
                             <div className="flex flex-wrap gap-2 mt-1">
                                 {profile.isAdmin && <UserRoleBadge role="admin" size="md" />}
-                                {profile.isVerifiedTeacher && <UserRoleBadge role="teacher" size="md" />}
                                 {profile.isPremium && <UserRoleBadge role="premium" size="md" />}
                             </div>
                             <p className="text-fun-pink font-black text-sm uppercase tracking-widest mt-1">{profile.stats.identityTitle || 'Explorer'}</p>

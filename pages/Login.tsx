@@ -257,17 +257,6 @@ const Login: React.FC = () => {
             </div>
         )}
 
-        <div className="mt-8 pt-6 border-t-2 border-slate-50 flex justify-center gap-6 text-slate-400">
-           <div className="flex flex-col items-center gap-2">
-              <Gamepad2 size={24} />
-              <span className="text-[10px] font-black uppercase">Kids Mode</span>
-           </div>
-           <div className="w-px bg-slate-200 h-10" />
-           <div className="flex flex-col items-center gap-2">
-              <Briefcase size={24} />
-              <span className="text-[10px] font-black uppercase">Pro Mode</span>
-           </div>
-        </div>
       </div>
     </div>
   );

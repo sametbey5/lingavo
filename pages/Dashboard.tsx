@@ -17,7 +17,7 @@ import wordRushImg from '../src/assets/images/race.png';
 
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
-  const { stats, quests, mode, userId, isPremium, isAdmin, isVerifiedTeacher } = useGamification();
+  const { stats, quests, mode, userId, isPremium, isAdmin } = useGamification();
   
   const isKids = true; // Forced to kids mode
 
