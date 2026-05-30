@@ -244,7 +244,7 @@ const VideoItem: React.FC<{ video: Video, isActive: boolean }> = ({ video, isAct
               {/* Phrases Section */}
               <div className="space-y-3">
                 <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-1.5">
-                  <span>🗣️ Key Phrases (Phrase Library)</span>
+                  <span>🗣️ Key Phrases</span>
                 </h4>
                 <div className="space-y-2.5">
                   {getVocabularyForVideo(video).phrases.map(phrase => (

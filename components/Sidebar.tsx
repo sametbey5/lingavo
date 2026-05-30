@@ -20,7 +20,7 @@ const Sidebar: React.FC = () => {
     { name: 'Movie Clips', path: '/videos', icon: <MonitorPlay size={24} />, color: 'text-[#00F798]' },
     { name: 'News', path: '/notifications', icon: <Bell size={24} />, color: 'text-fun-orange' },
     { name: 'Dictionary', path: '/wordbank', icon: <BookOpen size={24} />, color: 'text-fun-pink' },
-    { name: 'Speak Clear', path: '/pronunciation', icon: <Volume2 size={24} />, color: 'text-fun-blue' },
+    { name: 'Speak Clear', path: '/pronunciation', icon: <Mic size={24} />, color: 'text-fun-blue' },
     { name: 'Word Rush', path: '/vocab', icon: <Zap size={24} />, color: 'text-fun-yellow' },
     { name: 'Live Race', path: '/race', icon: <Flag size={24} />, color: 'text-red-500' },
     { name: 'Grammar Coach', path: '/grammar', icon: <GraduationCap size={24} />, color: 'text-fun-purple' },

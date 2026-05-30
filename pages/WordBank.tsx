@@ -1,12 +1,13 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useGamification } from '../context/GamificationContext';
-import { BookOpen, Search, Sparkles, Volume2, Bookmark, PlusCircle, Trash2, Brain, ChevronRight, Check } from 'lucide-react';
+import { BookOpen, Search, Sparkles, Volume2, Bookmark, PlusCircle, Trash2, Brain, ChevronRight, Check, Mic, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import Button from '../components/Button';
 import { VocabWord } from '../types';
 import { CAMBRIDGE_DICTIONARY, DictionaryWord } from '../constants/dictionary';
 import { WORD_IMAGES } from '../constants/wordImages';
+import { PHRASES } from '../constants/phrases';
 
 const getWordImage = (word: string): string => {
   const normalized = word.trim().toLowerCase();
@@ -18,11 +19,12 @@ const getWordImage = (word: string): string => {
 
 const WordBank: React.FC = () => {
   const { cefrLevel, wordBank, addToWordBank, awardPoints } = useGamification();
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const queryWord = searchParams.get('search');
 
   // Pick user's CEFR level as the starting tab
-  const [selectedLevel, setSelectedLevel] = useState<'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2' | 'saved'>(cefrLevel || 'A1');
+  const [selectedLevel, setSelectedLevel] = useState<'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2' | 'saved' | 'phrases'>(cefrLevel || 'A1');
   const [searchQuery, setSearchQuery] = useState('');
   
   // Combine static dict and custom words matching format
@@ -248,11 +250,57 @@ const WordBank: React.FC = () => {
             <span>Saves</span>
             <span className="text-[10px] sm:text-xs bg-black/10 px-1.5 py-0.5 rounded-md font-black">{wordBank.length}</span>
           </button>
+          
+          <button
+            onClick={() => {
+              setSelectedLevel('phrases');
+              setSearchQuery('');
+            }}
+            className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl font-bold text-xs sm:text-sm uppercase transition-all duration-200 flex items-center gap-1.5 transform active:scale-95 shrink-0 ${
+              selectedLevel === 'phrases'
+                ? 'bg-fun-purple text-white shadow-sm border-b-2 border-purple-800'
+                : 'bg-white text-slate-600 hover:bg-slate-105 border border-slate-200'
+            }`}
+          >
+            <Mic className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            <span>Phrases</span>
+          </button>
         </div>
       </div>
 
-      {/* Main Flashcard Area */}
-      {filteredWords.length === 0 ? (
+      {/* Main Area */}
+      {selectedLevel === 'phrases' ? (
+        <div className="space-y-3 pb-8">
+          {PHRASES.map((phrase, idx) => {
+            const matchQuery = phrase.text.toLowerCase().includes(searchQuery.toLowerCase()) || phrase.category.toLowerCase().includes(searchQuery.toLowerCase());
+            if (!matchQuery) return null;
+            return (
+              <div key={idx} className="bg-white p-4 sm:p-5 rounded-2xl border-2 border-slate-100 shadow-sm hover:border-fun-purple transition-all group flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                 <div>
+                    <div className="flex items-center gap-2 mb-2">
+                       <span className={`px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-widest ${
+                         phrase.difficulty === 'Beginner' ? 'bg-green-100 text-green-600' :
+                         phrase.difficulty === 'Intermediate' ? 'bg-fun-blue/20 text-fun-blue' :
+                         'bg-fun-purple/20 text-fun-purple'
+                       }`}>
+                         {phrase.difficulty}
+                       </span>
+                       <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{phrase.category}</span>
+                    </div>
+                    <h4 className="text-lg sm:text-xl font-bold text-slate-800 leading-tight">"{phrase.text}"</h4>
+                 </div>
+                 <Button 
+                   variant="primary"
+                   onClick={() => navigate(`/pronunciation?phrase=${encodeURIComponent(phrase.text)}`)}
+                   className="shrink-0 flex items-center justify-center gap-2 text-xs sm:text-sm"
+                 >
+                   <Mic size={16} /> Practice
+                 </Button>
+              </div>
+            );
+          })}
+        </div>
+      ) : filteredWords.length === 0 ? (
         <div className="bg-white rounded-[2rem] p-8 text-center shadow-lg border-2 border-slate-100 max-w-sm mx-auto">
           <BookOpen size={40} className="text-fun-pink mx-auto mb-3" />
           <h3 className="text-xl font-black text-slate-800">No matching words</h3>

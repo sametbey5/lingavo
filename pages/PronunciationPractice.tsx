@@ -6,45 +6,7 @@ import Button from '../components/Button';
 import { Mic, MicOff, Play, RotateCcw, CheckCircle2, AlertCircle, Trophy, Star, ArrowRight, Volume2, BookOpen } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import Confetti from '../components/Confetti';
-
-interface Phrase {
-  text: string;
-  difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
-  category: string;
-}
-
-const PHRASES: Phrase[] = [
-  // Greetings
-  { text: "Hello, how are you today?", difficulty: 'Beginner', category: 'Greetings' },
-  { text: "Nice to meet you.", difficulty: 'Beginner', category: 'Greetings' },
-  { text: "Good morning, everyone.", difficulty: 'Beginner', category: 'Greetings' },
-  
-  // Food & Drink
-  { text: "I would like to order a cup of coffee.", difficulty: 'Beginner', category: 'Food & Drink' },
-  { text: "Could I see the menu, please?", difficulty: 'Beginner', category: 'Food & Drink' },
-  { text: "The food was delicious, thank you.", difficulty: 'Intermediate', category: 'Food & Drink' },
-  
-  // Travel
-  { text: "Where is the nearest train station?", difficulty: 'Beginner', category: 'Travel' },
-  { text: "I have a reservation for two nights.", difficulty: 'Intermediate', category: 'Travel' },
-  { text: "Could you please tell me where the nearest station is?", difficulty: 'Intermediate', category: 'Travel' },
-  
-  // Business
-  { text: "Let's schedule a meeting for next week.", difficulty: 'Intermediate', category: 'Business' },
-  { text: "The entrepreneurial spirit is essential for innovation.", difficulty: 'Advanced', category: 'Business' },
-  { text: "We need to focus on our core competencies.", difficulty: 'Advanced', category: 'Business' },
-  
-  // Tongue Twisters
-  { text: "She sells seashells by the seashore.", difficulty: 'Advanced', category: 'Tongue Twister' },
-  { text: "Peter Piper picked a peck of pickled peppers.", difficulty: 'Advanced', category: 'Tongue Twister' },
-  { text: "How much wood would a woodchuck chuck?", difficulty: 'Advanced', category: 'Tongue Twister' },
-
-  // General
-  { text: "The weather is very nice this afternoon.", difficulty: 'Beginner', category: 'Weather' },
-  { text: "I have been studying English for three months.", difficulty: 'Intermediate', category: 'Education' },
-  { text: "It is important to practice speaking every day.", difficulty: 'Intermediate', category: 'General' },
-  { text: "The phenomenon was particularly fascinating to the researchers.", difficulty: 'Advanced', category: 'Science' },
-];
+import { PHRASES, Phrase } from '../constants/phrases';
 
 const CATEGORIES = Array.from(new Set(PHRASES.map(p => p.category)));
 
@@ -207,13 +169,13 @@ const PronunciationPractice: React.FC = () => {
       >
         <div className="text-center space-y-2 sm:space-y-4">
           <div className="inline-block bg-fun-blue/10 p-2 sm:p-4 rounded-full mb-1 sm:mb-2">
-              <BookOpen size={28} className="sm:w-12 sm:h-12 text-fun-blue" />
+              <Mic size={28} className="sm:w-12 sm:h-12 text-fun-blue" />
           </div>
           <h2 className="text-2xl md:text-5xl font-black text-slate-800 tracking-tight uppercase leading-tight">
-             Phrase Library <br className="sm:hidden" /> & Speaking Practice
+             Speaking Practice
           </h2>
           <p className="text-xs sm:text-xl font-bold text-slate-500 max-w-2xl mx-auto">
-             Choose a phrase to practice your pronunciation! 📚
+             Choose a phrase to practice your pronunciation! 🎤
           </p>
         </div>
 
@@ -279,7 +241,7 @@ const PronunciationPractice: React.FC = () => {
           onClick={() => setView('selection')}
           className="flex items-center gap-2 text-slate-500 font-black hover:text-fun-blue transition-colors"
         >
-          <RotateCcw size={20} /> Back to Library
+          <RotateCcw size={20} /> Back to Selection
         </button>
         <div className="bg-slate-100 px-4 py-2 rounded-full font-black text-xs text-slate-500 uppercase tracking-widest">
           Phrase {currentPhraseIndex + 1} of {filteredPhrases.length}
