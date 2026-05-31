@@ -1,82 +1,125 @@
-import React from 'react';
-import { motion } from 'motion/react';
+import React, { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "motion/react";
+
+const imageModules = import.meta.glob("../src/assets/mascot/**/*.png", {
+  eager: true,
+  import: "default",
+});
+
+const getImage = (assistantId: string, filename: string) => {
+  const path = `../src/assets/mascot/${assistantId}/${filename}`;
+  if (imageModules[path]) {
+    return imageModules[path] as string;
+  }
+  return imageModules[`../src/assets/mascot/hamdi/${filename}`] as string;
+};
 
 interface AnimatedMascotProps {
   isSpeaking: boolean;
   isListening: boolean;
+  assistantId?: string;
 }
 
-const AnimatedMascot: React.FC<AnimatedMascotProps> = ({ isSpeaking, isListening }) => {
+const AnimatedMascot: React.FC<AnimatedMascotProps> = ({
+  isSpeaking,
+  isListening,
+  assistantId = "hamdi",
+}) => {
+  const [blink, setBlink] = useState(false);
+  const timeoutRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    const triggerBlink = () => {
+      setBlink(true);
+      setTimeout(() => setBlink(false), 150); // Eye close duration
+      const nextBlink = Math.random() * 3000 + 3000; // 3 to 6 seconds
+      timeoutRef.current = window.setTimeout(triggerBlink, nextBlink);
+    };
+
+    timeoutRef.current = window.setTimeout(
+      triggerBlink,
+      Math.random() * 3000 + 3000,
+    );
+
+    return () => {
+      if (timeoutRef.current) {
+        window.clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
+
+  const bgImg = getImage(assistantId, "background.png");
+  const personImg = getImage(assistantId, "person.png");
+  const openEyesImg = getImage(assistantId, "openeyes.png");
+  const closedEyesImg = getImage(assistantId, "closedeyes.png");
+  const mouthSpeakingImg = getImage(assistantId, "mouthspeaking.png");
+  const eyebrowsNeutralImg = getImage(assistantId, "eyebrowsneutral.png");
+
   return (
-    <div className="relative w-full h-48 sm:h-56 mx-auto flex items-center justify-center bg-slate-50 border-b-4 border-slate-100 shrink-0">
-      {/* Character body */}
-      <motion.div 
-        animate={{ 
-          y: isSpeaking ? [-3, 3, -3] : [0, -2, 0],
-          scale: isListening ? [1, 1.05, 1] : 1
-        }}
-        transition={{ 
-          repeat: Infinity, 
-          duration: isSpeaking ? 0.4 : isListening ? 1.5 : 3,
-          ease: "easeInOut"
-        }}
-        className={`w-32 h-32 sm:w-40 sm:h-40 rounded-[2.5rem] shadow-xl relative border-8 border-white flex flex-col items-center justify-center transition-colors duration-500 ${
-          isListening ? 'bg-fun-pink' : 'bg-fun-purple'
-        }`}
-      >
-        {/* Antennas */}
-        <div className="absolute -top-8 left-1/2 -translate-x-1/2 flex gap-6 z-[-1]">
-          <div className="w-2 h-10 bg-white rounded-full relative">
-            <div className="absolute -top-2 -translate-x-1 w-4 h-4 rounded-full bg-fun-yellow animate-pulse" />
-          </div>
-        </div>
-
-        {/* Eyes container */}
-        <div className="flex gap-6 sm:gap-8 mb-2 sm:mb-4">
-          <motion.div 
-            animate={
-              isSpeaking ? { scaleY: [1, 0.1, 1], scaleX: [1, 1.1, 1] } :
-              { scaleY: [1, 0.1, 1] }
-            } 
-            transition={
-              isSpeaking ? { repeat: Infinity, duration: 4, times: [0, 0.05, 0.1], repeatDelay: 1 } :
-              { repeat: Infinity, duration: 4, times: [0, 0.05, 0.1], repeatDelay: Math.random() * 2 + 2 }
-            }
-            className="w-5 h-7 sm:w-6 sm:h-8 bg-white rounded-full shadow-inner" 
+    <div className="relative w-full h-64 sm:h-72 mx-auto flex items-center justify-center bg-slate-50 border-b-4 border-slate-100 shrink-0 overflow-hidden">
+      {/* Container for the layered images */}
+      <div className="relative w-full h-full flex items-center justify-center">
+        {/* Background layer */}
+        {bgImg && (
+          <img
+            src={bgImg}
+            alt="background"
+            className="absolute inset-0 w-full h-full object-contain object-bottom pointer-events-none"
           />
-          <motion.div 
-            animate={
-              isSpeaking ? { scaleY: [1, 0.1, 1], scaleX: [1, 1.1, 1] } :
-              { scaleY: [1, 0.1, 1] }
-            } 
-            transition={
-              isSpeaking ? { repeat: Infinity, duration: 4, times: [0, 0.05, 0.1], repeatDelay: 1 } :
-              { repeat: Infinity, duration: 4, times: [0, 0.05, 0.1], repeatDelay: Math.random() * 2 + 2 }
-            }
-            className="w-5 h-7 sm:w-6 sm:h-8 bg-white rounded-full shadow-inner" 
-          />
-        </div>
-
-        {/* Mouth */}
-        <motion.div 
-          animate={
-            isSpeaking ? { height: [8, 20, 8], width: [24, 30, 24], borderRadius: ['12px', '20px', '12px'] } : 
-            isListening ? { height: 16, width: 16, borderRadius: '50%' } :
-            { height: 8, width: 24, borderRadius: '12px' }
-          }
-          transition={isSpeaking ? { repeat: Infinity, duration: 0.25 } : { duration: 0.3 }}
-          className="bg-slate-900 shadow-inner"
-          style={{ minHeight: '8px' }}
-        />
-
-        {/* Cheeks */}
-        {(isSpeaking || isListening) && (
-           <div className="absolute top-16 sm:top-20 w-full flex justify-between px-4 sm:px-6 opacity-60">
-             <div className="w-3 h-3 sm:w-4 sm:h-4 bg-pink-400 rounded-full blur-[2px]" />
-             <div className="w-3 h-3 sm:w-4 sm:h-4 bg-pink-400 rounded-full blur-[2px]" />
-           </div>
         )}
-      </motion.div>
+
+        {/* Character layer */}
+        <motion.div
+          animate={{
+            y: isListening ? [0, -2, 0] : 0,
+          }}
+          transition={{
+            repeat: Infinity,
+            duration: isListening ? 1.5 : 3,
+            ease: "easeInOut",
+          }}
+          className="absolute inset-0 w-full h-full flex items-center justify-center pointer-events-none origin-bottom"
+        >
+          {personImg && (
+            <img
+              src={personImg}
+              alt="person"
+              className="absolute inset-0 w-full h-full object-contain object-bottom"
+            />
+          )}
+
+          {eyebrowsNeutralImg && (
+            <img
+              src={eyebrowsNeutralImg}
+              alt="eyebrows"
+              className="absolute inset-0 w-full h-full object-contain object-bottom"
+            />
+          )}
+
+          {/* Eyes Layer */}
+          {(blink ? closedEyesImg : openEyesImg) && (
+            <img
+              src={blink ? closedEyesImg : openEyesImg}
+              alt="eyes"
+              className="absolute inset-0 w-full h-full object-contain object-bottom"
+            />
+          )}
+
+          {/* Mouth Layer */}
+          <AnimatePresence>
+            {isSpeaking && mouthSpeakingImg && (
+              <motion.img
+                key="mouth-speaking"
+                src={mouthSpeakingImg}
+                alt="mouth"
+                animate={{ opacity: [0, 1, 0] }}
+                transition={{ repeat: Infinity, duration: 0.3 }}
+                className="absolute inset-0 w-full h-full object-contain object-bottom"
+              />
+            )}
+          </AnimatePresence>
+        </motion.div>
+      </div>
     </div>
   );
 };

@@ -22,6 +22,97 @@ import Confetti from "../components/Confetti";
 import AnimatedMascot from "../components/AnimatedMascot";
 import { PHRASES, Phrase } from "../constants/phrases";
 
+const AI_ASSISTANTS = [
+  {
+    id: "friendly_tutor",
+    name: "Friendly Tutor",
+    icon: "👨‍🏫",
+    systemPrompt:
+      "You are a helpful, enthusiastic, and encouraging AI English tutor designed for language learners. Keep your responses conversational, natural, and relatively short (2-3 sentences max). Ask engaging questions to keep the conversation going.",
+    initialMessage:
+      "Hello! I'm your Friendly Tutor. What would you like to talk about today?",
+  },
+  {
+    id: "strict_grammarian",
+    name: "Strict Grammarian",
+    icon: "🧐",
+    systemPrompt:
+      "You are a strict and precise English grammar tutor. You meticulously point out every grammatical, syntactical, and vocabulary error the user makes and explain the rule before continuing the conversation. Keep responses under 4 sentences.",
+    initialMessage:
+      "Greetings. I am here to correct your grammar. Please speak clearly, and try not to make any mistakes.",
+  },
+  {
+    id: "job_interviewer",
+    name: "Tech Interviewer",
+    icon: "💼",
+    systemPrompt:
+      "You are a professional hiring manager conducting a job interview for a software engineering position. Ask professional interview questions, wait for the user's answers, and evaluate their responses professionally. Keep questions brief.",
+    initialMessage:
+      "Hello. I'm the hiring manager. Are you ready to begin your interview?",
+  },
+  {
+    id: "travel_guide",
+    name: "Travel Guide",
+    icon: "🗺️",
+    systemPrompt:
+      "You are an enthusiastic travel guide leading a virtual tour. Describe sights, give travel tips, and ask the user about their travel preferences and questions about navigating new cities. Keep responses natural and under 3 sentences.",
+    initialMessage: "Welcome aboard! Where would you like to travel today?",
+  },
+  {
+    id: "chill_friend",
+    name: "Chill Friend",
+    icon: "😎",
+    systemPrompt:
+      "You are a casual, laid-back friend chatting with the user. Use everyday conversational English, some modern slang (in a natural way), and keep things lighthearted. Ask about their day or hobbies. Max 2-3 sentences.",
+    initialMessage: "Hey, what's up? How's your day going?",
+  },
+  {
+    id: "debate_opponent",
+    name: "Debate Opponent",
+    icon: "⚖️",
+    systemPrompt:
+      "You are an articulate and challenging debate opponent. Whatever opinion the user holds, you must respectfully but persistently argue the opposite side. Use advanced vocabulary and persuasive language. Keep responses concise but thought-provoking.",
+    initialMessage:
+      "State your opinion on any topic, and I will prove you wrong. Let us begin.",
+  },
+  {
+    id: "storyteller",
+    name: "Storyteller",
+    icon: "📖",
+    systemPrompt:
+      "You are a creative storyteller co-writing a fantasy adventure with the user. Provide the next short paragraph of the story ending with a choice or a cliffhanger, and ask the user what they want to do next. Keep it immersive.",
+    initialMessage:
+      "Once upon a time, in a dark and mysterious forest... How would you like our story to start?",
+  },
+  {
+    id: "business_boss",
+    name: "Corporate Boss",
+    icon: "📈",
+    systemPrompt:
+      "You are a direct, results-oriented corporate executive. Speak in business English, using corporate jargon. Focus on work scenarios, meetings, and project updates. Keep it professional and short.",
+    initialMessage:
+      "Let's touch base on your current projects. Give me an update on your bandwidth.",
+  },
+  {
+    id: "pirate_captain",
+    name: "Pirate Captain",
+    icon: "🏴‍☠️",
+    systemPrompt:
+      "You are a boisterous, salty pirate captain sailing the high seas. Speak using pirate slang (arr, matey, shiver me timbers) and talk about treasure, the ocean, and sailing. Respond in 2-3 sentences.",
+    initialMessage:
+      "Ahoy there, matey! Ready to set sail for some buried treasure?",
+  },
+  {
+    id: "shakespearean",
+    name: "Shakespearean Actor",
+    icon: "🎭",
+    systemPrompt:
+      "You are a dramatic actor from Elizabethan England. Speak exclusively in Early Modern English (using thee, thou, hath, anon) with poetic flair and dramatic metaphors. Keep responses short but highly dramatic.",
+    initialMessage:
+      "Hark! Who goes there? Pray tell me thy name and thy business.",
+  },
+];
+
 const CATEGORIES = Array.from(new Set(PHRASES.map((p) => p.category)));
 
 const PronunciationPractice: React.FC = () => {
@@ -30,7 +121,7 @@ const PronunciationPractice: React.FC = () => {
   const isKids = mode === "kids";
 
   const [view, setView] = useState<
-    "menu" | "selection" | "practice" | "ai-assistant"
+    "menu" | "selection" | "practice" | "ai-assistant" | "ai-selection"
   >("menu");
   const viewRef = useRef(view);
   useEffect(() => {
@@ -49,12 +140,17 @@ const PronunciationPractice: React.FC = () => {
   );
 
   // AI Assistant State
+  const [selectedAssistantId, setSelectedAssistantId] = useState(
+    AI_ASSISTANTS[0].id,
+  );
   const [aiChatHistory, setAiChatHistory] = useState<
     { role: "user" | "ai"; text: string }[]
   >([
     {
       role: "ai",
-      text: "Hello! I'm your AI English tutor. What would you like to talk about today?",
+      text:
+        AI_ASSISTANTS[0].initialMessage ||
+        "Hello! I'm your AI English tutor. What would you like to talk about today?",
     },
   ]);
   const [aiTranscript, setAiTranscript] = useState("");
@@ -71,6 +167,8 @@ const PronunciationPractice: React.FC = () => {
     setAiTranscript("");
     awardPoints(10, "Spoke with AI", "speaking");
 
+    const assistant = AI_ASSISTANTS.find((a) => a.id === selectedAssistantId);
+
     try {
       const mappedHistory = newUserHistory.map((m) => ({
         role: m.role === "ai" ? "assistant" : "user",
@@ -80,7 +178,11 @@ const PronunciationPractice: React.FC = () => {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: mappedHistory }),
+        body: JSON.stringify({
+          messages: mappedHistory,
+          systemPrompt:
+            assistant?.systemPrompt || AI_ASSISTANTS[0].systemPrompt,
+        }),
       });
 
       if (!res.ok) {
@@ -286,14 +388,7 @@ const PronunciationPractice: React.FC = () => {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => {
-              setView("ai-assistant");
-              setAiChatHistory([
-                {
-                  role: "ai",
-                  text: "Hello! I'm your AI English tutor. What would you like to talk about today?",
-                },
-              ]);
-              setAiTranscript("");
+              setView("ai-selection");
             }}
             className="bg-white p-8 sm:p-12 rounded-[2.5rem] sm:rounded-[3rem] border-4 border-slate-100 shadow-xl cursor-pointer hover:border-fun-purple transition-all group flex flex-col items-center text-center"
           >
@@ -406,6 +501,64 @@ const PronunciationPractice: React.FC = () => {
     );
   }
 
+  if (view === "ai-selection") {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="max-w-4xl mx-auto space-y-6 sm:space-y-8"
+      >
+        <div className="flex items-center gap-4 mb-4 sm:mb-8 px-4">
+          <button
+            onClick={() => setView("menu")}
+            className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-full flex items-center justify-center text-slate-400 hover:text-fun-blue hover:shadow-md transition-all border-2 border-slate-100"
+          >
+            <RotateCcw size={20} className="sm:w-6 sm:h-6" />
+          </button>
+          <div>
+            <h2 className="text-2xl sm:text-3xl font-black text-slate-800">
+              Choose an AI Assistant
+            </h2>
+            <p className="text-sm sm:text-base text-slate-500 font-bold">
+              Select a character to practice your English with!
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 px-4">
+          {AI_ASSISTANTS.map((assistant) => (
+            <motion.div
+              key={assistant.id}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => {
+                setSelectedAssistantId(assistant.id);
+                setAiChatHistory([
+                  {
+                    role: "ai",
+                    text:
+                      assistant.initialMessage ||
+                      `Hello! I'm your ${assistant.name}. What would you like to talk about today?`,
+                  },
+                ]);
+                setAiTranscript("");
+                setView("ai-assistant");
+              }}
+              className="bg-white p-6 rounded-3xl border-4 border-slate-100 shadow-sm cursor-pointer hover:border-fun-purple transition-all flex flex-col items-center justify-center text-center group"
+            >
+              <span className="text-4xl sm:text-5xl mb-4 group-hover:scale-110 transition-transform">
+                {assistant.icon}
+              </span>
+              <h3 className="font-bold text-slate-800 group-hover:text-fun-purple transition-colors">
+                {assistant.name}
+              </h3>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
+    );
+  }
+
   if (view === "ai-assistant") {
     return (
       <motion.div
@@ -415,13 +568,18 @@ const PronunciationPractice: React.FC = () => {
       >
         <div className="flex items-center justify-between mb-4 sm:mb-6 px-4">
           <button
-            onClick={() => setView("menu")}
+            onClick={() => setView("ai-selection")}
             className="flex items-center gap-2 text-slate-500 font-black hover:text-fun-purple transition-colors"
           >
-            <RotateCcw size={20} /> Back to Menu
+            <RotateCcw size={20} /> Change Assistant
           </button>
-          <div className="bg-fun-purple/10 text-fun-purple px-4 py-2 rounded-full font-black text-xs uppercase tracking-widest">
-            AI Assistant
+          <div className="bg-fun-purple/10 text-fun-purple px-4 py-2 rounded-full font-black text-xs uppercase tracking-widest flex items-center gap-2">
+            <span>
+              {AI_ASSISTANTS.find((a) => a.id === selectedAssistantId)?.icon}
+            </span>
+            <span>
+              {AI_ASSISTANTS.find((a) => a.id === selectedAssistantId)?.name}
+            </span>
           </div>
         </div>
 
@@ -444,7 +602,11 @@ const PronunciationPractice: React.FC = () => {
             </button>
           </div>
 
-          <AnimatedMascot isSpeaking={isAiSpeaking} isListening={isListening} />
+          <AnimatedMascot
+            isSpeaking={isAiSpeaking}
+            isListening={isListening}
+            assistantId={selectedAssistantId}
+          />
 
           {showChat ? (
             <>

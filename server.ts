@@ -28,7 +28,7 @@ async function startServer() {
 
   app.post("/api/chat", async (req, res) => {
     try {
-      const { messages } = req.body;
+      const { messages, systemPrompt } = req.body;
       const groq = getGroqClient();
       if (!process.env.GROQ_API_KEY) {
         return res.status(500).json({ error: "GROQ_API_KEY is not configured" });
@@ -38,7 +38,7 @@ async function startServer() {
         messages: [
           {
             role: "system",
-            content: "You are a helpful, enthusiastic, and encouraging AI English tutor designed for language learners. Keep your responses conversational, natural, and relatively short (2-3 sentences max). Ask engaging questions to keep the conversation going."
+            content: systemPrompt || "You are a helpful, enthusiastic, and encouraging AI English tutor designed for language learners. Keep your responses conversational, natural, and relatively short (2-3 sentences max). Ask engaging questions to keep the conversation going."
           },
           ...messages
         ],
