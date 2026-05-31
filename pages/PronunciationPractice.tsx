@@ -1,22 +1,37 @@
+import React, { useState, useEffect, useRef } from "react";
+import { useGamification } from "../context/GamificationContext";
+import { useSearchParams } from "react-router-dom";
+import Button from "../components/Button";
+import {
+  Mic,
+  MicOff,
+  Play,
+  RotateCcw,
+  CheckCircle2,
+  AlertCircle,
+  Trophy,
+  Star,
+  ArrowRight,
+  Volume2,
+  BookOpen,
+  MessageSquare,
+  EyeOff,
+} from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
+import Confetti from "../components/Confetti";
+import AnimatedMascot from "../components/AnimatedMascot";
+import { PHRASES, Phrase } from "../constants/phrases";
 
-import React, { useState, useEffect, useRef } from 'react';
-import { useGamification } from '../context/GamificationContext';
-import { useSearchParams } from 'react-router-dom';
-import Button from '../components/Button';
-import { Mic, MicOff, Play, RotateCcw, CheckCircle2, AlertCircle, Trophy, Star, ArrowRight, Volume2, BookOpen } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
-import Confetti from '../components/Confetti';
-import AnimatedMascot from '../components/AnimatedMascot';
-import { PHRASES, Phrase } from '../constants/phrases';
-
-const CATEGORIES = Array.from(new Set(PHRASES.map(p => p.category)));
+const CATEGORIES = Array.from(new Set(PHRASES.map((p) => p.category)));
 
 const PronunciationPractice: React.FC = () => {
   const { awardPoints, mode } = useGamification();
   const [searchParams] = useSearchParams();
-  const isKids = mode === 'kids';
+  const isKids = mode === "kids";
 
-  const [view, setView] = useState<'menu' | 'selection' | 'practice' | 'ai-assistant'>('menu');
+  const [view, setView] = useState<
+    "menu" | "selection" | "practice" | "ai-assistant"
+  >("menu");
   const viewRef = useRef(view);
   useEffect(() => {
     viewRef.current = view;
@@ -24,83 +39,116 @@ const PronunciationPractice: React.FC = () => {
 
   const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
   const [isListening, setIsListening] = useState(false);
-  const [transcript, setTranscript] = useState('');
+  const [transcript, setTranscript] = useState("");
   const [score, setScore] = useState<number | null>(null);
   const [feedback, setFeedback] = useState<string | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [selectedCategory, setSelectedCategory] = useState<string | 'All'>('All');
+  const [selectedCategory, setSelectedCategory] = useState<string | "All">(
+    "All",
+  );
 
   // AI Assistant State
-  const [aiChatHistory, setAiChatHistory] = useState<{role: 'user'|'ai', text: string}[]>([
-    {role: 'ai', text: "Hello! I'm your AI English tutor. What would you like to talk about today?"}
+  const [aiChatHistory, setAiChatHistory] = useState<
+    { role: "user" | "ai"; text: string }[]
+  >([
+    {
+      role: "ai",
+      text: "Hello! I'm your AI English tutor. What would you like to talk about today?",
+    },
   ]);
-  const [aiTranscript, setAiTranscript] = useState('');
+  const [aiTranscript, setAiTranscript] = useState("");
   const [isAiSpeaking, setIsAiSpeaking] = useState(false);
+  const [showChat, setShowChat] = useState(false);
   const aiMessagesEndRef = useRef<HTMLDivElement>(null);
 
-  const handleAiConversation = (userMsg: string) => {
-     setAiChatHistory(prev => [...prev, {role: 'user', text: userMsg}]);
-     awardPoints(10, 'Spoke with AI', 'speaking');
-     
-     // Mock AI response
-     setTimeout(() => {
-        const responses = [
-          "That's very interesting! Can you tell me more?", 
-          "Your pronunciation sounds great. What else?", 
-          "I see what you mean.", 
-          "Good job expressing yourself!"
-        ];
-        const aiResponse = responses[Math.floor(Math.random() * responses.length)];
-        setAiChatHistory(prev => [...prev, {role: 'ai', text: aiResponse}]);
-        
-        const utterance = new SpeechSynthesisUtterance(aiResponse);
-        utterance.lang = 'en-US';
-        utterance.onstart = () => setIsAiSpeaking(true);
-        utterance.onend = () => setIsAiSpeaking(false);
-        window.speechSynthesis.speak(utterance);
-     }, 1500);
+  const handleAiConversation = async (userMsg: string) => {
+    const newUserHistory = [
+      ...aiChatHistory,
+      { role: "user" as const, text: userMsg },
+    ];
+    setAiChatHistory(newUserHistory);
+    setAiTranscript("");
+    awardPoints(10, "Spoke with AI", "speaking");
+
+    try {
+      const mappedHistory = newUserHistory.map((m) => ({
+        role: m.role === "ai" ? "assistant" : "user",
+        content: m.text,
+      }));
+
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: mappedHistory }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to get response");
+      }
+
+      const data = await res.json();
+      const aiResponse = data.message;
+
+      setAiChatHistory((prev) => [...prev, { role: "ai", text: aiResponse }]);
+
+      const utterance = new SpeechSynthesisUtterance(aiResponse);
+      utterance.lang = "en-US";
+      utterance.onstart = () => setIsAiSpeaking(true);
+      utterance.onend = () => setIsAiSpeaking(false);
+      window.speechSynthesis.speak(utterance);
+    } catch (err) {
+      console.error("AI chat error:", err);
+      setError("Sorry, I couldn't connect to my brain. Try again!");
+    }
   };
 
   useEffect(() => {
-     if (view === 'ai-assistant') {
-       aiMessagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-     }
+    if (view === "ai-assistant") {
+      aiMessagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
   }, [aiChatHistory, view]);
 
   const recognitionRef = useRef<any>(null);
 
   useEffect(() => {
-    const qPhrase = searchParams.get('phrase') || searchParams.get('search');
+    const qPhrase = searchParams.get("phrase") || searchParams.get("search");
     if (qPhrase) {
       const decodedPhrase = decodeURIComponent(qPhrase);
-      const foundIdx = PHRASES.findIndex(p => p.text.toLowerCase().includes(decodedPhrase.toLowerCase()) || decodedPhrase.toLowerCase().includes(p.text.toLowerCase()));
+      const foundIdx = PHRASES.findIndex(
+        (p) =>
+          p.text.toLowerCase().includes(decodedPhrase.toLowerCase()) ||
+          decodedPhrase.toLowerCase().includes(p.text.toLowerCase()),
+      );
       if (foundIdx !== -1) {
-        setSelectedCategory('All');
+        setSelectedCategory("All");
         setCurrentPhraseIndex(foundIdx);
-        setView('practice');
+        setView("practice");
       }
     }
   }, [searchParams]);
 
-  const filteredPhrases = selectedCategory === 'All' 
-    ? PHRASES 
-    : PHRASES.filter(p => p.category === selectedCategory);
+  const filteredPhrases =
+    selectedCategory === "All"
+      ? PHRASES
+      : PHRASES.filter((p) => p.category === selectedCategory);
 
   const currentPhrase = filteredPhrases[currentPhraseIndex] || PHRASES[0];
 
   useEffect(() => {
-    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const SpeechRecognition =
+      (window as any).SpeechRecognition ||
+      (window as any).webkitSpeechRecognition;
     if (SpeechRecognition) {
       recognitionRef.current = new SpeechRecognition();
       recognitionRef.current.continuous = false;
       recognitionRef.current.interimResults = false;
-      recognitionRef.current.lang = 'en-US';
+      recognitionRef.current.lang = "en-US";
 
       recognitionRef.current.onresult = (event: any) => {
         const result = event.results[0][0].transcript;
         const confidence = event.results[0][0].confidence;
-        if (viewRef.current === 'ai-assistant') {
+        if (viewRef.current === "ai-assistant") {
           setAiTranscript(result);
           handleAiConversation(result);
         } else {
@@ -110,7 +158,7 @@ const PronunciationPractice: React.FC = () => {
       };
 
       recognitionRef.current.onerror = (event: any) => {
-        console.error('Speech recognition error', event.error);
+        console.error("Speech recognition error", event.error);
         setError(`Error: ${event.error}`);
         setIsListening(false);
       };
@@ -119,7 +167,9 @@ const PronunciationPractice: React.FC = () => {
         setIsListening(false);
       };
     } else {
-      setError("Your browser does not support speech recognition. Please try Chrome or Edge.");
+      setError(
+        "Your browser does not support speech recognition. Please try Chrome or Edge.",
+      );
     }
 
     return () => {
@@ -132,7 +182,7 @@ const PronunciationPractice: React.FC = () => {
   const startListening = () => {
     if (!recognitionRef.current) return;
     setError(null);
-    setTranscript('');
+    setTranscript("");
     setScore(null);
     setFeedback(null);
     setIsListening(true);
@@ -151,35 +201,39 @@ const PronunciationPractice: React.FC = () => {
   };
 
   const evaluatePronunciation = (result: string, confidence: number) => {
-    const target = currentPhrase.text.toLowerCase().replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, "");
-    const actual = result.toLowerCase().replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, "");
+    const target = currentPhrase.text
+      .toLowerCase()
+      .replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, "");
+    const actual = result
+      .toLowerCase()
+      .replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, "");
 
     // Simple word match score
-    const targetWords = target.split(' ');
-    const actualWords = actual.split(' ');
-    
+    const targetWords = target.split(" ");
+    const actualWords = actual.split(" ");
+
     let matches = 0;
-    targetWords.forEach(word => {
+    targetWords.forEach((word) => {
       if (actualWords.includes(word)) matches++;
     });
 
     const accuracy = (matches / targetWords.length) * 100;
     // Combine accuracy with API confidence
-    const finalScore = Math.round((accuracy * 0.7) + (confidence * 100 * 0.3));
-    
+    const finalScore = Math.round(accuracy * 0.7 + confidence * 100 * 0.3);
+
     setScore(finalScore);
 
     if (finalScore >= 90) {
       setFeedback("Perfect! You sound like a native speaker!");
       setShowConfetti(true);
-      awardPoints(50, 'Perfect Pronunciation', 'speaking');
+      awardPoints(50, "Perfect Pronunciation", "speaking");
       setTimeout(() => setShowConfetti(false), 3000);
     } else if (finalScore >= 70) {
       setFeedback("Great job! Just a few small improvements needed.");
-      awardPoints(30, 'Good Pronunciation', 'speaking');
+      awardPoints(30, "Good Pronunciation", "speaking");
     } else if (finalScore >= 40) {
       setFeedback("Not bad! Try to speak more clearly and focus on each word.");
-      awardPoints(10, 'Pronunciation Practice', 'speaking');
+      awardPoints(10, "Pronunciation Practice", "speaking");
     } else {
       setFeedback("Keep practicing! Try listening to the phrase again.");
     }
@@ -187,13 +241,13 @@ const PronunciationPractice: React.FC = () => {
 
   const speakPhrase = () => {
     const utterance = new SpeechSynthesisUtterance(currentPhrase.text);
-    utterance.lang = 'en-US';
+    utterance.lang = "en-US";
     window.speechSynthesis.speak(utterance);
   };
 
   const nextPhrase = () => {
     setCurrentPhraseIndex((prev) => (prev + 1) % filteredPhrases.length);
-    setTranscript('');
+    setTranscript("");
     setScore(null);
     setFeedback(null);
     setError(null);
@@ -201,29 +255,29 @@ const PronunciationPractice: React.FC = () => {
 
   const selectPhrase = (index: number) => {
     setCurrentPhraseIndex(index);
-    setView('practice');
-    setTranscript('');
+    setView("practice");
+    setTranscript("");
     setScore(null);
     setFeedback(null);
     setError(null);
   };
 
-  if (view === 'menu') {
+  if (view === "menu") {
     return (
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="max-w-5xl mx-auto space-y-8 sm:space-y-12 pb-20 px-4"
       >
         <div className="text-center space-y-4">
           <div className="inline-block bg-fun-blue/10 p-4 rounded-full mb-2">
-              <Mic size={48} className="text-fun-blue" />
+            <Mic size={48} className="text-fun-blue" />
           </div>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-800 tracking-tight uppercase leading-tight">
-             Speak Clear
+            Speak Clear
           </h2>
           <p className="text-lg sm:text-xl font-bold text-slate-500 max-w-2xl mx-auto">
-             Choose how you want to practice your speaking! 🗣️
+            Choose how you want to practice your speaking! 🗣️
           </p>
         </div>
 
@@ -232,67 +286,81 @@ const PronunciationPractice: React.FC = () => {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => {
-              setView('ai-assistant');
-              setAiChatHistory([{role: 'ai', text: "Hello! I'm your AI English tutor. What would you like to talk about today?"}]);
-              setAiTranscript('');
+              setView("ai-assistant");
+              setAiChatHistory([
+                {
+                  role: "ai",
+                  text: "Hello! I'm your AI English tutor. What would you like to talk about today?",
+                },
+              ]);
+              setAiTranscript("");
             }}
             className="bg-white p-8 sm:p-12 rounded-[2.5rem] sm:rounded-[3rem] border-4 border-slate-100 shadow-xl cursor-pointer hover:border-fun-purple transition-all group flex flex-col items-center text-center"
           >
             <div className="w-20 h-20 bg-fun-purple/10 rounded-2xl flex items-center justify-center text-fun-purple mb-6 group-hover:scale-110 transition-transform">
               <Volume2 size={40} />
             </div>
-            <h3 className="text-2xl sm:text-3xl font-black text-slate-800 mb-4">Practice with AI Assistant</h3>
-            <p className="text-slate-500 font-bold">Have a natural voice conversation with our AI English tutor.</p>
+            <h3 className="text-2xl sm:text-3xl font-black text-slate-800 mb-4">
+              Practice with AI Assistant
+            </h3>
+            <p className="text-slate-500 font-bold">
+              Have a natural voice conversation with our AI English tutor.
+            </p>
           </motion.div>
 
           <motion.div
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            onClick={() => setView('selection')}
+            onClick={() => setView("selection")}
             className="bg-white p-8 sm:p-12 rounded-[2.5rem] sm:rounded-[3rem] border-4 border-slate-100 shadow-xl cursor-pointer hover:border-fun-blue transition-all group flex flex-col items-center text-center"
           >
             <div className="w-20 h-20 bg-fun-blue/10 rounded-2xl flex items-center justify-center text-fun-blue mb-6 group-hover:scale-110 transition-transform">
               <Mic size={40} />
             </div>
-            <h3 className="text-2xl sm:text-3xl font-black text-slate-800 mb-4">Recording & Accuracy</h3>
-            <p className="text-slate-500 font-bold">Read phrases aloud, record your voice, and get instant accuracy scores.</p>
+            <h3 className="text-2xl sm:text-3xl font-black text-slate-800 mb-4">
+              Recording & Accuracy
+            </h3>
+            <p className="text-slate-500 font-bold">
+              Read phrases aloud, record your voice, and get instant accuracy
+              scores.
+            </p>
           </motion.div>
         </div>
       </motion.div>
     );
   }
 
-  if (view === 'selection') {
+  if (view === "selection") {
     return (
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="max-w-6xl mx-auto space-y-4 sm:space-y-8 pb-20 px-4"
       >
         <div className="text-center space-y-2 sm:space-y-4">
           <div className="inline-block bg-fun-blue/10 p-2 sm:p-4 rounded-full mb-1 sm:mb-2">
-              <Mic size={28} className="sm:w-12 sm:h-12 text-fun-blue" />
+            <Mic size={28} className="sm:w-12 sm:h-12 text-fun-blue" />
           </div>
           <h2 className="text-2xl md:text-5xl font-black text-slate-800 tracking-tight uppercase leading-tight">
-             Speaking Practice
+            Speaking Practice
           </h2>
           <p className="text-xs sm:text-xl font-bold text-slate-500 max-w-2xl mx-auto">
-             Choose a phrase to practice your pronunciation! 🎤
+            Choose a phrase to practice your pronunciation! 🎤
           </p>
         </div>
 
         <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-4 sm:mb-8">
-          <button 
-            onClick={() => setSelectedCategory('All')}
-            className={`px-3 py-1.5 sm:px-6 sm:py-2 rounded-full font-black text-[10px] sm:text-sm transition-all ${selectedCategory === 'All' ? 'bg-fun-blue text-white shadow-md sm:shadow-lg' : 'bg-white text-slate-500 border-2 border-slate-100 hover:bg-slate-50'}`}
+          <button
+            onClick={() => setSelectedCategory("All")}
+            className={`px-3 py-1.5 sm:px-6 sm:py-2 rounded-full font-black text-[10px] sm:text-sm transition-all ${selectedCategory === "All" ? "bg-fun-blue text-white shadow-md sm:shadow-lg" : "bg-white text-slate-500 border-2 border-slate-100 hover:bg-slate-50"}`}
           >
             ALL
           </button>
-          {CATEGORIES.map(cat => (
-            <button 
+          {CATEGORIES.map((cat) => (
+            <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`px-3 py-1.5 sm:px-6 sm:py-2 rounded-full font-black text-[10px] sm:text-sm transition-all ${selectedCategory === cat ? 'bg-fun-blue text-white shadow-md sm:shadow-lg' : 'bg-white text-slate-500 border-2 border-slate-100 hover:bg-slate-50'}`}
+              className={`px-3 py-1.5 sm:px-6 sm:py-2 rounded-full font-black text-[10px] sm:text-sm transition-all ${selectedCategory === cat ? "bg-fun-blue text-white shadow-md sm:shadow-lg" : "bg-white text-slate-500 border-2 border-slate-100 hover:bg-slate-50"}`}
             >
               {cat.toUpperCase()}
             </button>
@@ -309,16 +377,24 @@ const PronunciationPractice: React.FC = () => {
               className="bg-white p-3 sm:p-6 rounded-2xl sm:rounded-[2rem] border-2 sm:border-4 border-slate-100 shadow-sm cursor-pointer hover:border-fun-blue transition-all group flex flex-col justify-between"
             >
               <div className="flex flex-col sm:flex-row justify-between items-start mb-2 sm:mb-4 gap-1">
-                <span className={`px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-[8px] sm:text-[10px] font-black uppercase tracking-widest leading-none ${
-                  phrase.difficulty === 'Beginner' ? 'bg-green-100 text-green-600' :
-                  phrase.difficulty === 'Intermediate' ? 'bg-blue-100 text-blue-600' :
-                  'bg-purple-100 text-purple-600'
-                }`}>
+                <span
+                  className={`px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-[8px] sm:text-[10px] font-black uppercase tracking-widest leading-none ${
+                    phrase.difficulty === "Beginner"
+                      ? "bg-green-100 text-green-600"
+                      : phrase.difficulty === "Intermediate"
+                        ? "bg-blue-100 text-blue-600"
+                        : "bg-purple-100 text-purple-600"
+                  }`}
+                >
                   {phrase.difficulty}
                 </span>
-                <span className="text-[8px] sm:text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">{phrase.category}</span>
+                <span className="text-[8px] sm:text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">
+                  {phrase.category}
+                </span>
               </div>
-              <h4 className="text-base sm:text-xl font-bold text-slate-800 mb-2 sm:mb-6 group-hover:text-fun-blue transition-colors leading-tight">"{phrase.text}"</h4>
+              <h4 className="text-base sm:text-xl font-bold text-slate-800 mb-2 sm:mb-6 group-hover:text-fun-blue transition-colors leading-tight">
+                "{phrase.text}"
+              </h4>
               <div className="flex items-center justify-between text-fun-blue font-black text-[10px] sm:text-sm mt-auto">
                 <span>Practice</span>
                 <ArrowRight size={14} className="sm:w-5 sm:h-5" />
@@ -330,16 +406,16 @@ const PronunciationPractice: React.FC = () => {
     );
   }
 
-  if (view === 'ai-assistant') {
+  if (view === "ai-assistant") {
     return (
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="max-w-4xl mx-auto flex flex-col h-[calc(100vh-140px)] min-h-[500px]"
       >
         <div className="flex items-center justify-between mb-4 sm:mb-6 px-4">
-          <button 
-            onClick={() => setView('menu')}
+          <button
+            onClick={() => setView("menu")}
             className="flex items-center gap-2 text-slate-500 font-black hover:text-fun-purple transition-colors"
           >
             <RotateCcw size={20} /> Back to Menu
@@ -349,93 +425,163 @@ const PronunciationPractice: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex-1 bg-white rounded-[2rem] sm:rounded-[3rem] border-4 border-slate-100 shadow-2xl flex flex-col overflow-hidden mx-4 pb-4">
-          <AnimatedMascot isSpeaking={isAiSpeaking} isListening={isListening} />
-          
-          <div className="flex-1 overflow-y-auto p-4 sm:p-8 space-y-4 sm:space-y-6 bg-slate-50/50">
-            {aiChatHistory.map((msg, idx) => (
-              <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                <div className={`flex items-end gap-3 max-w-[90%] sm:max-w-[80%]`}>
-                  {msg.role === 'ai' && (
-                    <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-full bg-fun-purple/20 border-2 border-fun-purple flex items-center justify-center shrink-0 relative overflow-hidden">
-                      <span className="text-xl sm:text-2xl">🦉</span>
-                    </div>
-                  )}
-                  <div className={`p-4 sm:p-5 rounded-2xl sm:rounded-3xl font-bold text-sm sm:text-base shadow-sm ${msg.role === 'user' ? 'bg-fun-purple text-white rounded-br-none' : 'bg-white border-2 border-slate-100 text-slate-800 rounded-bl-none'}`}>
-                    {msg.text}
-                  </div>
-                </div>
-              </div>
-            ))}
-            <div ref={aiMessagesEndRef} />
-          </div>
-
-          {/* Input Area */}
-          <div className="px-4 sm:px-8 flex flex-col gap-2 pt-2">
-            {isListening && (
-              <div className="bg-slate-800 text-white px-4 py-2 rounded-full font-bold flex items-center justify-center self-center gap-2 text-xs animate-pulse shadow-md">
-                <Mic size={14} className="text-fun-pink" /> Listening...
-              </div>
-            )}
-            
-            <form 
-              onSubmit={(e) => {
-                e.preventDefault();
-                if (aiTranscript.trim()) {
-                  handleAiConversation(aiTranscript);
-                  setAiTranscript('');
-                }
-              }}
-              className="flex items-center gap-2 sm:gap-3 bg-slate-50 p-2 sm:p-3 rounded-full border-2 border-slate-100 focus-within:border-fun-purple/50 transition-colors"
+        <div className="flex-1 bg-white rounded-[2rem] sm:rounded-[3rem] border-4 border-slate-100 shadow-2xl flex flex-col overflow-hidden mx-4 pb-4 relative">
+          <div className="absolute top-4 right-4 z-10">
+            <button
+              onClick={() => setShowChat(!showChat)}
+              className="bg-white/80 backdrop-blur-sm p-3 rounded-2xl shadow-sm border-2 border-slate-100 text-slate-400 hover:text-fun-blue hover:border-fun-blue/30 transition-all font-black flex items-center gap-2 text-sm"
+              title={showChat ? "Hide Chat" : "Show Chat"}
             >
-              <button 
-                 type="button"
-                 onClick={isListening ? stopListening : startListening}
-                 className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-all shrink-0 ${
-                   isListening ? 'bg-fun-pink text-white shadow-inner scale-95' : 'bg-fun-purple/10 text-fun-purple hover:bg-fun-purple/20'
-                 }`}
-               >
-                   {isListening ? <MicOff size={20} /> : <Mic size={20} />}
-               </button>
-               
-               <input 
-                 type="text"
-                 value={aiTranscript}
-                 onChange={(e) => setAiTranscript(e.target.value)}
-                 placeholder="Type or speak a message..."
-                 className="flex-1 bg-transparent border-none outline-none text-sm sm:text-base font-bold text-slate-700 placeholder-slate-400"
-               />
-
-               <button 
-                 type="submit"
-                 disabled={!aiTranscript.trim()}
-                 className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-all shrink-0 ${
-                   aiTranscript.trim() ? 'bg-fun-blue text-white shadow-md hover:scale-105 active:scale-95' : 'bg-slate-200 text-slate-400 cursor-not-allowed'
-                 }`}
-               >
-                 <ArrowRight size={20} />
-               </button>
-            </form>
-             {error && (
-               <p className="text-xs font-bold text-red-500 text-center mb-2">{error}</p>
-             )}
+              {showChat ? (
+                <>
+                  <EyeOff size={18} /> Voice Only
+                </>
+              ) : (
+                <>
+                  <MessageSquare size={18} /> Show Chat
+                </>
+              )}
+            </button>
           </div>
+
+          <AnimatedMascot isSpeaking={isAiSpeaking} isListening={isListening} />
+
+          {showChat ? (
+            <>
+              <div className="flex-1 overflow-y-auto p-4 sm:p-8 space-y-4 sm:space-y-6 bg-slate-50/50">
+                {aiChatHistory.map((msg, idx) => (
+                  <div
+                    key={idx}
+                    className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+                  >
+                    <div
+                      className={`flex items-end gap-3 max-w-[90%] sm:max-w-[80%]`}
+                    >
+                      {msg.role === "ai" && (
+                        <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-full bg-fun-purple/20 border-2 border-fun-purple flex items-center justify-center shrink-0 relative overflow-hidden">
+                          <span className="text-xl sm:text-2xl">🦉</span>
+                        </div>
+                      )}
+                      <div
+                        className={`p-4 sm:p-5 rounded-2xl sm:rounded-3xl font-bold text-sm sm:text-base shadow-sm ${msg.role === "user" ? "bg-fun-purple text-white rounded-br-none" : "bg-white border-2 border-slate-100 text-slate-800 rounded-bl-none"}`}
+                      >
+                        {msg.text}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                <div ref={aiMessagesEndRef} />
+              </div>
+
+              {/* Input Area */}
+              <div className="px-4 sm:px-8 flex flex-col gap-2 pt-2">
+                {isListening && (
+                  <div className="bg-slate-800 text-white px-4 py-2 rounded-full font-bold flex items-center justify-center self-center gap-2 text-xs animate-pulse shadow-md">
+                    <Mic size={14} className="text-fun-pink" /> Listening...
+                  </div>
+                )}
+
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    if (aiTranscript.trim()) {
+                      handleAiConversation(aiTranscript);
+                      setAiTranscript("");
+                    }
+                  }}
+                  className="flex items-center gap-2 sm:gap-3 bg-slate-50 p-2 sm:p-3 rounded-full border-2 border-slate-100 focus-within:border-fun-purple/50 transition-colors"
+                >
+                  <button
+                    type="button"
+                    onClick={isListening ? stopListening : startListening}
+                    className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-all shrink-0 ${
+                      isListening
+                        ? "bg-fun-pink text-white shadow-inner scale-95"
+                        : "bg-fun-purple/10 text-fun-purple hover:bg-fun-purple/20"
+                    }`}
+                  >
+                    {isListening ? <MicOff size={20} /> : <Mic size={20} />}
+                  </button>
+
+                  <input
+                    type="text"
+                    value={aiTranscript}
+                    onChange={(e) => setAiTranscript(e.target.value)}
+                    placeholder="Type or speak a message..."
+                    className="flex-1 bg-transparent border-none outline-none text-sm sm:text-base font-bold text-slate-700 placeholder-slate-400"
+                  />
+
+                  <button
+                    type="submit"
+                    disabled={!aiTranscript.trim()}
+                    className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-all shrink-0 ${
+                      aiTranscript.trim()
+                        ? "bg-fun-blue text-white shadow-md hover:scale-105 active:scale-95"
+                        : "bg-slate-200 text-slate-400 cursor-not-allowed"
+                    }`}
+                  >
+                    <ArrowRight size={20} />
+                  </button>
+                </form>
+                {error && (
+                  <p className="text-xs font-bold text-red-500 text-center mb-2">
+                    {error}
+                  </p>
+                )}
+              </div>
+            </>
+          ) : (
+            <div className="flex-1 flex flex-col items-center justify-center p-8 bg-slate-50/50">
+              <div className="text-center space-y-6">
+                {isListening && (
+                  <div className="bg-slate-800 text-white px-6 py-3 rounded-full font-bold flex items-center gap-3 animate-bounce shadow-xl mx-auto w-fit">
+                    <Mic size={20} className="text-fun-pink animate-pulse" />{" "}
+                    Listening...
+                  </div>
+                )}
+                <button
+                  onClick={isListening ? stopListening : startListening}
+                  className={`w-24 h-24 sm:w-32 sm:h-32 rounded-[2rem] sm:rounded-[3rem] flex items-center justify-center transition-all shadow-2xl hover:scale-105 active:scale-95 mx-auto ${
+                    isListening
+                      ? "bg-fun-pink text-white animate-pulse"
+                      : "bg-fun-purple text-white"
+                  }`}
+                >
+                  {isListening ? (
+                    <MicOff size={40} className="sm:w-12 sm:h-12" />
+                  ) : (
+                    <Mic size={40} className="sm:w-12 sm:h-12" />
+                  )}
+                </button>
+                <p className="text-base sm:text-lg font-bold text-slate-400">
+                  {isListening
+                    ? "Tap to stop recording"
+                    : "Tap the mic to start talking"}
+                </p>
+                {error && (
+                  <p className="text-sm font-bold text-red-500 text-center mt-2">
+                    {error}
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </motion.div>
     );
   }
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       className="max-w-4xl mx-auto space-y-8 pb-20 px-4"
     >
       {showConfetti && <Confetti />}
-      
+
       <div className="flex items-center justify-between">
-        <button 
-          onClick={() => setView('selection')}
+        <button
+          onClick={() => setView("selection")}
           className="flex items-center gap-2 text-slate-500 font-black hover:text-fun-blue transition-colors"
         >
           <RotateCcw size={20} /> Back to Selection
@@ -447,172 +593,203 @@ const PronunciationPractice: React.FC = () => {
 
       <div className="text-center space-y-4">
         <div className="inline-block bg-fun-green/10 p-4 rounded-full mb-2">
-            <Mic size={48} className="text-fun-green" />
+          <Mic size={48} className="text-fun-green" />
         </div>
         <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-800 tracking-tight">
-           PRONUNCIATION LAB
+          PRONUNCIATION LAB
         </h2>
       </div>
 
       <div className="bg-white p-6 sm:p-8 md:p-12 rounded-[3rem] border-4 border-slate-100 shadow-2xl relative overflow-hidden">
         <div className="absolute top-0 right-0 p-4 sm:p-6">
-            <span className={`px-4 py-2 rounded-full text-xs font-black uppercase tracking-widest ${
-                currentPhrase.difficulty === 'Beginner' ? 'bg-green-100 text-green-600' :
-                currentPhrase.difficulty === 'Intermediate' ? 'bg-blue-100 text-blue-600' :
-                'bg-purple-100 text-purple-600'
-            }`}>
-                {currentPhrase.difficulty}
-            </span>
+          <span
+            className={`px-4 py-2 rounded-full text-xs font-black uppercase tracking-widest ${
+              currentPhrase.difficulty === "Beginner"
+                ? "bg-green-100 text-green-600"
+                : currentPhrase.difficulty === "Intermediate"
+                  ? "bg-blue-100 text-blue-600"
+                  : "bg-purple-100 text-purple-600"
+            }`}
+          >
+            {currentPhrase.difficulty}
+          </span>
         </div>
 
         <AnimatePresence mode="wait">
-            <motion.div 
-                key={currentPhraseIndex}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                className="flex flex-col items-center text-center space-y-8"
-            >
-                <div className="space-y-2">
-                    <span className="text-xs font-black text-slate-400 uppercase tracking-widest">{currentPhrase.category}</span>
-                    <h3 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-800 leading-tight">
-                        "{currentPhrase.text}"
-                    </h3>
+          <motion.div
+            key={currentPhraseIndex}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            className="flex flex-col items-center text-center space-y-8"
+          >
+            <div className="space-y-2">
+              <span className="text-xs font-black text-slate-400 uppercase tracking-widest">
+                {currentPhrase.category}
+              </span>
+              <h3 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-800 leading-tight">
+                "{currentPhrase.text}"
+              </h3>
+            </div>
+
+            <div className="flex gap-3 sm:gap-4">
+              <button
+                onClick={speakPhrase}
+                className="w-12 h-12 sm:w-16 sm:h-16 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-2xl flex items-center justify-center transition-all hover:scale-110 active:scale-95"
+                title="Listen to phrase"
+              >
+                <Volume2 size={24} className="sm:w-8 sm:h-8" />
+              </button>
+
+              <button
+                onClick={isListening ? stopListening : startListening}
+                className={`w-20 h-20 sm:w-24 sm:h-24 rounded-[1.5rem] sm:rounded-[2rem] flex items-center justify-center transition-all shadow-xl hover:scale-105 active:scale-95 ${
+                  isListening
+                    ? "bg-red-500 text-white animate-pulse"
+                    : "bg-fun-blue text-white"
+                }`}
+              >
+                {isListening ? (
+                  <MicOff size={32} className="sm:w-10 sm:h-10" />
+                ) : (
+                  <Mic size={32} className="sm:w-10 sm:h-10" />
+                )}
+              </button>
+
+              <button
+                onClick={nextPhrase}
+                className="w-12 h-12 sm:w-16 sm:h-16 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-2xl flex items-center justify-center transition-all hover:scale-110 active:scale-95"
+                title="Next phrase"
+              >
+                <ArrowRight size={24} className="sm:w-8 sm:h-8" />
+              </button>
+            </div>
+
+            {isListening && (
+              <div className="flex items-center gap-2 text-fun-blue font-black animate-pulse">
+                <div className="w-2 h-2 bg-fun-blue rounded-full" />
+                <div className="w-2 h-2 bg-fun-blue rounded-full" />
+                <div className="w-2 h-2 bg-fun-blue rounded-full" />
+                <span>Listening...</span>
+              </div>
+            )}
+
+            {error && (
+              <div className="bg-red-50 text-red-600 p-4 rounded-2xl flex items-center gap-2 font-bold">
+                <AlertCircle size={20} />
+                {error}
+              </div>
+            )}
+
+            {transcript && !isListening && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="space-y-6 w-full"
+              >
+                <div className="bg-slate-50 p-6 rounded-3xl border-2 border-slate-100">
+                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2">
+                    You said:
+                  </span>
+                  <p className="text-2xl font-bold text-slate-700 italic">
+                    "{transcript}"
+                  </p>
                 </div>
 
-                <div className="flex gap-3 sm:gap-4">
-                    <button 
-                        onClick={speakPhrase}
-                        className="w-12 h-12 sm:w-16 sm:h-16 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-2xl flex items-center justify-center transition-all hover:scale-110 active:scale-95"
-                        title="Listen to phrase"
+                {score !== null && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.2 }}
+                      className="bg-white p-6 rounded-3xl border-4 border-slate-50 shadow-sm flex flex-col items-center justify-center"
                     >
-                        <Volume2 size={24} className="sm:w-8 sm:h-8" />
-                    </button>
-                    
-                    <button 
-                        onClick={isListening ? stopListening : startListening}
-                        className={`w-20 h-20 sm:w-24 sm:h-24 rounded-[1.5rem] sm:rounded-[2rem] flex items-center justify-center transition-all shadow-xl hover:scale-105 active:scale-95 ${
-                            isListening ? 'bg-red-500 text-white animate-pulse' : 'bg-fun-blue text-white'
+                      <span className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">
+                        Accuracy Score
+                      </span>
+                      <div
+                        className={`text-5xl font-black ${
+                          score >= 80
+                            ? "text-fun-green"
+                            : score >= 50
+                              ? "text-fun-yellow"
+                              : "text-fun-orange"
                         }`}
-                    >
-                        {isListening ? <MicOff size={32} className="sm:w-10 sm:h-10" /> : <Mic size={32} className="sm:w-10 sm:h-10" />}
-                    </button>
-
-                    <button 
-                        onClick={nextPhrase}
-                        className="w-12 h-12 sm:w-16 sm:h-16 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-2xl flex items-center justify-center transition-all hover:scale-110 active:scale-95"
-                        title="Next phrase"
-                    >
-                        <ArrowRight size={24} className="sm:w-8 sm:h-8" />
-                    </button>
-                </div>
-
-                {isListening && (
-                    <div className="flex items-center gap-2 text-fun-blue font-black animate-pulse">
-                        <div className="w-2 h-2 bg-fun-blue rounded-full" />
-                        <div className="w-2 h-2 bg-fun-blue rounded-full" />
-                        <div className="w-2 h-2 bg-fun-blue rounded-full" />
-                        <span>Listening...</span>
-                    </div>
-                )}
-
-                {error && (
-                    <div className="bg-red-50 text-red-600 p-4 rounded-2xl flex items-center gap-2 font-bold">
-                        <AlertCircle size={20} />
-                        {error}
-                    </div>
-                )}
-
-                {transcript && !isListening && (
-                    <motion.div 
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        className="space-y-6 w-full"
-                    >
-                        <div className="bg-slate-50 p-6 rounded-3xl border-2 border-slate-100">
-                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2">You said:</span>
-                            <p className="text-2xl font-bold text-slate-700 italic">"{transcript}"</p>
-                        </div>
-
-                        {score !== null && (
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <motion.div 
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 0.2 }}
-                                    className="bg-white p-6 rounded-3xl border-4 border-slate-50 shadow-sm flex flex-col items-center justify-center"
-                                >
-                                    <span className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Accuracy Score</span>
-                                    <div className={`text-5xl font-black ${
-                                        score >= 80 ? 'text-fun-green' : score >= 50 ? 'text-fun-yellow' : 'text-fun-orange'
-                                    }`}>
-                                        {score}%
-                                    </div>
-                                    <div className="flex gap-1 mt-3">
-                                        {[1, 2, 3, 4, 5].map((star) => (
-                                            <Star 
-                                                key={star} 
-                                                size={20} 
-                                                className={`${score >= star * 20 ? 'text-fun-yellow fill-current' : 'text-slate-200'}`} 
-                                            />
-                                        ))}
-                                    </div>
-                                </motion.div>
-
-                                <motion.div 
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 0.3 }}
-                                    className="bg-white p-6 rounded-3xl border-4 border-slate-50 shadow-sm flex flex-col items-center justify-center"
-                                >
-                                    <span className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Feedback</span>
-                                    <p className="text-lg font-bold text-slate-700">{feedback}</p>
-                                    {score >= 70 ? (
-                                        <CheckCircle2 size={32} className="text-fun-green mt-3" />
-                                    ) : (
-                                        <RotateCcw 
-                                            size={32} 
-                                            className="text-fun-blue mt-3 cursor-pointer hover:rotate-180 transition-transform" 
-                                            onClick={startListening}
-                                        />
-                                    )}
-                                </motion.div>
-                            </div>
-                        )}
+                      >
+                        {score}%
+                      </div>
+                      <div className="flex gap-1 mt-3">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <Star
+                            key={star}
+                            size={20}
+                            className={`${score >= star * 20 ? "text-fun-yellow fill-current" : "text-slate-200"}`}
+                          />
+                        ))}
+                      </div>
                     </motion.div>
+
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.3 }}
+                      className="bg-white p-6 rounded-3xl border-4 border-slate-50 shadow-sm flex flex-col items-center justify-center"
+                    >
+                      <span className="text-xs font-black text-slate-400 uppercase tracking-widest mb-2">
+                        Feedback
+                      </span>
+                      <p className="text-lg font-bold text-slate-700">
+                        {feedback}
+                      </p>
+                      {score >= 70 ? (
+                        <CheckCircle2
+                          size={32}
+                          className="text-fun-green mt-3"
+                        />
+                      ) : (
+                        <RotateCcw
+                          size={32}
+                          className="text-fun-blue mt-3 cursor-pointer hover:rotate-180 transition-transform"
+                          onClick={startListening}
+                        />
+                      )}
+                    </motion.div>
+                  </div>
                 )}
-            </motion.div>
+              </motion.div>
+            )}
+          </motion.div>
         </AnimatePresence>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white p-6 rounded-3xl border-4 border-slate-100 shadow-md flex items-center gap-4">
-              <div className="w-12 h-12 bg-fun-blue/10 rounded-xl flex items-center justify-center text-fun-blue">
-                  <Trophy size={24} />
-              </div>
-              <div>
-                  <h4 className="font-black text-slate-800">Daily Goal</h4>
-                  <p className="text-xs font-bold text-slate-400">3/5 Phrases</p>
-              </div>
+        <div className="bg-white p-6 rounded-3xl border-4 border-slate-100 shadow-md flex items-center gap-4">
+          <div className="w-12 h-12 bg-fun-blue/10 rounded-xl flex items-center justify-center text-fun-blue">
+            <Trophy size={24} />
           </div>
-          <div className="bg-white p-6 rounded-3xl border-4 border-slate-100 shadow-md flex items-center gap-4">
-              <div className="w-12 h-12 bg-fun-pink/10 rounded-xl flex items-center justify-center text-fun-pink">
-                  <Star size={24} />
-              </div>
-              <div>
-                  <h4 className="font-black text-slate-800">Best Score</h4>
-                  <p className="text-xs font-bold text-slate-400">98% Accuracy</p>
-              </div>
+          <div>
+            <h4 className="font-black text-slate-800">Daily Goal</h4>
+            <p className="text-xs font-bold text-slate-400">3/5 Phrases</p>
           </div>
-          <div className="bg-white p-6 rounded-3xl border-4 border-slate-100 shadow-md flex items-center gap-4">
-              <div className="w-12 h-12 bg-fun-purple/10 rounded-xl flex items-center justify-center text-fun-purple">
-                  <RotateCcw size={24} />
-              </div>
-              <div>
-                  <h4 className="font-black text-slate-800">Total Practice</h4>
-                  <p className="text-xs font-bold text-slate-400">124 Phrases</p>
-              </div>
+        </div>
+        <div className="bg-white p-6 rounded-3xl border-4 border-slate-100 shadow-md flex items-center gap-4">
+          <div className="w-12 h-12 bg-fun-pink/10 rounded-xl flex items-center justify-center text-fun-pink">
+            <Star size={24} />
           </div>
+          <div>
+            <h4 className="font-black text-slate-800">Best Score</h4>
+            <p className="text-xs font-bold text-slate-400">98% Accuracy</p>
+          </div>
+        </div>
+        <div className="bg-white p-6 rounded-3xl border-4 border-slate-100 shadow-md flex items-center gap-4">
+          <div className="w-12 h-12 bg-fun-purple/10 rounded-xl flex items-center justify-center text-fun-purple">
+            <RotateCcw size={24} />
+          </div>
+          <div>
+            <h4 className="font-black text-slate-800">Total Practice</h4>
+            <p className="text-xs font-bold text-slate-400">124 Phrases</p>
+          </div>
+        </div>
       </div>
     </motion.div>
   );
