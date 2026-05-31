@@ -6,6 +6,7 @@ import Button from '../components/Button';
 import { Mic, MicOff, Play, RotateCcw, CheckCircle2, AlertCircle, Trophy, Star, ArrowRight, Volume2, BookOpen } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import Confetti from '../components/Confetti';
+import AnimatedMascot from '../components/AnimatedMascot';
 import { PHRASES, Phrase } from '../constants/phrases';
 
 const CATEGORIES = Array.from(new Set(PHRASES.map(p => p.category)));
@@ -15,7 +16,12 @@ const PronunciationPractice: React.FC = () => {
   const [searchParams] = useSearchParams();
   const isKids = mode === 'kids';
 
-  const [view, setView] = useState<'selection' | 'practice'>('selection');
+  const [view, setView] = useState<'menu' | 'selection' | 'practice' | 'ai-assistant'>('menu');
+  const viewRef = useRef(view);
+  useEffect(() => {
+    viewRef.current = view;
+  }, [view]);
+
   const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState('');
@@ -24,6 +30,43 @@ const PronunciationPractice: React.FC = () => {
   const [showConfetti, setShowConfetti] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | 'All'>('All');
+
+  // AI Assistant State
+  const [aiChatHistory, setAiChatHistory] = useState<{role: 'user'|'ai', text: string}[]>([
+    {role: 'ai', text: "Hello! I'm your AI English tutor. What would you like to talk about today?"}
+  ]);
+  const [aiTranscript, setAiTranscript] = useState('');
+  const [isAiSpeaking, setIsAiSpeaking] = useState(false);
+  const aiMessagesEndRef = useRef<HTMLDivElement>(null);
+
+  const handleAiConversation = (userMsg: string) => {
+     setAiChatHistory(prev => [...prev, {role: 'user', text: userMsg}]);
+     awardPoints(10, 'Spoke with AI', 'speaking');
+     
+     // Mock AI response
+     setTimeout(() => {
+        const responses = [
+          "That's very interesting! Can you tell me more?", 
+          "Your pronunciation sounds great. What else?", 
+          "I see what you mean.", 
+          "Good job expressing yourself!"
+        ];
+        const aiResponse = responses[Math.floor(Math.random() * responses.length)];
+        setAiChatHistory(prev => [...prev, {role: 'ai', text: aiResponse}]);
+        
+        const utterance = new SpeechSynthesisUtterance(aiResponse);
+        utterance.lang = 'en-US';
+        utterance.onstart = () => setIsAiSpeaking(true);
+        utterance.onend = () => setIsAiSpeaking(false);
+        window.speechSynthesis.speak(utterance);
+     }, 1500);
+  };
+
+  useEffect(() => {
+     if (view === 'ai-assistant') {
+       aiMessagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+     }
+  }, [aiChatHistory, view]);
 
   const recognitionRef = useRef<any>(null);
 
@@ -57,8 +100,13 @@ const PronunciationPractice: React.FC = () => {
       recognitionRef.current.onresult = (event: any) => {
         const result = event.results[0][0].transcript;
         const confidence = event.results[0][0].confidence;
-        setTranscript(result);
-        evaluatePronunciation(result, confidence);
+        if (viewRef.current === 'ai-assistant') {
+          setAiTranscript(result);
+          handleAiConversation(result);
+        } else {
+          setTranscript(result);
+          evaluatePronunciation(result, confidence);
+        }
       };
 
       recognitionRef.current.onerror = (event: any) => {
@@ -160,6 +208,60 @@ const PronunciationPractice: React.FC = () => {
     setError(null);
   };
 
+  if (view === 'menu') {
+    return (
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="max-w-5xl mx-auto space-y-8 sm:space-y-12 pb-20 px-4"
+      >
+        <div className="text-center space-y-4">
+          <div className="inline-block bg-fun-blue/10 p-4 rounded-full mb-2">
+              <Mic size={48} className="text-fun-blue" />
+          </div>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-800 tracking-tight uppercase leading-tight">
+             Speak Clear
+          </h2>
+          <p className="text-lg sm:text-xl font-bold text-slate-500 max-w-2xl mx-auto">
+             Choose how you want to practice your speaking! 🗣️
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 max-w-4xl mx-auto">
+          <motion.div
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => {
+              setView('ai-assistant');
+              setAiChatHistory([{role: 'ai', text: "Hello! I'm your AI English tutor. What would you like to talk about today?"}]);
+              setAiTranscript('');
+            }}
+            className="bg-white p-8 sm:p-12 rounded-[2.5rem] sm:rounded-[3rem] border-4 border-slate-100 shadow-xl cursor-pointer hover:border-fun-purple transition-all group flex flex-col items-center text-center"
+          >
+            <div className="w-20 h-20 bg-fun-purple/10 rounded-2xl flex items-center justify-center text-fun-purple mb-6 group-hover:scale-110 transition-transform">
+              <Volume2 size={40} />
+            </div>
+            <h3 className="text-2xl sm:text-3xl font-black text-slate-800 mb-4">Practice with AI Assistant</h3>
+            <p className="text-slate-500 font-bold">Have a natural voice conversation with our AI English tutor.</p>
+          </motion.div>
+
+          <motion.div
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => setView('selection')}
+            className="bg-white p-8 sm:p-12 rounded-[2.5rem] sm:rounded-[3rem] border-4 border-slate-100 shadow-xl cursor-pointer hover:border-fun-blue transition-all group flex flex-col items-center text-center"
+          >
+            <div className="w-20 h-20 bg-fun-blue/10 rounded-2xl flex items-center justify-center text-fun-blue mb-6 group-hover:scale-110 transition-transform">
+              <Mic size={40} />
+            </div>
+            <h3 className="text-2xl sm:text-3xl font-black text-slate-800 mb-4">Recording & Accuracy</h3>
+            <p className="text-slate-500 font-bold">Read phrases aloud, record your voice, and get instant accuracy scores.</p>
+          </motion.div>
+        </div>
+      </motion.div>
+    );
+  }
+
   if (view === 'selection') {
     return (
       <motion.div 
@@ -223,6 +325,101 @@ const PronunciationPractice: React.FC = () => {
               </div>
             </motion.div>
           ))}
+        </div>
+      </motion.div>
+    );
+  }
+
+  if (view === 'ai-assistant') {
+    return (
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="max-w-4xl mx-auto flex flex-col h-[calc(100vh-140px)] min-h-[500px]"
+      >
+        <div className="flex items-center justify-between mb-4 sm:mb-6 px-4">
+          <button 
+            onClick={() => setView('menu')}
+            className="flex items-center gap-2 text-slate-500 font-black hover:text-fun-purple transition-colors"
+          >
+            <RotateCcw size={20} /> Back to Menu
+          </button>
+          <div className="bg-fun-purple/10 text-fun-purple px-4 py-2 rounded-full font-black text-xs uppercase tracking-widest">
+            AI Assistant
+          </div>
+        </div>
+
+        <div className="flex-1 bg-white rounded-[2rem] sm:rounded-[3rem] border-4 border-slate-100 shadow-2xl flex flex-col overflow-hidden mx-4 pb-4">
+          <AnimatedMascot isSpeaking={isAiSpeaking} isListening={isListening} />
+          
+          <div className="flex-1 overflow-y-auto p-4 sm:p-8 space-y-4 sm:space-y-6 bg-slate-50/50">
+            {aiChatHistory.map((msg, idx) => (
+              <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                <div className={`flex items-end gap-3 max-w-[90%] sm:max-w-[80%]`}>
+                  {msg.role === 'ai' && (
+                    <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-full bg-fun-purple/20 border-2 border-fun-purple flex items-center justify-center shrink-0 relative overflow-hidden">
+                      <span className="text-xl sm:text-2xl">🦉</span>
+                    </div>
+                  )}
+                  <div className={`p-4 sm:p-5 rounded-2xl sm:rounded-3xl font-bold text-sm sm:text-base shadow-sm ${msg.role === 'user' ? 'bg-fun-purple text-white rounded-br-none' : 'bg-white border-2 border-slate-100 text-slate-800 rounded-bl-none'}`}>
+                    {msg.text}
+                  </div>
+                </div>
+              </div>
+            ))}
+            <div ref={aiMessagesEndRef} />
+          </div>
+
+          {/* Input Area */}
+          <div className="px-4 sm:px-8 flex flex-col gap-2 pt-2">
+            {isListening && (
+              <div className="bg-slate-800 text-white px-4 py-2 rounded-full font-bold flex items-center justify-center self-center gap-2 text-xs animate-pulse shadow-md">
+                <Mic size={14} className="text-fun-pink" /> Listening...
+              </div>
+            )}
+            
+            <form 
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (aiTranscript.trim()) {
+                  handleAiConversation(aiTranscript);
+                  setAiTranscript('');
+                }
+              }}
+              className="flex items-center gap-2 sm:gap-3 bg-slate-50 p-2 sm:p-3 rounded-full border-2 border-slate-100 focus-within:border-fun-purple/50 transition-colors"
+            >
+              <button 
+                 type="button"
+                 onClick={isListening ? stopListening : startListening}
+                 className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-all shrink-0 ${
+                   isListening ? 'bg-fun-pink text-white shadow-inner scale-95' : 'bg-fun-purple/10 text-fun-purple hover:bg-fun-purple/20'
+                 }`}
+               >
+                   {isListening ? <MicOff size={20} /> : <Mic size={20} />}
+               </button>
+               
+               <input 
+                 type="text"
+                 value={aiTranscript}
+                 onChange={(e) => setAiTranscript(e.target.value)}
+                 placeholder="Type or speak a message..."
+                 className="flex-1 bg-transparent border-none outline-none text-sm sm:text-base font-bold text-slate-700 placeholder-slate-400"
+               />
+
+               <button 
+                 type="submit"
+                 disabled={!aiTranscript.trim()}
+                 className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-all shrink-0 ${
+                   aiTranscript.trim() ? 'bg-fun-blue text-white shadow-md hover:scale-105 active:scale-95' : 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                 }`}
+               >
+                 <ArrowRight size={20} />
+               </button>
+            </form>
+             {error && (
+               <p className="text-xs font-bold text-red-500 text-center mb-2">{error}</p>
+             )}
+          </div>
         </div>
       </motion.div>
     );

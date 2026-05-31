@@ -9,7 +9,6 @@ import Button from '../components/Button';
 import { motion, AnimatePresence } from 'motion/react';
 import { generateRaceQuestions } from '../services/geminiService';
 import { supabase } from '../services/supabaseClient';
-import Confetti from '../components/Confetti';
 import { UI_TRANSLATIONS } from '../translations';
 import { VocabWord } from '../types';
 
@@ -520,135 +519,85 @@ const RaceMode: React.FC<RaceModeProps> = ({ defaultTab }) => {
   const renderLobbySelection = () => (
     <div className="max-w-xl mx-auto space-y-6 animate-fade-in py-6">
       
-      {/* Header Hub with segmented control tabs to choose single vs multi */}
-      <div className="bg-white p-3 sm:p-4 rounded-[2rem] border-4 border-slate-150 shadow-sm flex gap-2">
-        <button
-          onClick={() => {
-            setActiveMode('single');
-            navigate('/vocab');
-          }}
-          className={`flex-1 py-3 px-4 rounded-2xl font-black text-sm uppercase flex items-center justify-center gap-2 transition-all duration-300 ${
-            activeMode === 'single'
-              ? 'bg-fun-yellow text-slate-950 border-b-4 border-yellow-700 shadow-md scale-102'
-              : 'text-slate-500 hover:bg-slate-50'
-          }`}
-        >
-          <Zap size={16} className="fill-current" />
-          Single Player
-        </button>
-        <button
-          onClick={() => {
-            setActiveMode('multi');
-            navigate('/race');
-          }}
-          className={`flex-1 py-3 px-4 rounded-2xl font-black text-sm uppercase flex items-center justify-center gap-2 transition-all duration-300 ${
-            activeMode === 'multi'
-              ? 'bg-red-500 text-white border-b-4 border-red-800 shadow-md scale-102'
-              : 'text-slate-500 hover:bg-slate-50'
-          }`}
-        >
-          <Users size={16} />
-          Multiplayer
-        </button>
+      {/* PRIMARY LOBBY WITH BOTH OPTIONS */}
+      <div className="text-center space-y-4 mb-8">
+        <h2 className="text-3xl sm:text-4xl font-black text-slate-800 uppercase tracking-tighter leading-none">
+          Word Rush
+        </h2>
+        <p className="text-sm font-bold text-slate-500 max-w-sm mx-auto px-4 leading-tight">
+          Test your speed and vocabulary. Play solo or compete against real players!
+        </p>
       </div>
 
-      {activeMode === 'single' ? (
-        /* SINGLE PLAYER MODE PANEL */
-        <div className="relative text-center space-y-5">
-          <div className="w-16 h-16 sm:w-20 sm:h-20 bg-fun-yellow rounded-full flex items-center justify-center mx-auto shadow-xl border-4 border-white ring-4 ring-yellow-100 animate-bounce">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        {/* SINGLE PLAYER CARD */}
+        <div className="bg-white p-5 sm:p-6 rounded-[2.5rem] border-4 border-slate-100 shadow-lg space-y-6 flex flex-col items-center justify-between transition-transform hover:-translate-y-1">
+          <div className="w-16 h-16 sm:w-20 sm:h-20 bg-fun-yellow rounded-full flex items-center justify-center mx-auto shadow-md border-4 border-white mb-2">
             <Zap size={32} className="text-white fill-current" />
           </div>
-          <h2 className="text-3xl sm:text-4xl font-black text-slate-800 uppercase tracking-tighter rainbow-text leading-none">
-            Level Word Rush
-          </h2>
-          <p className="text-sm font-bold text-slate-500 max-w-sm mx-auto px-4 leading-tight">
-            High-speed vocabulary dash! Beat the clock and build multiplier streaks matching CEFR words.
+          <h3 className="text-2xl font-black text-slate-800 uppercase tracking-tight text-center leading-none">
+            Single Player
+          </h3>
+          <p className="text-xs font-bold text-slate-500 text-center leading-snug">
+            Beat the clock, build combo streaks, and master words by CEFR level.
           </p>
-
-          <div className="bg-white p-4 sm:p-6 rounded-[2.5rem] border-4 border-slate-100 shadow-lg space-y-6 text-left">
-            <label className="text-[10px] sm:text-xs font-black uppercase text-slate-400 mb-2 block px-1 tracking-wider flex items-center gap-1.5">
-              <CheckCircle2 size={12} className="text-fun-green" /> Select target difficulty
+          
+          <div className="w-full space-y-2 mt-4">
+            <label className="text-[10px] sm:text-xs font-black uppercase text-slate-400 block tracking-wider flex items-center justify-center gap-1.5">
+              Select Difficulty
             </label>
-
-            <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+            <div className="grid grid-cols-3 gap-2">
               {(['A1', 'A2', 'B1', 'B2', 'C1', 'C2'] as const).map(lvl => {
-                const isUserActualLvl = lvl === cefrLevel;
                 const isSelected = activeTestLevel === lvl;
                 return (
                   <button
                     key={lvl}
                     type="button"
                     onClick={() => setActiveTestLevel(lvl)}
-                    className={`py-3 sm:py-4 rounded-xl sm:rounded-2xl font-black text-base transition-all border-2 transform active:scale-95 flex flex-col items-center justify-center relative ${
+                    className={`py-2 rounded-xl font-black text-sm transition-all border-2 transform active:scale-95 ${
                       isSelected
                         ? 'bg-fun-yellow border-yellow-600 text-slate-900 shadow-md scale-105'
                         : 'bg-slate-50 border-slate-100 text-slate-500 hover:bg-slate-100 hover:border-slate-300'
                     }`}
                   >
-                    <span>{lvl}</span>
-                    {isUserActualLvl && (
-                      <span className={`absolute -top-2 left-1/2 -translate-x-1/2 text-[8px] font-black tracking-widest px-1.5 py-0.5 rounded-full shrink-0 ${
-                        isSelected ? 'bg-fun-pink text-white' : 'bg-slate-800 text-slate-100 animate-pulse'
-                      }`}>
-                        MINE
-                      </span>
-                    )}
+                    {lvl}
                   </button>
                 );
               })}
             </div>
-
-            <div className="bg-slate-50 p-3.5 rounded-2xl border border-slate-100 flex items-start gap-2.5">
-              <Info className="text-fun-blue shrink-0 mt-0.5" size={15} />
-              <p className="text-slate-500 font-bold text-[11px] sm:text-xs leading-normal">
-                Perfect warm-up! Shuffles and tests you on words for <span className="text-fun-pink font-black uppercase">{activeTestLevel}</span>. Shorter times on combos.
-              </p>
-            </div>
-
-            <Button onClick={startSinglePlayer} className="w-full py-4.5 text-lg sm:text-xl transform outline-none shadow-md font-black border-b-4 border-yellow-700 animate-wiggle" variant="primary">
-              START WORD RUSH
-            </Button>
           </div>
+
+          <Button onClick={() => { setActiveMode('single'); startSinglePlayer(); }} className="w-full mt-4 py-3.5 text-base sm:text-lg transform outline-none shadow-md font-black border-b-4 border-yellow-700" variant="primary">
+            START SOLO
+          </Button>
         </div>
-      ) : (
-        /* MULTIPLAYER RACE PANEL */
-        <div className="relative text-center space-y-5">
-          <div className="w-16 h-16 sm:w-20 sm:h-20 bg-red-500 rounded-full flex items-center justify-center mx-auto shadow-xl border-4 border-white ring-4 ring-red-100 animate-pulse">
-            <Flag size={32} className="text-white" />
+
+        {/* MULTIPLAYER CARD */}
+        <div className="bg-white p-5 sm:p-6 rounded-[2.5rem] border-4 border-slate-100 shadow-lg space-y-6 flex flex-col items-center justify-between transition-transform hover:-translate-y-1">
+          <div className="w-16 h-16 sm:w-20 sm:h-20 bg-red-500 rounded-full flex items-center justify-center mx-auto shadow-md border-4 border-white mb-2">
+            <Users size={32} className="text-white" />
           </div>
-          <h2 className="text-3xl sm:text-4xl font-black text-slate-800 uppercase tracking-tighter leading-none">
-            Live Word Race
-          </h2>
-          <p className="text-sm font-bold text-slate-500 max-w-sm mx-auto px-4 leading-tight">
-            1v1 real-time competitive matches. Complete grammar, synonyms, and translations to win trophies.
+          <h3 className="text-2xl font-black text-slate-800 uppercase tracking-tight text-center leading-none">
+            Multiplayer
+          </h3>
+          <p className="text-xs font-bold text-slate-500 text-center leading-snug">
+            1v1 real-time matches against other players at your skill level.
           </p>
-
-          <div className="bg-white p-5 sm:p-6 rounded-[2.5rem] border-4 border-slate-100 shadow-lg space-y-6">
-            <div className="flex gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100 text-left items-center">
-              <Users className="text-red-500 shrink-0" size={36} />
-              <div>
-                <h4 className="font-black text-slate-800 text-sm">Real-time matchmaking</h4>
-                <p className="text-slate-500 text-xs font-bold mt-0.5 leading-snug">
-                  Compete against online players at level <span className="text-fun-blue font-black">{cefrLevel || 'A2'}</span>, or polished AI bots in case of short cues.
-                </p>
-              </div>
+          
+          <div className="flex justify-center -space-x-3 overflow-hidden py-2 my-auto">
+            {OPPONENTS.map((opp, i) => (
+              <img key={i} className="inline-block h-10 w-10 rounded-full ring-2 ring-white bg-slate-50" src={opp.avatar} alt="Bot player avatar" />
+            ))}
+            <div className="inline-block h-10 w-10 rounded-full bg-slate-800 border-2 border-white flex items-center justify-center text-white text-[10px] font-black z-10">
+              +LIVE
             </div>
-
-            <div className="flex justify-center -space-x-3 overflow-hidden py-1">
-              {OPPONENTS.map((opp, i) => (
-                <img key={i} className="inline-block h-10 w-10 rounded-full ring-2 ring-white bg-slate-50" src={opp.avatar} alt="Bot player avatar" />
-              ))}
-              <div className="inline-block h-10 w-10 rounded-full bg-slate-800 border-2 border-white flex items-center justify-center text-white text-[10px] font-black">
-                +LIVE
-              </div>
-            </div>
-
-            <Button onClick={startMatching} className="w-full py-4.5 text-lg sm:text-xl transform outline-none shadow-md font-black border-b-4 border-red-800" variant="danger">
-              FIND MATCH
-            </Button>
           </div>
+
+          <Button onClick={() => { setActiveMode('multi'); startMatching(); }} className="w-full mt-4 py-3.5 text-base sm:text-lg transform outline-none shadow-md font-black border-b-4 border-red-800" variant="danger">
+            FIND MATCH
+          </Button>
         </div>
-      )}
+      </div>
     </div>
   );
 
@@ -891,7 +840,6 @@ const RaceMode: React.FC<RaceModeProps> = ({ defaultTab }) => {
     if (activeMode === 'single') {
       return (
         <div className="max-w-md mx-auto text-center space-y-6 animate-fade-in py-10">
-          <Confetti />
           <div className="relative inline-block">
             <Trophy size={80} className="mx-auto text-fun-yellow animate-bounce" />
             <Star className="absolute -top-2 -right-4 text-amber-400 animate-pulse" size={24} />
@@ -936,7 +884,6 @@ const RaceMode: React.FC<RaceModeProps> = ({ defaultTab }) => {
 
     return (
       <div className="max-w-xl mx-auto space-y-6 animate-fade-in pb-10 pt-4">
-        {isWinner && <Confetti />}
         <div className="text-center space-y-3">
           <motion.div 
             initial={{ scale: 0 }}
