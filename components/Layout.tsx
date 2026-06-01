@@ -103,12 +103,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <ContactModal />
       
       {/* Mobile Header */}
-      <div className={`md:hidden p-4 flex items-center justify-between sticky top-0 z-30 shadow-sm ${isKids ? 'bg-white border-b-4 border-slate-100' : 'bg-white border-b border-slate-200'}`}>
-        <div className="flex items-center gap-2">
+      <div className={`md:hidden px-4 py-3 flex items-center justify-between sticky top-0 z-50 backdrop-blur-xl bg-white/80 border-b border-white/20 shadow-[0_4px_30px_rgba(0,0,0,0.03)]`}>
+        <div className="flex items-center gap-3">
             <img 
               src="https://i.ibb.co/TMMP1KYB/smart.png" 
               alt="Lingavo Logo" 
-              className="h-8 w-auto object-contain"
+              className="h-8 w-auto object-contain drop-shadow-sm"
               referrerPolicy="no-referrer"
             />
         </div>
@@ -116,51 +116,52 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <div className="flex-1 px-2 flex justify-center flex-col items-center overflow-hidden relative min-h-[40px]">
            {notification && (
               <div className="absolute inset-0 flex items-center justify-center animate-fade-in z-50">
-                 <div className={`text-white px-2 py-1 mb-1 rounded-full shadow-md flex items-center gap-1 border border-white/20 whitespace-nowrap overflow-hidden bg-slate-800`}>
+                 <div className={`text-white px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 border border-white/20 whitespace-nowrap overflow-hidden bg-slate-800/90 backdrop-blur-md`}>
                     {notification.type === 'xp' && <Zap className="text-yellow-400 fill-current shrink-0" size={12} />}
                     {notification.type === 'reward' && <Gift className="text-fun-pink fill-current shrink-0" size={12} />}
                     {notification.type === 'badge' && <Award className="text-fun-green fill-current shrink-0" size={12} />}
                     {notification.type === 'trade' && <ArrowRightLeft className="text-fun-blue fill-current shrink-0" size={12} />}
-                    <span className="font-bold text-[10px] truncate max-w-[120px]">{notification.text}</span>
+                    <span className="font-bold text-[10px] tracking-wide truncate max-w-[120px]">{notification.text}</span>
                  </div>
               </div>
            )}
            
            {showLevelUp && !notification && (
               <div className="absolute inset-0 flex items-center justify-center animate-bounce-slow z-50">
-                 <div onClick={closeLevelUp} className="bg-gradient-to-r from-fun-blue to-cyan-400 text-white px-3 py-1 mb-1 rounded-full shadow-md flex items-center gap-1 border border-white/20 cursor-pointer hover:scale-105 transition-transform">
+                 <div onClick={closeLevelUp} className="bg-gradient-to-r from-fun-blue to-cyan-400 text-white px-4 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 border border-white/20 cursor-pointer hover:scale-105 transition-transform">
                     <Star className="text-fun-yellow fill-current animate-pulse shrink-0" size={14} />
-                    <span className="font-black text-[10px] whitespace-nowrap">LEVEL {stats.level}!</span>
+                    <span className="font-black text-[10px] tracking-wider whitespace-nowrap">LEVEL {stats.level}!</span>
                  </div>
               </div>
            )}
         </div>
         
-        <div className="flex items-center gap-2 ml-auto mr-2">
+        <div className="flex items-center gap-1.5 ml-auto">
             {/* Language Switch */}
             <button 
               onClick={() => handleLanguageChange(preferredLanguage === 'English' ? 'Turkish' : 'English')}
-              className={`p-2 rounded-xl transition-colors flex items-center justify-center ${preferredLanguage !== 'English' && preferredLanguage ? 'bg-blue-100 text-fun-blue' : 'text-slate-400 bg-slate-50 hover:bg-slate-100'}`}
-              title="Translate to Turkish"
+              className={`p-2 rounded-2xl transition-all shadow-sm flex items-center justify-center ${preferredLanguage !== 'English' && preferredLanguage ? 'bg-blue-50 text-fun-blue border border-blue-100' : 'text-slate-400 bg-white border border-slate-100 hover:bg-slate-50'}`}
+              title="Translate"
             >
-              <Globe size={20} />
+              <Globe size={18} />
             </button>
 
             {/* Notifications */}
             <NavLink 
                 to="/notifications"
-                className="p-2 text-fun-orange bg-orange-50 hover:bg-orange-100 rounded-xl transition-colors"
+                className="p-2 text-fun-orange bg-white border border-slate-100 hover:bg-orange-50 hover:border-orange-100 rounded-2xl transition-all shadow-sm relative"
             >
-                <Bell size={20} />
+                <Bell size={18} />
+                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-fun-orange rounded-full border border-white animate-pulse" />
             </NavLink>
+            
+            <button 
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="p-2 ml-1 text-slate-500 bg-white border border-slate-100 hover:bg-slate-50 rounded-2xl transition-all shadow-sm"
+            >
+              {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
         </div>
-
-        <button 
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="p-2 text-slate-600 hover:bg-slate-100 rounded-xl transition-colors"
-        >
-          {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
-        </button>
       </div>
 
       {/* Mobile Menu Overlay */}
