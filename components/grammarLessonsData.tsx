@@ -87,7 +87,7 @@ const createLesson = (
       {
         id: 'q2',
         type: 'fill-in-blank',
-        question: q1.replace('_____', '...'), // Simplified for bulk generation
+        question: q1.replace('_____', '...'),
         correctAnswer: a1,
         explanation: `The correct form is "${a1}".`
       }
@@ -97,1053 +97,176 @@ const createLesson = (
 };
 
 export const LESSONS: Lesson[] = [
-  // --- A1 Beginner ---
-  {
-    id: 'a1-1',
-    level: 'A1',
-    title: 'Present Simple (To Be)',
-    topic: 'Verbs',
-    explanation: (
-      <div className="space-y-4">
-        <p className="text-lg text-slate-700">We use <strong>am / is / are</strong> as the present tense of the verb <strong>to be</strong>.</p>
-        <p className="text-slate-600">The verb "to be" is one of the most important verbs in English, used to describe identity, age, profession, emotions, location, and condition.</p>
-      </div>
-    ),
-    explanationParts: [
-      <div className="space-y-6">
-        <h4 className="text-2xl font-black text-slate-800">Unit 1: Present Simple "To Be" (am, is, are)</h4>
-        <p className="text-lg text-slate-600">
-          The verb <strong className="text-fun-blue">to be</strong> is one of the most important verbs in English. It is used to describe:
-        </p>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-sm text-center">
-          {['identity', 'age', 'profession', 'emotions', 'location', 'condition'].map((item) => (
-            <div key={item} className="bg-slate-50 border border-slate-200 px-3 py-2 rounded-xl font-bold text-slate-700 capitalize">
-              {item}
-            </div>
-          ))}
-        </div>
-        
-        <div className="mt-6">
-          <h5 className="font-bold text-slate-700 mb-2 uppercase tracking-wider text-xs">Basic Forms</h5>
-          <div className="overflow-hidden border border-slate-100 rounded-2xl shadow-sm">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="bg-slate-100 font-black text-slate-600 text-xs uppercase">
-                  <th className="p-3">Subject</th>
-                  <th className="p-3">Verb</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 font-bold text-slate-700">
-                <tr>
-                  <td className="p-3 bg-blue-50/50 text-sm">I</td>
-                  <td className="p-3 text-fun-blue bg-blue-50/50 text-sm">am</td>
-                </tr>
-                <tr>
-                  <td className="p-3 bg-purple-50/50 text-sm">He / She / It</td>
-                  <td className="p-3 text-fun-purple bg-purple-50/50 text-sm">is</td>
-                </tr>
-                <tr>
-                  <td className="p-3 bg-green-50/50 text-sm">You / We / They</td>
-                  <td className="p-3 text-fun-green bg-green-50/50 text-sm">are</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <div className="mt-4 bg-amber-50 border-2 border-amber-200/60 p-4 rounded-2xl">
-          <h5 className="font-black text-amber-800 text-xs uppercase tracking-wider mb-1">Sentence Structure</h5>
-          <p className="font-mono text-base font-black text-amber-950">Subject + am / is / are + complement</p>
-        </div>
-
-        <div className="space-y-2 mt-4">
-          <p className="font-bold text-slate-700">Examples:</p>
-          <ul className="space-y-1.5 text-slate-600 font-medium text-sm">
-            <li className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-fun-blue"></span>
-              <span>I <strong>am</strong> a student.</span>
-            </li>
-            <li className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-fun-purple"></span>
-              <span>She <strong>is</strong> happy.</span>
-            </li>
-            <li className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-fun-green"></span>
-              <span>They <strong>are</strong> at school.</span>
-            </li>
-          </ul>
-        </div>
-      </div>,
-      <div className="space-y-6">
-        <h4 className="text-2xl font-black text-slate-800">Why Different Forms?</h4>
-        <p className="text-lg text-slate-600">English changes the verb depending on the subject.</p>
-        
-        <div className="space-y-3">
-          <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 text-sm">
-            <span className="font-black text-fun-blue block">“I” → am</span>
-            <p className="text-slate-600 italic font-medium mt-1">Example: "I am tired."</p>
-          </div>
-          <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 text-sm">
-            <span className="font-black text-fun-purple block">Singular person/object → is</span>
-            <p className="text-slate-600 italic font-medium mt-1">Examples: "He is tall.", "The dog is hungry."</p>
-          </div>
-          <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 text-sm">
-            <span className="font-black text-fun-green block">Plural or “you” → are</span>
-            <p className="text-slate-600 italic font-medium mt-1">Examples: "You are late.", "We are ready."</p>
-          </div>
-        </div>
-
-        <div className="mt-6">
-          <h4 className="text-2xl font-black text-slate-800">Contractions (Short Forms)</h4>
-          <p className="text-base text-slate-600 mb-3">Native speakers use contractions constantly in conversation.</p>
-          <div className="grid grid-cols-2 gap-2 mt-2">
-            {[
-              { full: 'I am', short: "I'm" },
-              { full: 'He is', short: "He's" },
-              { full: 'She is', short: "She's" },
-              { full: 'It is', short: "It's" },
-              { full: 'We are', short: "We're" },
-              { full: 'They are', short: "They're" },
-            ].map((c, i) => (
-              <div key={i} className="bg-white p-3 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-center text-sm">
-                <div className="flex justify-between items-center">
-                  <span className="text-slate-400 font-bold">{c.full}</span>
-                  <span className="font-black text-fun-pink">→ {c.short}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="mt-4 bg-slate-50 p-4 rounded-xl border border-slate-200 text-sm font-bold text-slate-600 space-y-1">
-            <p className="font-black text-xs text-slate-400 uppercase tracking-wider mb-1">Examples</p>
-            <p>• I'm busy.</p>
-            <p>• She's my teacher.</p>
-            <p>• They're friends.</p>
-          </div>
-        </div>
-      </div>,
-      <div className="space-y-6">
-        <h4 className="text-2xl font-black text-slate-800">Negative Form</h4>
-        <p className="text-lg text-slate-600">To make a sentence negative, we simply add <strong className="text-fun-pink">not</strong>.</p>
-
-        <div className="overflow-hidden border border-slate-100 rounded-2xl shadow-sm">
-          <table className="w-full text-left border-collapse text-sm">
-            <thead>
-              <tr className="bg-slate-100 font-black text-slate-600 text-xs uppercase border-b border-slate-100">
-                <th className="p-3">Positive</th>
-                <th className="p-3">Negative</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 font-bold text-slate-700">
-              <tr>
-                <td className="p-3">I am</td>
-                <td className="p-3 text-fun-pink">I am not</td>
-              </tr>
-              <tr>
-                <td className="p-3">He / She / It is</td>
-                <td className="p-3 text-fun-pink">He / She / It is not</td>
-              </tr>
-              <tr>
-                <td className="p-3">You / We / They are</td>
-                <td className="p-3 text-fun-pink">You / We / They are not</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div className="bg-slate-800 text-white p-5 rounded-[2rem] mt-6 space-y-3">
-          <h5 className="font-black text-fun-pink text-xs uppercase tracking-widest">Short Negative Forms</h5>
-          <div className="grid grid-cols-2 gap-4 text-sm font-bold">
-            <div className="bg-white/5 p-3 rounded-xl border border-white/10">
-              <span className="text-slate-300 block text-xs">is not</span>
-              <span className="text-white text-base">isn't</span>
-            </div>
-            <div className="bg-white/5 p-3 rounded-xl border border-white/10">
-              <span className="text-slate-300 block text-xs">are not</span>
-              <span className="text-white text-base">aren't</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="space-y-2 mt-4 text-sm">
-          <p className="font-bold text-slate-700">Examples:</p>
-          <ul className="space-y-1.5 text-slate-600 font-medium">
-            <li className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-fun-pink"></span>
-              <span>She <strong>isn't</strong> sad. <span className="text-slate-400 text-xs font-mono">(She is not sad)</span></span>
-            </li>
-            <li className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-fun-pink"></span>
-              <span>We <strong>aren't</strong> tired. <span className="text-slate-400 text-xs font-mono">(We are not tired)</span></span>
-            </li>
-          </ul>
-        </div>
-      </div>,
-      <div className="space-y-6">
-        <h4 className="text-2xl font-black text-slate-800">Common Uses & Mistakes</h4>
-        <div>
-          <h5 className="font-black text-xs uppercase tracking-widest text-slate-400 mb-2">Common Uses</h5>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {[
-              { tag: "1. Identity", desc: "I am Ahmet.", alt: "She is my sister." },
-              { tag: "2. Profession", desc: "He is a doctor.", alt: "They are engineers." },
-              { tag: "3. Age", desc: "I am 18 years old.", alt: "She is 25." },
-              { tag: "4. Location", desc: "The keys are on the table.", alt: "We are at home." },
-              { tag: "5. Feelings", desc: "We are excited.", alt: "I am happy." }
-            ].map((item, idx) => (
-              <div key={idx} className="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 text-sm">
-                <span className="font-black text-xs uppercase tracking-widest text-slate-400 block mb-1">{item.tag}</span>
-                <p className="text-slate-800 font-bold">{item.desc}</p>
-                <p className="text-slate-500 text-xs font-medium mt-0.5">{item.alt}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="mt-6">
-          <h5 className="font-black text-xs uppercase tracking-widest text-slate-400 mb-2">Common Mistakes</h5>
-          <div className="space-y-3">
-            {[
-              { wrong: "She are happy.", correct: "She is happy." },
-              { wrong: "I is tired.", correct: "I am tired." },
-              { wrong: "They is here.", correct: "They are here." }
-            ].map((mistake, idx) => (
-              <div key={idx} className="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm flex flex-col gap-1 text-sm">
-                <p className="text-red-500 font-bold flex items-center gap-2">
-                  <span>❌</span> <span className="line-through">{mistake.wrong}</span>
-                </p>
-                <p className="text-green-600 font-black flex items-center gap-2">
-                  <span>✅</span> <span>{mistake.correct}</span>
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    ],
-    exercises: [
-      { id: 'q1', type: 'multiple-choice', question: 'I _____ happy.', options: ['am', 'is', 'are'], correctAnswer: 'am', explanation: 'Use "am" with "I".' },
-      { id: 'q2', type: 'multiple-choice', question: 'They _____ my friends.', options: ['am', 'is', 'are'], correctAnswer: 'are', explanation: 'Use "are" with "They".' },
-      { id: 'q3', type: 'multiple-choice', question: 'She _____ not at home.', options: ['am', 'is', 'are'], correctAnswer: 'is', explanation: 'Use "is" with "She".' }
-    ],
-    translations: {
-      'Turkish': {
-        title: 'Present Simple (To Be)',
-        explanation: (
-          <div className="space-y-4 text-slate-700 text-lg">
-            <p><strong>am / is / are</strong> İngilizcedeki "to be" fiilinin şimdiki zaman halidir ve Türkçe'deki <em>olmak</em>, <em>bulunmak</em> veya <em>-dir/-dir</em> ek anlamlarını karşılar.</p>
-          </div>
-        ),
-        explanationParts: [
-          <div className="space-y-6">
-            <h4 className="text-2xl font-black text-slate-800">Kullanım Alanları</h4>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
-              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                <span className="font-black text-fun-blue block">1. Kimlik belirtme</span>
-                <p className="text-slate-800 font-bold mt-1">Ben öğrenciyim.</p>
-                <p className="text-slate-500 italic">→ I am a student.</p>
-              </div>
-              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                <span className="font-black text-fun-purple block">2. Meslek belirtme</span>
-                <p className="text-slate-800 font-bold mt-1">O doktor.</p>
-                <p className="text-slate-500 italic">→ He is a doctor.</p>
-              </div>
-              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                <span className="font-black text-fun-green block">3. Duygu belirtme</span>
-                <p className="text-slate-800 font-bold mt-1">Mutluyum.</p>
-                <p className="text-slate-500 italic">→ I am happy.</p>
-              </div>
-              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                <span className="font-black text-fun-orange block">4. Yer belirtme</span>
-                <p className="text-slate-800 font-bold mt-1">Evdeler.</p>
-                <p className="text-slate-500 italic">→ They are at home.</p>
-              </div>
-              <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 col-span-1 sm:col-span-2">
-                <span className="font-black text-fun-pink block">5. Yaş belirtme</span>
-                <p className="text-slate-800 font-bold mt-1">20 yaşındayım.</p>
-                <p className="text-slate-500 italic">→ I am 20 years old.</p>
-              </div>
-            </div>
-
-            <div className="mt-6">
-              <h4 className="font-bold text-slate-800 mb-2">Özneye Göre Kullanım:</h4>
-              <div className="grid grid-cols-3 gap-2 text-center text-sm">
-                <div className="bg-blue-50 p-3 rounded-xl border border-blue-100 font-bold">
-                  <span className="text-fun-blue block">I</span> am
-                </div>
-                <div className="bg-purple-50 p-3 rounded-xl border border-purple-100 font-bold">
-                  <span className="text-fun-purple block">He/She/It</span> is
-                </div>
-                <div className="bg-green-50 p-3 rounded-xl border border-green-100 font-bold">
-                  <span className="text-fun-green block">You/We/They</span> are
-                </div>
-              </div>
-            </div>
-          </div>,
-          <div className="space-y-6">
-            <h4 className="text-2xl font-black text-slate-800">Cümle Yapısı</h4>
-            <div className="bg-amber-50 border-2 border-amber-200 p-4 rounded-2xl">
-              <p className="font-mono text-base font-black text-amber-950">Özne + am / is / are + tamamlayıcı</p>
-            </div>
-            
-            <div className="space-y-2 font-bold text-slate-700 text-sm">
-              <p>Örnekler:</p>
-              <div className="bg-white p-3 rounded-xl border shadow-sm">
-                <p>I am tired. <span className="text-slate-500 font-medium">→ Yorgunum.</span></p>
-              </div>
-              <div className="bg-white p-3 rounded-xl border shadow-sm">
-                <p>She is beautiful. <span className="text-slate-500 font-medium">→ O güzel.</span></p>
-              </div>
-              <div className="bg-white p-3 rounded-xl border shadow-sm">
-                <p>They are students. <span className="text-slate-500 font-medium">→ Onlar öğrenci.</span></p>
-              </div>
-            </div>
-
-            <div className="mt-6">
-              <h4 className="text-2xl font-black text-slate-800">Kısaltmalar</h4>
-              <p className="text-slate-600 mb-3 text-sm">Konuşma İngilizcesinde kısaltmalar çok sık tercih edilir.</p>
-              <div className="overflow-hidden border border-slate-100 rounded-2xl shadow-sm text-sm">
-                <table className="w-full text-left border-collapse">
-                  <thead>
-                    <tr className="bg-slate-100 font-black text-slate-600 text-xs">
-                      <th className="p-3">Uzun Hâl</th>
-                      <th className="p-3">Kısa Hâl</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100 font-bold text-slate-700">
-                    <tr>
-                      <td className="p-3">I am</td>
-                      <td className="p-3 text-fun-pink">I'm</td>
-                    </tr>
-                    <tr>
-                      <td className="p-3">He is / She is</td>
-                      <td className="p-3 text-fun-pink font-bold">He's / She's</td>
-                    </tr>
-                    <tr>
-                      <td className="p-3">They are</td>
-                      <td className="p-3 text-fun-pink font-bold">They're</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>,
-          <div className="space-y-6">
-            <h4 className="text-2xl font-black text-slate-800">Olumsuz Yapı & Hatalar</h4>
-            <div>
-              <h5 className="font-black text-xs uppercase tracking-widest text-slate-400 mb-2">Olumsuz Yapı</h5>
-              <p className="text-sm text-slate-600 mb-3">Olumsuz cümle yaparken yardımcı fiilden sonra <strong className="text-fun-pink">not</strong> eklenir.</p>
-              
-              <div className="space-y-2 text-sm font-bold">
-                <div className="bg-slate-50 p-3 rounded-xl border">
-                  <p>I am not hungry. <span className="text-slate-500 font-medium">→ Aç değilim.</span></p>
-                </div>
-                <div className="bg-slate-50 p-3 rounded-xl border">
-                  <p>She isn't busy. <span className="text-slate-500 font-medium">→ Meşgul değil.</span></p>
-                </div>
-                <div className="bg-slate-50 p-3 rounded-xl border">
-                  <p>They aren't here. <span className="text-slate-500 font-medium">→ Burada değiller.</span></p>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-6">
-              <h4 className="text-2xl font-black text-slate-800">Sık Yapılan Hatalar</h4>
-              <div className="space-y-3 mt-3 text-sm">
-                <div className="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm">
-                  <p className="text-red-500 font-bold line-through">❌ She are happy.</p>
-                  <p className="text-green-600 font-black">✅ She is happy.</p>
-                </div>
-                <div className="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm">
-                  <p className="text-red-500 font-bold line-through">❌ I is tired.</p>
-                  <p className="text-green-600 font-black">✅ I am tired.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        ]
-      }
-    }
-  },
-  {
-    id: 'a1-2',
-    level: 'A1',
-    title: 'Present Simple (Verbs)',
-    topic: 'Verbs',
-    explanation: (
-      <div className="space-y-4">
-        <p>The Present Simple is used for habits, routines, and facts.</p>
-        <p>Example: "I drink coffee every morning."</p>
-      </div>
-    ),
-    explanationParts: [
-      <div className="space-y-6">
-        <h4 className="text-2xl font-black text-slate-800">Part 1: Most Verbs</h4>
-        <p className="text-lg text-slate-600">For most people (I, You, We, They), we use the base form of the verb.</p>
-        <div className="bg-white p-6 rounded-[2rem] border-4 border-slate-100 shadow-sm">
-          <ul className="space-y-2 font-bold text-slate-700">
-            <li>I <span className="text-fun-blue underline">play</span> football.</li>
-            <li>You <span className="text-fun-blue underline">eat</span> pizza.</li>
-            <li>We <span className="text-fun-blue underline">live</span> in London.</li>
-            <li>They <span className="text-fun-blue underline">speak</span> English.</li>
-          </ul>
-        </div>
-      </div>,
-      <div className="space-y-6">
-        <h4 className="text-2xl font-black text-slate-800">Part 2: The "S" Rule</h4>
-        <p className="text-lg text-slate-600">When the subject is <strong>He</strong>, <strong>She</strong>, or <strong>It</strong>, we must add an <strong>-s</strong> to the end of the verb.</p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="bg-orange-50 p-4 rounded-2xl border-2 border-orange-100">
-            <p className="font-black text-orange-600 mb-1">Normal</p>
-            <p className="text-slate-600">I work</p>
-          </div>
-          <div className="bg-fun-pink/10 p-4 rounded-2xl border-2 border-fun-pink/20">
-            <p className="font-black text-fun-pink mb-1">He/She/It</p>
-            <p className="text-slate-800 font-bold">He work<span className="text-fun-pink text-xl">s</span></p>
-          </div>
-        </div>
-        <p className="text-sm text-slate-500 italic">Example: "She plays tennis every Saturday."</p>
-      </div>,
-      <div className="space-y-6">
-        <h4 className="text-2xl font-black text-slate-800">Part 3: Spelling Exceptions</h4>
-        <p className="text-lg text-slate-600">Some verbs need <strong>-es</strong> instead of just <strong>-s</strong>.</p>
-        <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200">
-          <p className="font-bold mb-2">Verbs ending in -ch, -sh, -s, -x, -o:</p>
-          <ul className="grid grid-cols-2 gap-2 text-sm">
-            <li>Watch → Watch<span className="text-fun-blue font-bold">es</span></li>
-            <li>Finish → Finish<span className="text-fun-blue font-bold">es</span></li>
-            <li>Go → Go<span className="text-fun-blue font-bold">es</span></li>
-            <li>Fix → Fix<span className="text-fun-blue font-bold">es</span></li>
-          </ul>
-        </div>
-      </div>
-    ],
-    exercises: [
-      { id: 'q1', type: 'multiple-choice', question: 'She _____ tennis.', options: ['play', 'plays', 'playing'], correctAnswer: 'plays', explanation: 'Add -s for "She".' },
-      { id: 'q2', type: 'multiple-choice', question: 'We _____ to school.', options: ['go', 'goes', 'going'], correctAnswer: 'go', explanation: 'Use base form for "We".' },
-      { id: 'q3', type: 'multiple-choice', question: 'He _____ TV every night.', options: ['watch', 'watches', 'watching'], correctAnswer: 'watches', explanation: 'Add -es for verbs ending in -ch.' }
-    ],
-    translations: {
-      'Turkish': { 
-        title: 'Geniş Zaman (Fiiller)', 
-        explanation: <div>He/She/It için -s takısı ekleyin.</div>,
-        explanationParts: [
-          <div>Çoğu fiil: I, You, We, They için yalın hal kullanılır.</div>,
-          <div>"S" Kuralı: He, She, It için fiile -s eklenir.</div>,
-          <div>Yazım istisnaları: -ch, -sh, -s, -x, -o ile bitenlere -es eklenir.</div>
-        ]
-      }
-    }
-  },
-  {
-    id: 'a1-3',
-    level: 'A1',
-    title: 'Subject Pronouns',
-    topic: 'Pronouns',
-    explanation: (
-      <div className="space-y-4">
-        <p>Subject pronouns are words that replace a noun as the subject of a sentence.</p>
-        <p>Example: "John is happy" → "<strong>He</strong> is happy."</p>
-      </div>
-    ),
-    explanationParts: [
-      <div className="space-y-6">
-        <h4 className="text-2xl font-black text-slate-800">Part 1: Singular Pronouns</h4>
-        <p className="text-lg text-slate-600">These pronouns refer to one person or thing.</p>
-        <div className="space-y-3">
-          <div className="bg-blue-50 p-4 rounded-xl border border-blue-100 flex justify-between">
-            <span className="font-black">I</span>
-            <span className="text-slate-500">Myself</span>
-          </div>
-          <div className="bg-blue-50 p-4 rounded-xl border border-blue-100 flex justify-between">
-            <span className="font-black">You</span>
-            <span className="text-slate-500">The person I am talking to</span>
-          </div>
-          <div className="bg-blue-50 p-4 rounded-xl border border-blue-100 flex justify-between">
-            <span className="font-black">He / She / It</span>
-            <span className="text-slate-500">A man / A woman / A thing</span>
-          </div>
-        </div>
-      </div>,
-      <div className="space-y-6">
-        <h4 className="text-2xl font-black text-slate-800">Part 2: Plural Pronouns</h4>
-        <p className="text-lg text-slate-600">These pronouns refer to more than one person or thing.</p>
-        <div className="space-y-3">
-          <div className="bg-purple-50 p-4 rounded-xl border border-purple-100 flex justify-between">
-            <span className="font-black">We</span>
-            <span className="text-slate-500">Me + others</span>
-          </div>
-          <div className="bg-purple-50 p-4 rounded-xl border border-purple-100 flex justify-between">
-            <span className="font-black">You (Plural)</span>
-            <span className="text-slate-500">A group I am talking to</span>
-          </div>
-          <div className="bg-purple-50 p-4 rounded-xl border border-purple-100 flex justify-between">
-            <span className="font-black">They</span>
-            <span className="text-slate-500">A group of others</span>
-          </div>
-        </div>
-      </div>
-    ],
-    exercises: [
-      { id: 'q1', type: 'multiple-choice', question: '_____ is my friend.', options: ['He', 'Him', 'His'], correctAnswer: 'He', explanation: 'Use "He" as the subject.' },
-      { id: 'q2', type: 'multiple-choice', question: '_____ are at school.', options: ['They', 'Them', 'Their'], correctAnswer: 'They', explanation: 'Use "They" as the subject.' },
-      { id: 'q3', type: 'multiple-choice', question: '_____ am a teacher.', options: ['I', 'Me', 'My'], correctAnswer: 'I', explanation: 'Use "I" as the subject.' }
-    ],
-    translations: {
-      'Turkish': { 
-        title: 'Özne Zamirleri', 
-        explanation: <div>Ben, Sen, O, Biz, Onlar.</div>,
-        explanationParts: [
-          <div>Tekil Zamirler: I, You, He, She, It.</div>,
-          <div>Çoğul Zamirler: We, You, They.</div>
-        ]
-      }
-    }
-  },
-  {
-    id: 'a1-4',
-    level: 'A1',
-    title: 'Object Pronouns',
-    topic: 'Pronouns',
-    explanation: (
-      <div className="space-y-4">
-        <p>Object pronouns are used after verbs or prepositions.</p>
-        <p>Example: "Look at <strong>me</strong>."</p>
-      </div>
-    ),
-    explanationParts: [
-      <div className="space-y-6">
-        <h4 className="text-2xl font-black text-slate-800">Part 1: The List</h4>
-        <p className="text-lg text-slate-600">Every subject pronoun has a matching object pronoun.</p>
-        <div className="grid grid-cols-2 gap-2 text-sm font-bold">
-          <div className="bg-slate-100 p-2 rounded">I → me</div>
-          <div className="bg-slate-100 p-2 rounded">You → you</div>
-          <div className="bg-slate-100 p-2 rounded">He → him</div>
-          <div className="bg-slate-100 p-2 rounded">She → her</div>
-          <div className="bg-slate-100 p-2 rounded">It → it</div>
-          <div className="bg-slate-100 p-2 rounded">We → us</div>
-          <div className="bg-slate-100 p-2 rounded">They → them</div>
-        </div>
-      </div>,
-      <div className="space-y-6">
-        <h4 className="text-2xl font-black text-slate-800">Part 2: Usage</h4>
-        <p className="text-lg text-slate-600">We use them when the person is receiving the action.</p>
-        <div className="bg-green-50 p-6 rounded-[2rem] border-4 border-green-100">
-          <p className="mb-2">"Can you help <span className="text-fun-green font-black underline">me</span>?"</p>
-          <p className="mb-2">"I love <span className="text-fun-green font-black underline">them</span>."</p>
-          <p>"Give it to <span className="text-fun-green font-black underline">us</span>."</p>
-        </div>
-      </div>
-    ],
-    exercises: [
-      { id: 'q1', type: 'multiple-choice', question: 'Listen to _____.', options: ['me', 'I', 'my'], correctAnswer: 'me', explanation: 'Use "me" after the preposition "to".' },
-      { id: 'q2', type: 'multiple-choice', question: 'I see _____.', options: ['him', 'he', 'his'], correctAnswer: 'him', explanation: 'Use "him" after the verb "see".' },
-      { id: 'q3', type: 'multiple-choice', question: 'They like _____.', options: ['us', 'we', 'our'], correctAnswer: 'us', explanation: 'Use "us" after the verb "like".' }
-    ]
-  },
-  createLesson('a1-5', 'A1', 'Possessive Adjectives', 'Adjectives', 'My, Your, His, Her, Its, Our, Their.', 'This is _____ car.', 'my', ['my', 'me', 'I']),
-  createLesson('a1-6', 'A1', 'Plural Nouns', 'Nouns', 'Add -s or -es.', 'Two _____ are on the table.', 'boxes', ['boxes', 'boxs', 'box']),
-  createLesson('a1-7', 'A1', 'Demonstratives', 'Determiners', 'This, That, These, Those.', '_____ is my book here.', 'This', ['This', 'Those', 'These']),
-  createLesson('a1-8', 'A1', 'There is / There are', 'Structure', 'Singular vs Plural existence.', 'There _____ a cat.', 'is', ['is', 'are', 'be']),
-  createLesson('a1-9', 'A1', 'Countable Nouns', 'Nouns', 'Things you can count.', 'I have three _____.', 'apples', ['apples', 'water', 'rice']),
-  createLesson('a1-10', 'A1', 'Some / Any', 'Quantifiers', 'Some for positive, Any for negative.', 'I don\'t have _____ money.', 'any', ['any', 'some', 'a']),
-  {
-    id: 'a1-11',
-    level: 'A1',
-    title: 'Articles (A, An, The)',
-    topic: 'Articles',
-    explanation: (
-      <div className="space-y-4">
-        <p>Articles are small words that come before nouns. They tell us if we are talking about something specific or general.</p>
-        <p>There are three articles in English: <strong>a</strong>, <strong>an</strong>, and <strong>the</strong>.</p>
-      </div>
-    ),
-    explanationParts: [
-      <div className="space-y-6">
-        <h4 className="text-2xl font-black text-slate-800">Part 1: A and AN</h4>
-        <p className="text-lg text-slate-600">We use <strong>a</strong> and <strong>an</strong> when we talk about <strong>one</strong> thing that is <strong>not specific</strong>.</p>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="bg-blue-50 p-6 rounded-2xl border-2 border-blue-100">
-            <p className="font-black text-fun-blue mb-2 uppercase text-xs tracking-widest">Use A</p>
-            <p className="text-slate-800 font-bold mb-1">Before Consonants</p>
-            <p className="text-sm text-slate-500 italic">a car, a dog, a book</p>
-          </div>
-          <div className="bg-purple-50 p-6 rounded-2xl border-2 border-purple-100">
-            <p className="font-black text-fun-purple mb-2 uppercase text-xs tracking-widest">Use AN</p>
-            <p className="text-slate-800 font-bold mb-1">Before Vowels (a, e, i, o, u)</p>
-            <p className="text-sm text-slate-500 italic">an apple, an egg, an orange</p>
-          </div>
-        </div>
-      </div>,
-      <div className="space-y-6">
-        <h4 className="text-2xl font-black text-slate-800">Part 2: THE</h4>
-        <p className="text-lg text-slate-600">We use <strong>the</strong> when we talk about something <strong>specific</strong> or something we already mentioned.</p>
-        <div className="bg-slate-800 text-white p-8 rounded-[2rem] space-y-4">
-          <div className="space-y-2">
-            <p className="text-fun-pink font-black uppercase text-xs tracking-widest">General:</p>
-            <p>"I see <strong>a</strong> cat." (Any cat)</p>
-          </div>
-          <div className="space-y-2 pt-4 border-t border-white/10">
-            <p className="text-fun-green font-black uppercase text-xs tracking-widest">Specific:</p>
-            <p>"<strong>The</strong> cat is black." (The cat I just mentioned)</p>
-          </div>
-        </div>
-      </div>,
-      <div className="space-y-6">
-        <h4 className="text-2xl font-black text-slate-800">Part 3: No Article</h4>
-        <p className="text-lg text-slate-600">Sometimes we don't use any article at all!</p>
-        <ul className="space-y-3">
-          <li className="flex items-center gap-3 bg-white p-3 rounded-xl shadow-sm border border-slate-100">
-            <span className="w-8 h-8 bg-fun-pink/10 text-fun-pink rounded-full flex items-center justify-center font-bold">✖</span>
-            <span>With plural general nouns: "Dogs are friendly."</span>
-          </li>
-          <li className="flex items-center gap-3 bg-white p-3 rounded-xl shadow-sm border border-slate-100">
-            <span className="w-8 h-8 bg-fun-pink/10 text-fun-pink rounded-full flex items-center justify-center font-bold">✖</span>
-            <span>With countries: "I live in France." (But: "The USA")</span>
-          </li>
-        </ul>
-      </div>
-    ],
-    exercises: [
-      { id: 'q1', type: 'multiple-choice', question: 'I eat _____ apple every day.', options: ['a', 'an', 'the'], correctAnswer: 'an', explanation: 'Use "an" before vowel sounds like apple.' },
-      { id: 'q2', type: 'multiple-choice', question: 'Look at _____ moon! It is beautiful.', options: ['a', 'an', 'the'], correctAnswer: 'the', explanation: 'There is only one moon, so we use "the".' },
-      { id: 'q3', type: 'multiple-choice', question: 'She is _____ teacher.', options: ['a', 'an', 'the'], correctAnswer: 'a', explanation: 'Teacher starts with a consonant, and it is a general job.' }
-    ]
-  },
-  {
-    id: 'a1-12',
-    level: 'A1',
-    title: 'Prepositions of Place',
-    topic: 'Prepositions',
-    explanation: (
-      <div className="space-y-4">
-        <p>Prepositions of place tell us where something is. The three most common ones are <strong>in</strong>, <strong>on</strong>, and <strong>at</strong>.</p>
-      </div>
-    ),
-    explanationParts: [
-      <div className="space-y-6">
-        <h4 className="text-2xl font-black text-slate-800">Part 1: IN</h4>
-        <p className="text-lg text-slate-600">Use <strong>in</strong> for 3D spaces, rooms, or defined areas.</p>
-        <div className="bg-blue-50 p-6 rounded-2xl border-2 border-blue-100 flex items-center justify-between">
-          <ul className="font-bold text-slate-700 space-y-1">
-            <li>In the room</li>
-            <li>In the box</li>
-            <li>In London</li>
-            <li>In the water</li>
-          </ul>
-          <div className="text-4xl">📦</div>
-        </div>
-      </div>,
-      <div className="space-y-6">
-        <h4 className="text-2xl font-black text-slate-800">Part 2: ON</h4>
-        <p className="text-lg text-slate-600">Use <strong>on</strong> for surfaces or lines.</p>
-        <div className="bg-orange-50 p-6 rounded-2xl border-2 border-orange-100 flex items-center justify-between">
-          <ul className="font-bold text-slate-700 space-y-1">
-            <li>On the table</li>
-            <li>On the floor</li>
-            <li>On the wall</li>
-            <li>On the menu</li>
-          </ul>
-          <div className="text-4xl">📄</div>
-        </div>
-      </div>,
-      <div className="space-y-6">
-        <h4 className="text-2xl font-black text-slate-800">Part 3: AT</h4>
-        <p className="text-lg text-slate-600">Use <strong>at</strong> for a specific point or location.</p>
-        <div className="bg-green-50 p-6 rounded-2xl border-2 border-green-100 flex items-center justify-between">
-          <ul className="font-bold text-slate-700 space-y-1">
-            <li>At the bus stop</li>
-            <li>At the door</li>
-            <li>At the top</li>
-            <li>At school</li>
-          </ul>
-          <div className="text-4xl">📍</div>
-        </div>
-      </div>
-    ],
-    exercises: [
-      { id: 'q1', type: 'multiple-choice', question: 'The milk is _____ the fridge.', options: ['in', 'on', 'at'], correctAnswer: 'in', explanation: 'A fridge is a 3D space/container.' },
-      { id: 'q2', type: 'multiple-choice', question: 'I put my phone _____ the table.', options: ['in', 'on', 'at'], correctAnswer: 'on', explanation: 'The table is a surface.' },
-      { id: 'q3', type: 'multiple-choice', question: 'Meet me _____ the park entrance.', options: ['in', 'on', 'at'], correctAnswer: 'at', explanation: 'The entrance is a specific point.' }
-    ]
-  },
-  {
-    id: 'a1-13',
-    level: 'A1',
-    title: 'Prepositions of Time',
-    topic: 'Prepositions',
-    explanation: (
-      <div className="space-y-4">
-        <p>Prepositions of time tell us when something happens. We use <strong>in</strong>, <strong>on</strong>, and <strong>at</strong> for different lengths of time.</p>
-      </div>
-    ),
-    explanationParts: [
-      <div className="space-y-6">
-        <h4 className="text-2xl font-black text-slate-800">Part 1: AT (Precise Time)</h4>
-        <p className="text-lg text-slate-600">Use <strong>at</strong> for specific times on the clock or specific holiday periods.</p>
-        <div className="bg-blue-50 p-6 rounded-2xl border-2 border-blue-100 flex items-center justify-between">
-          <ul className="font-bold text-slate-700 space-y-1">
-            <li>At 7:00 AM</li>
-            <li>At noon / midnight</li>
-            <li>At night</li>
-            <li>At the weekend</li>
-          </ul>
-          <div className="text-4xl">⏰</div>
-        </div>
-      </div>,
-      <div className="space-y-6">
-        <h4 className="text-2xl font-black text-slate-800">Part 2: ON (Days and Dates)</h4>
-        <p className="text-lg text-slate-600">Use <strong>on</strong> for specific days of the week or specific dates.</p>
-        <div className="bg-orange-50 p-6 rounded-2xl border-2 border-orange-100 flex items-center justify-between">
-          <ul className="font-bold text-slate-700 space-y-1">
-            <li>On Monday</li>
-            <li>On my birthday</li>
-            <li>On July 4th</li>
-            <li>On Christmas Day</li>
-          </ul>
-          <div className="text-4xl">📅</div>
-        </div>
-      </div>,
-      <div className="space-y-6">
-        <h4 className="text-2xl font-black text-slate-800">Part 3: IN (Longer Periods)</h4>
-        <p className="text-lg text-slate-600">Use <strong>in</strong> for months, years, seasons, or parts of the day.</p>
-        <div className="bg-green-50 p-6 rounded-2xl border-2 border-green-100 flex items-center justify-between">
-          <ul className="font-bold text-slate-700 space-y-1">
-            <li>In the morning</li>
-            <li>In December</li>
-            <li>In 1995</li>
-            <li>In the summer</li>
-          </ul>
-          <div className="text-4xl">🗓️</div>
-        </div>
-      </div>
-    ],
-    exercises: [
-      { id: 'q1', type: 'multiple-choice', question: 'I was born _____ 2005.', options: ['in', 'on', 'at'], correctAnswer: 'in', explanation: 'Use "in" for years.' },
-      { id: 'q2', type: 'multiple-choice', question: 'See you _____ Friday!', options: ['in', 'on', 'at'], correctAnswer: 'on', explanation: 'Use "on" for days of the week.' },
-      { id: 'q3', type: 'multiple-choice', question: 'The movie starts _____ 8:30 PM.', options: ['in', 'on', 'at'], correctAnswer: 'at', explanation: 'Use "at" for precise times.' }
-    ]
-  },
-  createLesson('a1-14', 'A1', 'Can / Can\'t', 'Modals', 'Ability.', 'I _____ swim.', 'can', ['can', 'cans', 'to can']),
-  {
-    id: 'a1-15',
-    level: 'A1',
-    title: 'Present Continuous',
-    topic: 'Tenses',
-    explanation: (
-      <div className="space-y-4">
-        <p>We use the <strong>Present Continuous</strong> to talk about actions that are happening <strong>right now</strong>, at this moment.</p>
-        <p>Structure: <strong>Subject + Be (am/is/are) + Verb + ing</strong></p>
-      </div>
-    ),
-    explanationParts: [
-      <div className="space-y-6">
-        <h4 className="text-2xl font-black text-slate-800">Part 1: The Structure</h4>
-        <p className="text-lg text-slate-600">To make this tense, you need two things: the verb "to be" and an "-ing" verb.</p>
-        <div className="bg-slate-800 text-white p-8 rounded-[2rem] space-y-4">
-          <div className="flex justify-between items-center bg-white/5 p-4 rounded-xl">
-            <span className="font-bold">I am</span>
-            <span className="font-black text-fun-pink">playing</span>
-          </div>
-          <div className="flex justify-between items-center bg-white/5 p-4 rounded-xl">
-            <span className="font-bold">He/She/It is</span>
-            <span className="font-black text-fun-pink">eating</span>
-          </div>
-          <div className="flex justify-between items-center bg-white/5 p-4 rounded-xl">
-            <span className="font-bold">You/We/They are</span>
-            <span className="font-black text-fun-pink">running</span>
-          </div>
-        </div>
-      </div>,
-      <div className="space-y-6">
-        <h4 className="text-2xl font-black text-slate-800">Part 2: Spelling -ing</h4>
-        <p className="text-lg text-slate-600">Most verbs just add <strong>-ing</strong>, but some have special rules.</p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="bg-blue-50 p-4 rounded-2xl border-2 border-blue-100">
-            <p className="font-black text-fun-blue mb-1 uppercase text-xs">Ends in -e</p>
-            <p className="text-slate-700">Remove 'e': Make → <span className="font-bold">making</span></p>
-          </div>
-          <div className="bg-purple-50 p-4 rounded-2xl border-2 border-purple-100">
-            <p className="font-black text-fun-purple mb-1 uppercase text-xs">Short Vowel + Consonant</p>
-            <p className="text-slate-700">Double last letter: Run → <span className="font-bold">running</span></p>
-          </div>
-        </div>
-      </div>,
-      <div className="space-y-6">
-        <h4 className="text-2xl font-black text-slate-800">Part 3: Negative and Questions</h4>
-        <div className="space-y-4">
-          <div className="bg-red-50 p-6 rounded-2xl border-2 border-red-100">
-            <p className="font-bold text-red-800 mb-2">Negative: Just add 'not'</p>
-            <p className="text-slate-700">I am <span className="text-red-600 font-black">not</span> working.</p>
-            <p className="text-slate-700">They are <span className="text-red-600 font-black">not</span> coming.</p>
-          </div>
-          <div className="bg-fun-blue/10 p-6 rounded-2xl border-2 border-fun-blue/20">
-            <p className="font-bold text-fun-blue mb-2">Questions: Switch subject and verb</p>
-            <p className="text-slate-700 font-bold"><span className="text-fun-blue underline">Are you</span> listening?</p>
-            <p className="text-slate-700 font-bold"><span className="text-fun-blue underline">Is she</span> sleeping?</p>
-          </div>
-        </div>
-      </div>
-    ],
-    exercises: [
-      { id: 'q1', type: 'multiple-choice', question: 'I _____ reading a book right now.', options: ['am', 'is', 'are'], correctAnswer: 'am', explanation: 'Use "am" with "I" in Present Continuous.' },
-      { id: 'q2', type: 'multiple-choice', question: 'They _____ to music.', options: ['listen', 'listening', 'are listening'], correctAnswer: 'are listening', explanation: 'Use "are" + "-ing" for "They".' },
-      { id: 'q3', type: 'multiple-choice', question: 'She _____ (not/eat) breakfast.', options: ['is not eating', 'not eating', 'is eating not'], correctAnswer: 'is not eating', explanation: 'Put "not" after the "to be" verb.' }
-    ]
-  },
-  createLesson('a1-16', 'A1', 'Past Simple (To Be)', 'Verbs', 'Was / Were.', 'I _____ tired yesterday.', 'was', ['was', 'were', 'am']),
-  createLesson('a1-17', 'A1', 'Past Simple (Regular)', 'Verbs', 'Add -ed.', 'We _____ football.', 'played', ['played', 'play', 'playing']),
-  createLesson('a1-18', 'A1', 'Past Simple (Irregular)', 'Verbs', 'Memorize forms.', 'She _____ to the shop.', 'went', ['went', 'go', 'goed']),
-  createLesson('a1-19', 'A1', 'Question Words', 'Questions', 'Who, What, Where, When.', '_____ is your name?', 'What', ['What', 'Who', 'Where']),
-  createLesson('a1-20', 'A1', 'Adverbs of Frequency', 'Adverbs', 'Always, Usually, Never.', 'I _____ drink coffee.', 'always', ['always', 'yesterday', 'tomorrow']),
-  createLesson('a1-21', 'A1', 'Imperatives', 'Verbs', 'Commands.', '_____ the door!', 'Open', ['Open', 'Opens', 'Opening']),
-  createLesson('a1-22', 'A1', 'Like + -ing', 'Verbs', 'Preferences.', 'I like _____ TV.', 'watching', ['watching', 'watch', 'watches']),
-  createLesson('a1-23', 'A1', 'Want / Would like', 'Verbs', 'Desires.', 'I would like _____ tea.', 'some', ['some', 'a', 'any']),
-  createLesson('a1-24', 'A1', 'How much / How many', 'Questions', 'Quantity.', '_____ water do you need?', 'How much', ['How much', 'How many', 'What']),
-  createLesson('a1-25', 'A1', 'Comparatives', 'Adjectives', 'Add -er or more.', 'He is _____ than me.', 'taller', ['taller', 'tall', 'more tall']),
-  createLesson('a1-26', 'A1', 'Superlatives', 'Adjectives', 'Add -est or most.', 'She is the _____ girl.', 'smartest', ['smartest', 'smarter', 'smart']),
-  createLesson('a1-27', 'A1', 'Going to', 'Future', 'Plans.', 'I am _____ to buy a car.', 'going', ['going', 'go', 'will']),
-  createLesson('a1-28', 'A1', 'Conjunctions', 'Structure', 'And, But, Or.', 'I like tea _____ coffee.', 'and', ['and', 'but', 'so']),
-  createLesson('a1-29', 'A1', 'Possessive \'s', 'Nouns', 'Ownership.', 'This is _____ bag.', 'John\'s', ['John\'s', 'Johns', 'John']),
-  {
-    id: 'a1-30',
-    level: 'A1',
-    title: 'Sentence Structure (SVO)',
-    topic: 'Structure',
-    explanation: (
-      <div className="space-y-4">
-        <p>In English, sentences usually follow a specific order: <strong>Subject → Verb → Object</strong>. This is called SVO.</p>
-      </div>
-    ),
-    explanationParts: [
-      <div className="space-y-6">
-        <h4 className="text-2xl font-black text-slate-800">Part 1: The SVO Pattern</h4>
-        <p className="text-lg text-slate-600">The most basic English sentence has these three parts in this order.</p>
-        <div className="grid grid-cols-3 gap-2">
-          <div className="bg-blue-100 p-4 rounded-xl text-center">
-            <p className="text-xs font-black text-blue-600 uppercase mb-2">Subject</p>
-            <p className="font-bold text-slate-800 text-lg">I</p>
-          </div>
-          <div className="bg-pink-100 p-4 rounded-xl text-center">
-            <p className="text-xs font-black text-pink-600 uppercase mb-2">Verb</p>
-            <p className="font-bold text-slate-800 text-lg">eat</p>
-          </div>
-          <div className="bg-green-100 p-4 rounded-xl text-center">
-            <p className="text-xs font-black text-green-600 uppercase mb-2">Object</p>
-            <p className="font-bold text-slate-800 text-lg">apples</p>
-          </div>
-        </div>
-        <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 mt-4">
-           <p className="text-slate-600 italic">"The dog (S) chased (V) the ball (O)."</p>
-        </div>
-      </div>,
-      <div className="space-y-6">
-        <h4 className="text-2xl font-black text-slate-800">Part 2: Adding Adjectives</h4>
-        <p className="text-lg text-slate-600">Adjectives (describing words) come <strong>before</strong> the noun they describe.</p>
-        <div className="bg-white p-6 rounded-[2rem] border-4 border-slate-100 shadow-sm space-y-3">
-          <p className="font-bold">"I see a <span className="text-fun-blue underline decoration-2">big</span> dog."</p>
-          <p className="font-bold">"She has <span className="text-fun-blue underline decoration-2">red</span> hair."</p>
-          <p className="text-sm text-slate-500">Notice: NOT "a dog big".</p>
-        </div>
-      </div>,
-      <div className="space-y-6">
-        <h4 className="text-2xl font-black text-slate-800">Part 3: Place and Time</h4>
-        <p className="text-lg text-slate-600">In English, we usually put <strong>Place</strong> before <strong>Time</strong> at the end of a sentence.</p>
-        <div className="bg-slate-800 text-white p-6 rounded-[2rem] space-y-2">
-          <p className="text-xl font-bold">I go <span className="text-fun-pink">to school (Place)</span> <span className="text-fun-green underline">at 8 AM (Time)</span>.</p>
-        </div>
-      </div>
-    ],
-    exercises: [
-      { id: 'q1', type: 'multiple-choice', question: 'Which sentence is correct?', options: ['I eat an apple.', 'An apple I eat.', 'Eat I apple.'], correctAnswer: 'I eat an apple.', explanation: 'Follow the Subject-Verb-Object (SVO) order.' },
-      { id: 'q2', type: 'multiple-choice', question: 'I see a _____ car.', options: ['blue', 'car blue', 'blue is'], correctAnswer: 'blue', explanation: 'Adjectives come before the noun.' },
-      { id: 'q3', type: 'multiple-choice', question: 'Order this: (at night / he / sleeps / at home)', options: ['He sleeps at home at night.', 'At home at night he sleeps.', 'He at home sleeps at night.'], correctAnswer: 'He sleeps at home at night.', explanation: 'Subject + Verb + Place + Time.' }
-    ]
-  },
-  {
-    id: 'a1-exam',
-    level: 'A1',
-    title: 'A1 Final Exam',
-    topic: 'Exam',
-    explanation: <div className="text-center font-bold text-xl">Pass this to unlock A2!</div>,
-    exercises: [
-        { id: 'ex1', type: 'multiple-choice', question: 'She _____ in London.', options: ['lives', 'live', 'living'], correctAnswer: 'lives', explanation: 'Present Simple' },
-        { id: 'ex2', type: 'multiple-choice', question: '_____ you like pizza?', options: ['Do', 'Does', 'Are'], correctAnswer: 'Do', explanation: 'Question form' },
-        { id: 'ex3', type: 'multiple-choice', question: 'I _____ a doctor.', options: ['am', 'is', 'are'], correctAnswer: 'am', explanation: 'Verb to be' }
-    ]
-  },
-
-  // --- A2 Elementary ---
-  createLesson('a2-1', 'A2', 'Past Continuous', 'Tenses', 'Was/Were + -ing.', 'I was _____ when you called.', 'sleeping', ['sleeping', 'slept', 'sleep']),
-  createLesson('a2-2', 'A2', 'Present Perfect (Exp)', 'Tenses', 'Have/Has + V3.', 'I have _____ to Paris.', 'been', ['been', 'was', 'go']),
-  createLesson('a2-3', 'A2', 'Present Perfect vs Past', 'Tenses', 'Unfinished vs Finished time.', 'I _____ him yesterday.', 'saw', ['saw', 'have seen', 'seen']),
-  createLesson('a2-4', 'A2', 'Will (Future)', 'Future', 'Predictions.', 'It _____ rain.', 'will', ['will', 'is', 'going']),
-  createLesson('a2-5', 'A2', 'Going to vs Will', 'Future', 'Plans vs Decisions.', 'I _____ visit my mom (plan).', 'am going to', ['am going to', 'will', 'shall']),
-  createLesson('a2-6', 'A2', 'First Conditional', 'Conditionals', 'If + Present, Will.', 'If it rains, I _____ stay home.', 'will', ['will', 'would', 'am']),
-  createLesson('a2-7', 'A2', 'Should / Shouldn\'t', 'Modals', 'Advice.', 'You _____ study more.', 'should', ['should', 'must', 'can']),
-  createLesson('a2-8', 'A2', 'Must / Have to', 'Modals', 'Obligation.', 'You _____ wear a uniform.', 'must', ['must', 'should', 'can']),
-  createLesson('a2-9', 'A2', 'Adverbs of Manner', 'Adverbs', 'How you do something.', 'He runs _____.', 'quickly', ['quickly', 'quick', 'fastly']),
-  createLesson('a2-10', 'A2', 'Relative Clauses', 'Structure', 'Who, Which, That.', 'The man _____ called me.', 'who', ['who', 'which', 'where']),
-  createLesson('a2-11', 'A2', 'Too / Enough', 'Quantifiers', 'Excess / Sufficiency.', 'It is _____ hot.', 'too', ['too', 'enough', 'very']),
-  createLesson('a2-12', 'A2', 'Gerunds vs Infinitives', 'Verbs', 'Verb patterns.', 'I enjoy _____.', 'swimming', ['swimming', 'to swim', 'swim']),
-  createLesson('a2-13', 'A2', 'Phrasal Verbs (Basic)', 'Verbs', 'Verbs with particles.', 'Please _____ on the light.', 'turn', ['turn', 'get', 'make']),
-  createLesson('a2-14', 'A2', 'Used to', 'Past', 'Past habits.', 'I _____ play tennis.', 'used to', ['used to', 'use to', 'usually']),
-  createLesson('a2-15', 'A2', 'So / Neither', 'Structure', 'Agreeing.', 'So _____ I.', 'do', ['do', 'am', 'have']),
-  createLesson('a2-16', 'A2', 'Indefinite Pronouns', 'Pronouns', 'Someone, Anyone.', 'Is there _____ here?', 'anyone', ['anyone', 'someone', 'no one']),
-  createLesson('a2-17', 'A2', 'Present Cont. Future', 'Future', 'Arrangements.', 'I am _____ him tonight.', 'meeting', ['meeting', 'meet', 'will meet']),
-  createLesson('a2-18', 'A2', 'Past Perfect (Intro)', 'Tenses', 'Had + V3.', 'When I arrived, he _____ left.', 'had', ['had', 'has', 'was']),
-  createLesson('a2-19', 'A2', 'Reported Speech', 'Structure', 'He said that...', 'He said he _____ busy.', 'was', ['was', 'is', 'were']),
-  createLesson('a2-20', 'A2', 'Passive (Present)', 'Voice', 'Is/Are + V3.', 'English _____ spoken here.', 'is', ['is', 'are', 'was']),
-  createLesson('a2-21', 'A2', 'Passive (Past)', 'Voice', 'Was/Were + V3.', 'The car _____ stolen.', 'was', ['was', 'is', 'were']),
-  createLesson('a2-22', 'A2', 'Comparatives (as...as)', 'Adjectives', 'Equality.', 'He is as _____ as me.', 'tall', ['tall', 'taller', 'tallest']),
-  createLesson('a2-23', 'A2', 'Superlatives (Irreg)', 'Adjectives', 'Best, Worst.', 'This is the _____ movie.', 'best', ['best', 'goodest', 'better']),
-  createLesson('a2-24', 'A2', 'Preps of Movement', 'Prepositions', 'Into, Out of, Through.', 'Walk _____ the door.', 'through', ['through', 'on', 'at']),
-  createLesson('a2-25', 'A2', 'Time Clauses', 'Structure', 'When, While.', '_____ I was sleeping, the phone rang.', 'While', ['While', 'During', 'For']),
-  {
-    id: 'a2-exam',
-    level: 'A2',
-    title: 'A2 Final Exam',
-    topic: 'Exam',
-    explanation: <div className="text-center font-bold text-xl">Pass this to unlock B1!</div>,
-    exercises: [
-        { id: 'ex1', type: 'multiple-choice', question: 'I _____ working when you called.', options: ['was', 'were', 'am'], correctAnswer: 'was', explanation: 'Past Continuous' },
-        { id: 'ex2', type: 'multiple-choice', question: 'If I go, I _____ buy it.', options: ['will', 'would', 'am'], correctAnswer: 'will', explanation: 'First Conditional' },
-        { id: 'ex3', type: 'multiple-choice', question: 'This house _____ built in 1990.', options: ['was', 'is', 'has'], correctAnswer: 'was', explanation: 'Passive Voice' }
-    ]
-  },
-
-  // --- B1 Intermediate ---
-  createLesson('b1-1', 'B1', 'Present Perfect Cont.', 'Tenses', 'Have been + -ing.', 'I have been _____ for 2 hours.', 'waiting', ['waiting', 'waited', 'wait']),
-  createLesson('b1-2', 'B1', 'Past Perfect Simple', 'Tenses', 'Had + V3.', 'She _____ already eaten.', 'had', ['had', 'has', 'have']),
-  createLesson('b1-3', 'B1', 'Future Continuous', 'Future', 'Will be + -ing.', 'I will be _____ at 8pm.', 'working', ['working', 'work', 'worked']),
-  createLesson('b1-4', 'B1', 'Second Conditional', 'Conditionals', 'If + Past, Would.', 'If I _____ rich, I would travel.', 'were', ['were', 'am', 'was']),
-  createLesson('b1-5', 'B1', 'Third Conditional', 'Conditionals', 'If + Past Perf, Would Have.', 'If I had known, I _____ have come.', 'would', ['would', 'will', 'can']),
-  createLesson('b1-6', 'B1', 'Mixed Conditionals', 'Conditionals', 'Past cause, present result.', 'If I had studied, I _____ be smart now.', 'would', ['would', 'will', 'can']),
-  createLesson('b1-7', 'B1', 'Modals of Deduction', 'Modals', 'Must, Might, Can\'t.', 'He _____ be at home.', 'must', ['must', 'should', 'can']),
-  createLesson('b1-8', 'B1', 'Modals of Obligation', 'Modals', 'Had to.', 'I _____ leave early yesterday.', 'had to', ['had to', 'must', 'should']),
-  createLesson('b1-9', 'B1', 'Passive (All Tenses)', 'Voice', 'Be + V3.', 'The work is _____ done.', 'being', ['being', 'been', 'be']),
-  createLesson('b1-10', 'B1', 'Reported Questions', 'Structure', 'He asked if...', 'He asked _____ I was ok.', 'if', ['if', 'that', 'what']),
-  createLesson('b1-11', 'B1', 'Reported Commands', 'Structure', 'Told to...', 'He told me _____ stop.', 'to', ['to', 'that', 'if']),
-  createLesson('b1-12', 'B1', 'Relative Clauses (Non)', 'Structure', 'Commas.', 'My mom, _____ is 50, works here.', 'who', ['who', 'that', 'which']),
-  createLesson('b1-13', 'B1', 'Quantifiers', 'Quantifiers', 'A few, A little.', 'I have _____ time.', 'a little', ['a little', 'a few', 'many']),
-  createLesson('b1-14', 'B1', 'Connectors', 'Structure', 'Although, However.', '_____ it rained, we went out.', 'Although', ['Although', 'However', 'But']),
-  createLesson('b1-15', 'B1', 'Question Tags', 'Questions', 'Isn\'t it?', 'You are happy, _____?', 'aren\'t you', ['aren\'t you', 'don\'t you', 'isn\'t it']),
-  createLesson('b1-16', 'B1', 'Phrasal Verbs (Int)', 'Verbs', 'Look after, Take off.', 'Please _____ off your shoes.', 'take', ['take', 'put', 'get']),
-  createLesson('b1-17', 'B1', 'Future Forms Review', 'Future', 'Will, Going to, Present.', 'The train _____ at 9.', 'leaves', ['leaves', 'will leave', 'leaving']),
-  createLesson('b1-18', 'B1', 'Used to / Be used to', 'Structure', 'Habits vs Familiarity.', 'I am used to _____ early.', 'waking', ['waking', 'wake', 'woke']),
-  createLesson('b1-19', 'B1', 'Wishes', 'Mood', 'I wish + Past.', 'I wish I _____ rich.', 'were', ['were', 'am', 'will be']),
-  createLesson('b1-20', 'B1', 'Causative', 'Structure', 'Have something done.', 'I had my hair _____.', 'cut', ['cut', 'cutting', 'to cut']),
-  {
-    id: 'b1-exam',
-    level: 'B1',
-    title: 'B1 Final Exam',
-    topic: 'Exam',
-    explanation: <div className="text-center font-bold text-xl">Pass this to unlock B2!</div>,
-    exercises: [
-        { id: 'ex1', type: 'multiple-choice', question: 'If I _____ you, I would go.', options: ['were', 'was', 'am'], correctAnswer: 'were', explanation: 'Second Conditional' },
-        { id: 'ex2', type: 'multiple-choice', question: 'I wish I _____ more time.', options: ['had', 'have', 'will have'], correctAnswer: 'had', explanation: 'Wishes' },
-        { id: 'ex3', type: 'multiple-choice', question: 'He asked me _____ I lived.', options: ['where', 'that', 'if'], correctAnswer: 'where', explanation: 'Reported Question' }
-    ]
-  },
-
-  // --- B2 Upper Intermediate ---
-  createLesson('b2-1', 'B2', 'Future Perfect', 'Future', 'Will have + V3.', 'I will have _____ by 5pm.', 'finished', ['finished', 'finish', 'finishing']),
-  createLesson('b2-2', 'B2', 'Future Perfect Cont.', 'Future', 'Will have been + -ing.', 'I will have been _____ for 10 years.', 'working', ['working', 'worked', 'work']),
-  createLesson('b2-3', 'B2', 'Third Conditional', 'Conditionals', 'Regrets.', 'If I had seen you, I _____ said hello.', 'would have', ['would have', 'will have', 'had']),
-  createLesson('b2-4', 'B2', 'Mixed Conditionals', 'Conditionals', 'Complex time.', 'If I were you, I _____ done it.', 'would have', ['would have', 'will have', 'would']),
-  createLesson('b2-5', 'B2', 'Modals of Deduction', 'Modals', 'Past.', 'He must _____ been tired.', 'have', ['have', 'has', 'had']),
-  createLesson('b2-6', 'B2', 'Passive Reporting', 'Voice', 'It is said that...', 'He is said _____ rich.', 'to be', ['to be', 'being', 'is']),
-  createLesson('b2-7', 'B2', 'Cleft Sentences', 'Emphasis', 'It was X that...', 'It was John _____ called.', 'who', ['who', 'what', 'which']),
-  createLesson('b2-8', 'B2', 'Inversion', 'Emphasis', 'Never have I...', 'Never _____ I seen this.', 'have', ['have', 'had', 'did']),
-  createLesson('b2-9', 'B2', 'Subjunctive', 'Mood', 'I suggest he...', 'I suggest he _____ there.', 'go', ['go', 'goes', 'went']),
-  createLesson('b2-10', 'B2', 'Discourse Markers', 'Structure', 'Mind you, Actually.', '_____, I don\'t agree.', 'Actually', ['Actually', 'But', 'And']),
-  createLesson('b2-11', 'B2', 'Participle Clauses', 'Structure', 'Walking down the street...', '_____ the news, he cried.', 'Hearing', ['Hearing', 'Heard', 'Hear']),
-  createLesson('b2-12', 'B2', 'Phrasal Verbs (Adv)', 'Verbs', 'Complex meanings.', 'I can\'t put _____ with this.', 'up', ['up', 'on', 'in']),
-  createLesson('b2-13', 'B2', 'Idioms', 'Vocabulary', 'Fixed phrases.', 'It\'s raining cats and _____.', 'dogs', ['dogs', 'cows', 'birds']),
-  createLesson('b2-14', 'B2', 'Narrative Tenses', 'Tenses', 'Storytelling.', 'The sun _____ shining.', 'was', ['was', 'is', 'were']),
-  createLesson('b2-15', 'B2', 'Future in the Past', 'Future', 'Was going to.', 'I _____ going to call you.', 'was', ['was', 'am', 'were']),
-  createLesson('b2-16', 'B2', 'Whatever / Whoever', 'Pronouns', 'Any person/thing.', '_____ calls, say I\'m out.', 'Whoever', ['Whoever', 'Whatever', 'However']),
-  createLesson('b2-17', 'B2', 'Verbs of Perception', 'Verbs', 'See him do/doing.', 'I saw him _____ the road.', 'cross', ['cross', 'crossed', 'to cross']),
-  createLesson('b2-18', 'B2', 'Adjective Order', 'Adjectives', 'OSASCOMP.', 'A _____ red car.', 'big', ['big', 'red', 'car']),
-  createLesson('b2-19', 'B2', 'Gradable Adjectives', 'Adjectives', 'Very vs Absolutely.', 'It is _____ freezing.', 'absolutely', ['absolutely', 'very', 'a bit']),
-  createLesson('b2-20', 'B2', 'Adverbs of Degree', 'Adverbs', 'Quite, Rather.', 'It\'s _____ cold today.', 'quite', ['quite', 'much', 'many']),
-  {
-    id: 'b2-exam',
-    level: 'B2',
-    title: 'B2 Final Exam',
-    topic: 'Exam',
-    explanation: <div className="text-center font-bold text-xl">Pass this to unlock C1!</div>,
-    exercises: [
-        { id: 'ex1', type: 'multiple-choice', question: 'Never _____ I seen such a thing.', options: ['have', 'had', 'did'], correctAnswer: 'have', explanation: 'Inversion' },
-        { id: 'ex2', type: 'multiple-choice', question: 'It is essential that he _____ on time.', options: ['be', 'is', 'was'], correctAnswer: 'be', explanation: 'Subjunctive' },
-        { id: 'ex3', type: 'multiple-choice', question: 'I saw him _____ the money.', options: ['take', 'took', 'taken'], correctAnswer: 'take', explanation: 'Verb of perception' }
-    ]
-  },
-
-  // --- C1 Advanced ---
-  createLesson('c1-1', 'C1', 'Inversion (Complex)', 'Structure', 'Little did he know.', 'Little _____ he know.', 'did', ['did', 'does', 'do']),
-  createLesson('c1-2', 'C1', 'Cleft (It was...)', 'Emphasis', 'Focusing.', 'It was John _____ did it.', 'who', ['who', 'what', 'that']),
-  createLesson('c1-3', 'C1', 'Cleft (What...)', 'Emphasis', 'Focusing.', 'What I need _____ money.', 'is', ['is', 'are', 'was']),
-  createLesson('c1-4', 'C1', 'Subjunctive (Formal)', 'Mood', 'Mandatory.', 'It is mandatory that she _____ .', 'sign', ['sign', 'signs', 'signed']),
-  createLesson('c1-5', 'C1', 'Unreal Past', 'Mood', 'It\'s time...', 'It\'s time we _____.', 'left', ['left', 'leave', 'go']),
-  createLesson('c1-6', 'C1', 'Advanced Conditionals', 'Conditionals', 'Should you see him...', '_____ you see him, call me.', 'Should', ['Should', 'If', 'When']),
-  createLesson('c1-7', 'C1', 'Participle Phrases', 'Structure', 'Reduced clauses.', '_____ by the noise, he woke up.', 'Disturbed', ['Disturbed', 'Disturbing', 'Disturb']),
-  createLesson('c1-8', 'C1', 'Absolute Phrases', 'Structure', 'Noun + Participle.', 'Weather _____, we will go.', 'permitting', ['permitting', 'permitted', 'permit']),
-  createLesson('c1-9', 'C1', 'Nominalization', 'Style', 'Verbs to Nouns.', 'The _____ of the data.', 'analysis', ['analysis', 'analyze', 'analyzing']),
-  createLesson('c1-10', 'C1', 'Hedging', 'Style', 'Softening.', 'It _____ appear that...', 'would', ['would', 'will', 'can']),
-  createLesson('c1-11', 'C1', 'Fronting', 'Emphasis', 'Moving to front.', 'Strange _____ it seems.', 'as', ['as', 'though', 'if']),
-  createLesson('c1-12', 'C1', 'Discourse Markers', 'Structure', 'Furthermore.', '_____, we must consider...', 'Furthermore', ['Furthermore', 'But', 'So']),
-  createLesson('c1-13', 'C1', 'Adv Phrasal Verbs', 'Verbs', 'Nuance.', 'The deal fell _____.', 'through', ['through', 'out', 'off']),
-  createLesson('c1-14', 'C1', 'Collocations (Adj)', 'Vocabulary', 'Heavy rain.', '_____ rain.', 'Heavy', ['Heavy', 'Strong', 'Big']),
-  createLesson('c1-15', 'C1', 'Collocations (Verb)', 'Vocabulary', 'Make a decision.', '_____ a decision.', 'Make', ['Make', 'Do', 'Have']),
-  createLesson('c1-16', 'C1', 'Idioms', 'Vocabulary', 'Advanced.', 'Once in a _____ moon.', 'blue', ['blue', 'red', 'green']),
-  createLesson('c1-17', 'C1', 'Stylistic Inversion', 'Style', 'Literary.', 'Down _____ the rain.', 'came', ['came', 'come', 'coming']),
-  createLesson('c1-18', 'C1', 'Passive (Adv)', 'Voice', 'Get passive.', 'He got _____ by the police.', 'caught', ['caught', 'catch', 'catching']),
-  createLesson('c1-19', 'C1', 'Future in Past', 'Future', 'Was to have...', 'He was to _____ arrived.', 'have', ['have', 'had', 'has']),
-  createLesson('c1-20', 'C1', 'Modals (Nuance)', 'Modals', 'Dare / Need.', 'How dare you _____ that!', 'say', ['say', 'said', 'saying']),
-  {
-    id: 'c1-exam',
-    level: 'C1',
-    title: 'C1 Final Exam',
-    topic: 'Exam',
-    explanation: <div className="text-center font-bold text-xl">Pass this to unlock C2!</div>,
-    exercises: [
-        { id: 'ex1', type: 'multiple-choice', question: '_____ you require assistance, call us.', options: ['Should', 'If', 'When'], correctAnswer: 'Should', explanation: 'Inverted conditional' },
-        { id: 'ex2', type: 'multiple-choice', question: 'It\'s high time we _____.', options: ['left', 'leave', 'go'], correctAnswer: 'left', explanation: 'Unreal Past' },
-        { id: 'ex3', type: 'multiple-choice', question: 'Strange _____ it may seem.', options: ['as', 'though', 'if'], correctAnswer: 'as', explanation: 'Fronting' }
-    ]
-  },
-
-  // --- C2 Proficiency ---
-  createLesson('c2-1', 'C2', 'Archaic Forms', 'Style', 'Old English.', '_____ thou happy?', 'Art', ['Art', 'Are', 'Is']),
-  createLesson('c2-2', 'C2', 'Literary Devices', 'Style', 'Metaphor.', 'Time is a _____.', 'thief', ['thief', 'bird', 'car']),
-  createLesson('c2-3', 'C2', 'Complex Inversion', 'Structure', 'No sooner...', 'No sooner _____ I arrived.', 'had', ['had', 'have', 'did']),
-  createLesson('c2-4', 'C2', 'Subjunctive (Rare)', 'Mood', 'Be that as it may.', 'Be that as it _____.', 'may', ['may', 'might', 'can']),
-  createLesson('c2-5', 'C2', 'Adv Collocations', 'Vocabulary', 'Mitigating circumstances.', '_____ circumstances.', 'Mitigating', ['Mitigating', 'Reducing', 'Lowering']),
-  createLesson('c2-6', 'C2', 'Fixed Expressions', 'Vocabulary', 'By and large.', 'By and _____.', 'large', ['large', 'big', 'wide']),
-  createLesson('c2-7', 'C2', 'Neologisms', 'Vocabulary', 'New words.', 'Selfie is a _____.', 'neologism', ['neologism', 'word', 'verb']),
-  createLesson('c2-8', 'C2', 'Dialectal Variations', 'Vocabulary', 'Regional.', 'Wee means _____.', 'small', ['small', 'big', 'fast']),
-  createLesson('c2-9', 'C2', 'Register Shifting', 'Style', 'Tone.', 'Kindly _____ the door.', 'shut', ['shut', 'close', 'slam']),
-  createLesson('c2-10', 'C2', 'Irony', 'Style', 'Meaning opposite.', 'Great weather! (It\'s raining).', 'Irony', ['Irony', 'Simile', 'Metaphor']),
-  createLesson('c2-11', 'C2', 'Metaphor', 'Style', 'Comparison.', 'He is a _____.', 'lion', ['lion', 'man', 'boy']),
-  createLesson('c2-12', 'C2', 'Hyperbole', 'Style', 'Exaggeration.', 'I told you a _____ times.', 'million', ['million', 'few', 'some']),
-  createLesson('c2-13', 'C2', 'Euphemisms', 'Style', 'Polite terms.', 'Passed away means _____.', 'died', ['died', 'slept', 'left']),
-  createLesson('c2-14', 'C2', 'Ambiguity', 'Style', 'Double meaning.', 'The bank (river or money).', 'Ambiguity', ['Ambiguity', 'Irony', 'Pun']),
-  createLesson('c2-15', 'C2', 'Syntactic Complexity', 'Structure', 'Long sentences.', 'Despite the fact that...', 'Although', ['Although', 'But', 'So']),
-  createLesson('c2-16', 'C2', 'Discourse Analysis', 'Structure', 'Text flow.', 'Cohesion.', 'Cohesion', ['Cohesion', 'Glue', 'Stick']),
-  createLesson('c2-17', 'C2', 'Textual Cohesion', 'Structure', 'Linking.', 'Therefore.', 'Therefore', ['Therefore', 'So', 'And']),
-  createLesson('c2-18', 'C2', 'Style and Tone', 'Style', 'Formal/Informal.', 'Greetings vs Hi.', 'Register', ['Register', 'Tone', 'Style']),
-  createLesson('c2-19', 'C2', 'Connotation', 'Vocabulary', 'Feeling.', 'Home vs House.', 'Connotation', ['Connotation', 'Meaning', 'Sense']),
-  createLesson('c2-20', 'C2', 'Sound Symbolism', 'Style', 'Phonaesthetics.', 'Slither.', 'Snake', ['Snake', 'Dog', 'Cat']),
-  {
-    id: 'c2-exam',
-    level: 'C2',
-    title: 'C2 Final Exam',
-    topic: 'Exam',
-    explanation: <div className="text-center font-bold text-xl">You are a Legend!</div>,
-    exercises: [
-        { id: 'ex1', type: 'multiple-choice', question: 'No sooner _____ we left than it rained.', options: ['had', 'did', 'have'], correctAnswer: 'had', explanation: 'Inversion' },
-        { id: 'ex2', type: 'multiple-choice', question: 'Suffice it to _____ that...', options: ['say', 'tell', 'speak'], correctAnswer: 'say', explanation: 'Fixed expression' },
-        { id: 'ex3', type: 'multiple-choice', question: 'He is a wolf in sheep\'s _____.', options: ['clothing', 'clothes', 'coat'], correctAnswer: 'clothing', explanation: 'Idiom' }
-    ]
-  }
+  createLesson('a1-m1-l1', 'A1', 'Alphabet', 'First English', 'Learn about Alphabet.', 'What is the correct form for Alphabet?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a1-m1-l2', 'A1', 'Greetings', 'First English', 'Learn about Greetings.', 'What is the correct form for Greetings?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a1-m1-l3', 'A1', 'Numbers', 'First English', 'Learn about Numbers.', 'What is the correct form for Numbers?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a1-m1-l4', 'A1', 'Days & Months', 'First English', 'Learn about Days & Months.', 'What is the correct form for Days & Months?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a1-m1-l5', 'A1', 'Basic Vocabulary', 'First English', 'Learn about Basic Vocabulary.', 'What is the correct form for Basic Vocabulary?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a1-m2-l1', 'A1', 'To Be', 'Identity', 'Learn about To Be.', 'What is the correct form for To Be?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a1-m2-l2', 'A1', 'Subject Pronouns', 'Identity', 'Learn about Subject Pronouns.', 'What is the correct form for Subject Pronouns?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a1-m2-l3', 'A1', 'Possessive Adjectives', 'Identity', 'Learn about Possessive Adjectives.', 'What is the correct form for Possessive Adjectives?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a1-m2-l4', 'A1', 'Nationalities', 'Identity', 'Learn about Nationalities.', 'What is the correct form for Nationalities?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a1-m2-l5', 'A1', 'Personal Information', 'Identity', 'Learn about Personal Information.', 'What is the correct form for Personal Information?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a1-m3-l1', 'A1', 'Articles', 'Building Sentences', 'Learn about Articles.', 'What is the correct form for Articles?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a1-m3-l2', 'A1', 'Singular/Plural', 'Building Sentences', 'Learn about Singular/Plural.', 'What is the correct form for Singular/Plural?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a1-m3-l3', 'A1', 'Demonstratives', 'Building Sentences', 'Learn about Demonstratives.', 'What is the correct form for Demonstratives?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a1-m3-l4', 'A1', 'Basic Questions', 'Building Sentences', 'Learn about Basic Questions.', 'What is the correct form for Basic Questions?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a1-m4-l1', 'A1', 'Present Simple', 'Everyday Life', 'Learn about Present Simple.', 'What is the correct form for Present Simple?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a1-m4-l2', 'A1', 'Daily Routines', 'Everyday Life', 'Learn about Daily Routines.', 'What is the correct form for Daily Routines?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a1-m4-l3', 'A1', 'Frequency Adverbs', 'Everyday Life', 'Learn about Frequency Adverbs.', 'What is the correct form for Frequency Adverbs?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a1-m4-l4', 'A1', 'Likes & Dislikes', 'Everyday Life', 'Learn about Likes & Dislikes.', 'What is the correct form for Likes & Dislikes?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a1-m5-l1', 'A1', 'There Is/Are', 'Around Me', 'Learn about There Is/Are.', 'What is the correct form for There Is/Are?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a1-m5-l2', 'A1', 'Prepositions', 'Around Me', 'Learn about Prepositions.', 'What is the correct form for Prepositions?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a1-m5-l3', 'A1', 'Home Vocabulary', 'Around Me', 'Learn about Home Vocabulary.', 'What is the correct form for Home Vocabulary?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a1-m5-l4', 'A1', 'Places in Town', 'Around Me', 'Learn about Places in Town.', 'What is the correct form for Places in Town?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a1-m6-l1', 'A1', 'Present Continuous', 'Action Time', 'Learn about Present Continuous.', 'What is the correct form for Present Continuous?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a1-m6-l2', 'A1', 'Can/Can’t', 'Action Time', 'Learn about Can/Can’t.', 'What is the correct form for Can/Can’t?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a1-m6-l3', 'A1', 'Hobbies', 'Action Time', 'Learn about Hobbies.', 'What is the correct form for Hobbies?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a1-m6-l4', 'A1', 'Shopping', 'Action Time', 'Learn about Shopping.', 'What is the correct form for Shopping?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a1-m7-l1', 'A1', 'Was/Were', 'Time & Plans', 'Learn about Was/Were.', 'What is the correct form for Was/Were?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a1-m7-l2', 'A1', 'Simple Past Basics', 'Time & Plans', 'Learn about Simple Past Basics.', 'What is the correct form for Simple Past Basics?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a1-m7-l3', 'A1', 'Going To Future', 'Time & Plans', 'Learn about Going To Future.', 'What is the correct form for Going To Future?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a1-m8-l1', 'A1', 'Directions', 'Communication Basics', 'Learn about Directions.', 'What is the correct form for Directions?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a1-m8-l2', 'A1', 'Restaurant English', 'Communication Basics', 'Learn about Restaurant English.', 'What is the correct form for Restaurant English?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a1-m8-l3', 'A1', 'Classroom English', 'Communication Basics', 'Learn about Classroom English.', 'What is the correct form for Classroom English?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a1-m8-l4', 'A1', 'Asking for Help', 'Communication Basics', 'Learn about Asking for Help.', 'What is the correct form for Asking for Help?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a2-m1-l1', 'A2', 'Past Simple', 'Expanding Grammar', 'Learn about Past Simple.', 'What is the correct form for Past Simple?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a2-m1-l2', 'A2', 'Irregular Verbs', 'Expanding Grammar', 'Learn about Irregular Verbs.', 'What is the correct form for Irregular Verbs?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a2-m1-l3', 'A2', 'Comparatives', 'Expanding Grammar', 'Learn about Comparatives.', 'What is the correct form for Comparatives?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a2-m1-l4', 'A2', 'Superlatives', 'Expanding Grammar', 'Learn about Superlatives.', 'What is the correct form for Superlatives?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a2-m2-l1', 'A2', 'Invitations', 'Real Conversations', 'Learn about Invitations.', 'What is the correct form for Invitations?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a2-m2-l2', 'A2', 'Suggestions', 'Real Conversations', 'Learn about Suggestions.', 'What is the correct form for Suggestions?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a2-m2-l3', 'A2', 'Requests', 'Real Conversations', 'Learn about Requests.', 'What is the correct form for Requests?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a2-m2-l4', 'A2', 'Opinions', 'Real Conversations', 'Learn about Opinions.', 'What is the correct form for Opinions?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a2-m3-l1', 'A2', 'Travel', 'Life Situations', 'Learn about Travel.', 'What is the correct form for Travel?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a2-m3-l2', 'A2', 'Health', 'Life Situations', 'Learn about Health.', 'What is the correct form for Health?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a2-m3-l3', 'A2', 'Transportation', 'Life Situations', 'Learn about Transportation.', 'What is the correct form for Transportation?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a2-m3-l4', 'A2', 'Hotels', 'Life Situations', 'Learn about Hotels.', 'What is the correct form for Hotels?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a2-m4-l1', 'A2', 'Adjectives', 'Describing the World', 'Learn about Adjectives.', 'What is the correct form for Adjectives?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a2-m4-l2', 'A2', 'Adverbs', 'Describing the World', 'Learn about Adverbs.', 'What is the correct form for Adverbs?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a2-m4-l3', 'A2', 'Quantity', 'Describing the World', 'Learn about Quantity.', 'What is the correct form for Quantity?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a2-m4-l4', 'A2', 'Countable/Uncountable', 'Describing the World', 'Learn about Countable/Uncountable.', 'What is the correct form for Countable/Uncountable?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a2-m5-l1', 'A2', 'Will', 'Future English', 'Learn about Will.', 'What is the correct form for Will?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a2-m5-l2', 'A2', 'Future Plans', 'Future English', 'Learn about Future Plans.', 'What is the correct form for Future Plans?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a2-m5-l3', 'A2', 'Predictions', 'Future English', 'Learn about Predictions.', 'What is the correct form for Predictions?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a2-m5-l4', 'A2', 'Promises', 'Future English', 'Learn about Promises.', 'What is the correct form for Promises?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a2-m6-l1', 'A2', 'Present Perfect Basics', 'Experiences', 'Learn about Present Perfect Basics.', 'What is the correct form for Present Perfect Basics?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a2-m6-l2', 'A2', 'Ever/Never', 'Experiences', 'Learn about Ever/Never.', 'What is the correct form for Ever/Never?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a2-m6-l3', 'A2', 'Already/Yet', 'Experiences', 'Learn about Already/Yet.', 'What is the correct form for Already/Yet?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a2-m7-l1', 'A2', 'Should', 'Problem Solving', 'Learn about Should.', 'What is the correct form for Should?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a2-m7-l2', 'A2', 'Advice', 'Problem Solving', 'Learn about Advice.', 'What is the correct form for Advice?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a2-m7-l3', 'A2', 'Obligation', 'Problem Solving', 'Learn about Obligation.', 'What is the correct form for Obligation?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a2-m7-l4', 'A2', 'Permission', 'Problem Solving', 'Learn about Permission.', 'What is the correct form for Permission?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a2-m8-l1', 'A2', 'Phone Calls', 'Speaking Confidence', 'Learn about Phone Calls.', 'What is the correct form for Phone Calls?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a2-m8-l2', 'A2', 'Social Situations', 'Speaking Confidence', 'Learn about Social Situations.', 'What is the correct form for Social Situations?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a2-m8-l3', 'A2', 'Small Talk', 'Speaking Confidence', 'Learn about Small Talk.', 'What is the correct form for Small Talk?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a2-m8-l4', 'A2', 'Storytelling Basics', 'Speaking Confidence', 'Learn about Storytelling Basics.', 'What is the correct form for Storytelling Basics?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b1-m1-l1', 'B1', 'Present Perfect vs Past Simple', 'Intermediate Grammar', 'Learn about Present Perfect vs Past Simple.', 'What is the correct form for Present Perfect vs Past Simple?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b1-m1-l2', 'B1', 'Past Continuous', 'Intermediate Grammar', 'Learn about Past Continuous.', 'What is the correct form for Past Continuous?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b1-m1-l3', 'B1', 'Used To', 'Intermediate Grammar', 'Learn about Used To.', 'What is the correct form for Used To?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b1-m1-l4', 'B1', 'Future Forms', 'Intermediate Grammar', 'Learn about Future Forms.', 'What is the correct form for Future Forms?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b1-m2-l1', 'B1', 'Relative Clauses', 'Complex Sentences', 'Learn about Relative Clauses.', 'What is the correct form for Relative Clauses?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b1-m2-l2', 'B1', 'First Conditional', 'Complex Sentences', 'Learn about First Conditional.', 'What is the correct form for First Conditional?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b1-m2-l3', 'B1', 'Second Conditional', 'Complex Sentences', 'Learn about Second Conditional.', 'What is the correct form for Second Conditional?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b1-m2-l4', 'B1', 'Time Clauses', 'Complex Sentences', 'Learn about Time Clauses.', 'What is the correct form for Time Clauses?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b1-m3-l1', 'B1', 'Opinions', 'Expressing Ideas', 'Learn about Opinions.', 'What is the correct form for Opinions?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b1-m3-l2', 'B1', 'Agreement/Disagreement', 'Expressing Ideas', 'Learn about Agreement/Disagreement.', 'What is the correct form for Agreement/Disagreement?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b1-m3-l3', 'B1', 'Debate Basics', 'Expressing Ideas', 'Learn about Debate Basics.', 'What is the correct form for Debate Basics?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b1-m3-l4', 'B1', 'Giving Reasons', 'Expressing Ideas', 'Learn about Giving Reasons.', 'What is the correct form for Giving Reasons?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b1-m4-l1', 'B1', 'Emails', 'Work & Study', 'Learn about Emails.', 'What is the correct form for Emails?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b1-m4-l2', 'B1', 'Meetings', 'Work & Study', 'Learn about Meetings.', 'What is the correct form for Meetings?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b1-m4-l3', 'B1', 'Interviews', 'Work & Study', 'Learn about Interviews.', 'What is the correct form for Interviews?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b1-m4-l4', 'B1', 'Academic English', 'Work & Study', 'Learn about Academic English.', 'What is the correct form for Academic English?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b1-m5-l1', 'B1', 'News', 'Media & Technology', 'Learn about News.', 'What is the correct form for News?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b1-m5-l2', 'B1', 'Social Media', 'Media & Technology', 'Learn about Social Media.', 'What is the correct form for Social Media?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b1-m5-l3', 'B1', 'Technology Vocabulary', 'Media & Technology', 'Learn about Technology Vocabulary.', 'What is the correct form for Technology Vocabulary?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b1-m5-l4', 'B1', 'Internet Discussions', 'Media & Technology', 'Learn about Internet Discussions.', 'What is the correct form for Internet Discussions?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b1-m6-l1', 'B1', 'Narratives', 'Storytelling', 'Learn about Narratives.', 'What is the correct form for Narratives?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b1-m6-l2', 'B1', 'Sequencing', 'Storytelling', 'Learn about Sequencing.', 'What is the correct form for Sequencing?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b1-m6-l3', 'B1', 'Emotions', 'Storytelling', 'Learn about Emotions.', 'What is the correct form for Emotions?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b1-m6-l4', 'B1', 'Descriptions', 'Storytelling', 'Learn about Descriptions.', 'What is the correct form for Descriptions?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b1-m7-l1', 'B1', 'Modals', 'Problem & Solution', 'Learn about Modals.', 'What is the correct form for Modals?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b1-m7-l2', 'B1', 'Suggestions', 'Problem & Solution', 'Learn about Suggestions.', 'What is the correct form for Suggestions?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b1-m7-l3', 'B1', 'Complaints', 'Problem & Solution', 'Learn about Complaints.', 'What is the correct form for Complaints?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b1-m7-l4', 'B1', 'Negotiation', 'Problem & Solution', 'Learn about Negotiation.', 'What is the correct form for Negotiation?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b1-m8-l1', 'B1', 'Long Conversations', 'Fluency Builder', 'Learn about Long Conversations.', 'What is the correct form for Long Conversations?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b1-m8-l2', 'B1', 'Real-Life Dialogues', 'Fluency Builder', 'Learn about Real-Life Dialogues.', 'What is the correct form for Real-Life Dialogues?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b1-m8-l3', 'B1', 'Fast Listening', 'Fluency Builder', 'Learn about Fast Listening.', 'What is the correct form for Fast Listening?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b1-m8-l4', 'B1', 'Speaking Challenges', 'Fluency Builder', 'Learn about Speaking Challenges.', 'What is the correct form for Speaking Challenges?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b2-m1-l1', 'B2', 'Perfect Continuous', 'Advanced Tenses', 'Learn about Perfect Continuous.', 'What is the correct form for Perfect Continuous?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b2-m1-l2', 'B2', 'Mixed Tenses', 'Advanced Tenses', 'Learn about Mixed Tenses.', 'What is the correct form for Mixed Tenses?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b2-m1-l3', 'B2', 'Narrative Tenses', 'Advanced Tenses', 'Learn about Narrative Tenses.', 'What is the correct form for Narrative Tenses?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b2-m2-l1', 'B2', 'Third Conditional', 'Advanced Conditionals', 'Learn about Third Conditional.', 'What is the correct form for Third Conditional?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b2-m2-l2', 'B2', 'Mixed Conditionals', 'Advanced Conditionals', 'Learn about Mixed Conditionals.', 'What is the correct form for Mixed Conditionals?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b2-m2-l3', 'B2', 'Wish Structures', 'Advanced Conditionals', 'Learn about Wish Structures.', 'What is the correct form for Wish Structures?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b2-m3-l1', 'B2', 'Passive Voice', 'Passive & Reported Speech', 'Learn about Passive Voice.', 'What is the correct form for Passive Voice?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b2-m3-l2', 'B2', 'Reporting Verbs', 'Passive & Reported Speech', 'Learn about Reporting Verbs.', 'What is the correct form for Reporting Verbs?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b2-m3-l3', 'B2', 'Indirect Questions', 'Passive & Reported Speech', 'Learn about Indirect Questions.', 'What is the correct form for Indirect Questions?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b2-m4-l1', 'B2', 'Formal Writing', 'Academic Communication', 'Learn about Formal Writing.', 'What is the correct form for Formal Writing?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b2-m4-l2', 'B2', 'Essays', 'Academic Communication', 'Learn about Essays.', 'What is the correct form for Essays?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b2-m4-l3', 'B2', 'Arguments', 'Academic Communication', 'Learn about Arguments.', 'What is the correct form for Arguments?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b2-m4-l4', 'B2', 'Presentations', 'Academic Communication', 'Learn about Presentations.', 'What is the correct form for Presentations?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b2-m5-l1', 'B2', 'Business Meetings', 'Professional English', 'Learn about Business Meetings.', 'What is the correct form for Business Meetings?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b2-m5-l2', 'B2', 'Negotiation', 'Professional English', 'Learn about Negotiation.', 'What is the correct form for Negotiation?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b2-m5-l3', 'B2', 'Leadership Communication', 'Professional English', 'Learn about Leadership Communication.', 'What is the correct form for Leadership Communication?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b2-m6-l1', 'B2', 'Idioms', 'Nuanced English', 'Learn about Idioms.', 'What is the correct form for Idioms?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b2-m6-l2', 'B2', 'Phrasal Verbs', 'Nuanced English', 'Learn about Phrasal Verbs.', 'What is the correct form for Phrasal Verbs?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b2-m6-l3', 'B2', 'Collocations', 'Nuanced English', 'Learn about Collocations.', 'What is the correct form for Collocations?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b2-m6-l4', 'B2', 'Tone', 'Nuanced English', 'Learn about Tone.', 'What is the correct form for Tone?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b2-m7-l1', 'B2', 'Persuasive Language', 'Debate & Persuasion', 'Learn about Persuasive Language.', 'What is the correct form for Persuasive Language?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b2-m7-l2', 'B2', 'Counterarguments', 'Debate & Persuasion', 'Learn about Counterarguments.', 'What is the correct form for Counterarguments?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b2-m7-l3', 'B2', 'Advanced Opinions', 'Debate & Persuasion', 'Learn about Advanced Opinions.', 'What is the correct form for Advanced Opinions?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b2-m8-l1', 'B2', 'Native-like Conversations', 'Real World Fluency', 'Learn about Native-like Conversations.', 'What is the correct form for Native-like Conversations?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b2-m8-l2', 'B2', 'Humor', 'Real World Fluency', 'Learn about Humor.', 'What is the correct form for Humor?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b2-m8-l3', 'B2', 'Sarcasm', 'Real World Fluency', 'Learn about Sarcasm.', 'What is the correct form for Sarcasm?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('b2-m8-l4', 'B2', 'Cultural Context', 'Real World Fluency', 'Learn about Cultural Context.', 'What is the correct form for Cultural Context?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c1-m1-l1', 'C1', 'Inversion', 'Precision Grammar', 'Learn about Inversion.', 'What is the correct form for Inversion?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c1-m1-l2', 'C1', 'Emphasis Structures', 'Precision Grammar', 'Learn about Emphasis Structures.', 'What is the correct form for Emphasis Structures?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c1-m1-l3', 'C1', 'Advanced Modals', 'Precision Grammar', 'Learn about Advanced Modals.', 'What is the correct form for Advanced Modals?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c1-m2-l1', 'C1', 'Reports', 'Sophisticated Writing', 'Learn about Reports.', 'What is the correct form for Reports?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c1-m2-l2', 'C1', 'Research Summaries', 'Sophisticated Writing', 'Learn about Research Summaries.', 'What is the correct form for Research Summaries?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c1-m2-l3', 'C1', 'Advanced Essays', 'Sophisticated Writing', 'Learn about Advanced Essays.', 'What is the correct form for Advanced Essays?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c1-m3-l1', 'C1', 'Public Speaking', 'High-Level Speaking', 'Learn about Public Speaking.', 'What is the correct form for Public Speaking?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c1-m3-l2', 'C1', 'Persuasive Speaking', 'High-Level Speaking', 'Learn about Persuasive Speaking.', 'What is the correct form for Persuasive Speaking?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c1-m3-l3', 'C1', 'Advanced Discussion', 'High-Level Speaking', 'Learn about Advanced Discussion.', 'What is the correct form for Advanced Discussion?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c1-m4-l1', 'C1', 'Formal Meetings', 'Academic & Business Fluency', 'Learn about Formal Meetings.', 'What is the correct form for Formal Meetings?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c1-m4-l2', 'C1', 'Professional Presentations', 'Academic & Business Fluency', 'Learn about Professional Presentations.', 'What is the correct form for Professional Presentations?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c1-m4-l3', 'C1', 'Leadership Language', 'Academic & Business Fluency', 'Learn about Leadership Language.', 'What is the correct form for Leadership Language?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c1-m5-l1', 'C1', 'Fast Native Audio', 'Deep Comprehension', 'Learn about Fast Native Audio.', 'What is the correct form for Fast Native Audio?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c1-m5-l2', 'C1', 'Complex Articles', 'Deep Comprehension', 'Learn about Complex Articles.', 'What is the correct form for Complex Articles?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c1-m5-l3', 'C1', 'Abstract Topics', 'Deep Comprehension', 'Learn about Abstract Topics.', 'What is the correct form for Abstract Topics?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c1-m6-l1', 'C1', 'Register', 'Style & Tone', 'Learn about Register.', 'What is the correct form for Register?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c1-m6-l2', 'C1', 'Nuance', 'Style & Tone', 'Learn about Nuance.', 'What is the correct form for Nuance?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c1-m6-l3', 'C1', 'Humor', 'Style & Tone', 'Learn about Humor.', 'What is the correct form for Humor?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c1-m6-l4', 'C1', 'Subtext', 'Style & Tone', 'Learn about Subtext.', 'What is the correct form for Subtext?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c1-m7-l1', 'C1', 'Analysis', 'Critical Thinking', 'Learn about Analysis.', 'What is the correct form for Analysis?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c1-m7-l2', 'C1', 'Interpretation', 'Critical Thinking', 'Learn about Interpretation.', 'What is the correct form for Interpretation?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c1-m7-l3', 'C1', 'Evaluation', 'Critical Thinking', 'Learn about Evaluation.', 'What is the correct form for Evaluation?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c1-m8-l1', 'C1', 'Natural Expressions', 'Near-Native Communication', 'Learn about Natural Expressions.', 'What is the correct form for Natural Expressions?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c1-m8-l2', 'C1', 'Cultural Fluency', 'Near-Native Communication', 'Learn about Cultural Fluency.', 'What is the correct form for Cultural Fluency?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c1-m8-l3', 'C1', 'Advanced Interaction', 'Near-Native Communication', 'Learn about Advanced Interaction.', 'What is the correct form for Advanced Interaction?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c2-m1-l1', 'C2', 'Rare Grammar', 'Native-Level Structures', 'Learn about Rare Grammar.', 'What is the correct form for Rare Grammar?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c2-m1-l2', 'C2', 'Advanced Syntax', 'Native-Level Structures', 'Learn about Advanced Syntax.', 'What is the correct form for Advanced Syntax?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c2-m1-l3', 'C2', 'Literary Structures', 'Native-Level Structures', 'Learn about Literary Structures.', 'What is the correct form for Literary Structures?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c2-m2-l1', 'C2', 'Debate Mastery', 'Master Communication', 'Learn about Debate Mastery.', 'What is the correct form for Debate Mastery?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c2-m2-l2', 'C2', 'Negotiation Mastery', 'Master Communication', 'Learn about Negotiation Mastery.', 'What is the correct form for Negotiation Mastery?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c2-m2-l3', 'C2', 'Persuasion', 'Master Communication', 'Learn about Persuasion.', 'What is the correct form for Persuasion?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c2-m3-l1', 'C2', 'Editorial Writing', 'Elite Writing', 'Learn about Editorial Writing.', 'What is the correct form for Editorial Writing?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c2-m3-l2', 'C2', 'Academic Research', 'Elite Writing', 'Learn about Academic Research.', 'What is the correct form for Academic Research?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c2-m3-l3', 'C2', 'Creative Writing', 'Elite Writing', 'Learn about Creative Writing.', 'What is the correct form for Creative Writing?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c2-m4-l1', 'C2', 'Idiomatic Mastery', 'Cultural Intelligence', 'Learn about Idiomatic Mastery.', 'What is the correct form for Idiomatic Mastery?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c2-m4-l2', 'C2', 'Humor & Irony', 'Cultural Intelligence', 'Learn about Humor & Irony.', 'What is the correct form for Humor & Irony?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c2-m4-l3', 'C2', 'Regional Differences', 'Cultural Intelligence', 'Learn about Regional Differences.', 'What is the correct form for Regional Differences?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c2-m5-l1', 'C2', 'Legal English', 'Specialized English', 'Learn about Legal English.', 'What is the correct form for Legal English?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c2-m5-l2', 'C2', 'Scientific English', 'Specialized English', 'Learn about Scientific English.', 'What is the correct form for Scientific English?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c2-m5-l3', 'C2', 'Technical English', 'Specialized English', 'Learn about Technical English.', 'What is the correct form for Technical English?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c2-m6-l1', 'C2', 'Native-Speed Listening', 'High-Speed Fluency', 'Learn about Native-Speed Listening.', 'What is the correct form for Native-Speed Listening?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c2-m6-l2', 'C2', 'Real-Time Response', 'High-Speed Fluency', 'Learn about Real-Time Response.', 'What is the correct form for Real-Time Response?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c2-m6-l3', 'C2', 'Accent Adaptation', 'High-Speed Fluency', 'Learn about Accent Adaptation.', 'What is the correct form for Accent Adaptation?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c2-m7-l1', 'C2', 'Storytelling', 'Expression Mastery', 'Learn about Storytelling.', 'What is the correct form for Storytelling?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c2-m7-l2', 'C2', 'Emotion', 'Expression Mastery', 'Learn about Emotion.', 'What is the correct form for Emotion?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c2-m7-l3', 'C2', 'Tone Manipulation', 'Expression Mastery', 'Learn about Tone Manipulation.', 'What is the correct form for Tone Manipulation?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c2-m8-l1', 'C2', 'Real Simulations', 'Final Mastery', 'Learn about Real Simulations.', 'What is the correct form for Real Simulations?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c2-m8-l2', 'C2', 'Long Discussions', 'Final Mastery', 'Learn about Long Discussions.', 'What is the correct form for Long Discussions?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('c2-m8-l3', 'C2', 'Full Fluency Challenges', 'Final Mastery', 'Learn about Full Fluency Challenges.', 'What is the correct form for Full Fluency Challenges?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
 ];

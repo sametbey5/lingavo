@@ -1,8 +1,8 @@
 
 import React, { ReactNode, useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import Sidebar from './Sidebar';
-import { Menu, X, LayoutDashboard, MessageCircle, BookOpen, PenTool, Trophy, Gamepad2, Briefcase, MonitorPlay, Crown, Store, ArrowRightLeft, LogOut, User, HelpCircle, Globe, ChevronDown, Bell, Flag, ShieldCheck, Zap, Gift, Award, Sparkles, Star } from 'lucide-react';
+import { Menu, X, LayoutDashboard, MessageCircle, BookOpen, PenTool, Trophy, Gamepad2, Briefcase, MonitorPlay, Crown, Store, ArrowRightLeft, LogOut, User, HelpCircle, Globe, ChevronDown, Bell, Flag, ShieldCheck, Zap, Gift, Award, Sparkles, Star, Mic, Target, Home } from 'lucide-react';
 import { useGamification } from '../context/GamificationContext';
 import ContactModal from './ContactModal';
 import { SUPPORTED_LANGUAGES } from '../constants';
@@ -16,6 +16,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
   const { mode, userId, logout, setIsContactOpen, preferredLanguage, updateProfile, isAdmin, notification, showLevelUp, stats, closeLevelUp } = useGamification();
   const isKids = mode === 'kids';
+
+  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Inject Google Translate only if not present
@@ -299,9 +302,40 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       </div>
 
       {/* Main Content Area - Reduced padding for Pro mode */}
-      <main className={`md:ml-${isKids ? '72' : '64'} p-3 sm:p-4 md:px-${isKids ? '10' : '8'} md:pt-${isKids ? '10' : '8'} md:pb-4 max-w-7xl mx-auto transition-all`}>
+      <main className={`md:ml-${isKids ? '72' : '64'} p-3 sm:p-4 md:px-${isKids ? '10' : '8'} md:pt-${isKids ? '10' : '8'} md:pb-4 pb-24 max-w-7xl mx-auto transition-all`}>
         {children}
       </main>
+
+      {/* Floating Bottom Navigation (Mobile Only styling, but visible up to MD) */}
+      <div className="md:hidden fixed bottom-3 left-3 right-3 sm:left-1/2 sm:-translate-x-1/2 sm:w-[500px] z-[60]">
+         <div className="bg-white/95 backdrop-blur-xl border border-slate-200/50 p-1.5 rounded-[2rem] shadow-[0_10px_30px_rgba(0,0,0,0.1)] flex items-center justify-between">
+             {[
+                { id: 'home', icon: Home, label: 'Home', path: '/' },
+                { id: 'lessons', icon: BookOpen, label: 'Lessons', path: '/grammar-lessons' },
+                { id: 'speaking', icon: Mic, label: 'Speak', path: '/pronunciation' },
+                { id: 'quests', icon: Target, label: 'Quests', path: '/your-progress' },
+                { id: 'profile', icon: User, label: 'Profile', path: '/my-style' },
+             ].map((item) => {
+                const isActive = location.pathname === item.path || (item.path !== '/' && location.pathname.startsWith(item.path));
+                const Icon = item.icon;
+                return (
+                   <button
+                      key={item.id}
+                      onClick={() => {
+                         if (location.pathname !== item.path) navigate(item.path);
+                      }}
+                      className={`flex flex-col items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-[1.5rem] relative transition-all duration-300 ${isActive ? 'text-fun-blue scale-110' : 'text-slate-400 hover:text-slate-600 hover:bg-slate-50'}`}
+                   >
+                      {isActive && (
+                         <div className="absolute inset-0 bg-fun-blue/10 rounded-full -z-10" />
+                      )}
+                      <Icon size={isActive ? 20 : 18} className={isActive ? 'fill-fun-blue/20' : ''} />
+                      {isActive && <span className="absolute -bottom-0.5 w-1 h-1 bg-fun-blue rounded-full" />}
+                   </button>
+                )
+             })}
+         </div>
+      </div>
     </div>
   );
 };
