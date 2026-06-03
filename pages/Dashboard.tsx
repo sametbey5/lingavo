@@ -52,8 +52,8 @@ const Dashboard: React.FC = () => {
               </div>
           </div>
           <div className="p-2 sm:p-3 flex flex-col flex-1 justify-center">
-             <h4 className="font-black text-slate-800 text-[11px] sm:text-sm mb-0.5 group-hover:text-fun-blue transition-colors line-clamp-1">{title}</h4>
-             <p className="text-[9px] sm:text-[10px] font-bold text-slate-400 line-clamp-1">{desc}</p>
+             <h4 className="font-black text-slate-800 text-sm sm:text-lg mb-0.5 group-hover:text-fun-blue transition-colors line-clamp-1">{title}</h4>
+             <p className="text-xs sm:text-sm font-bold text-slate-400 line-clamp-1">{desc}</p>
           </div>
       </div>
   );
@@ -66,7 +66,7 @@ const Dashboard: React.FC = () => {
          <div className="bg-white rounded-[1.25rem] p-3 shadow-sm border border-slate-100 relative overflow-hidden flex flex-col gap-2">
             <div className="absolute -top-10 -right-10 w-32 h-32 bg-fun-blue/5 rounded-full blur-2xl pointer-events-none" />
             
-            <div className="flex items-center gap-2 relative z-10">
+            <div className="flex items-center gap-2 relative z-10 w-full">
                <div onClick={() => navigate('/my-style')} className={`w-12 h-12 sm:w-16 sm:h-16 shrink-0 ${stats.themeColor || 'bg-fun-blue'} rounded-xl border-[2px] border-white shadow-md flex items-center justify-center cursor-pointer hover:scale-105 transition-transform relative group overflow-hidden`}>
                   <img src={stats.avatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix'} alt="User Avatar" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                   <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
@@ -74,35 +74,39 @@ const Dashboard: React.FC = () => {
                   </div>
                </div>
                
-               <div className="flex-1 min-w-0">
-                  <p className="text-slate-400 font-bold uppercase tracking-widest text-[9px] sm:text-xs flex items-center gap-1 mb-0.5">
-                     <Sparkles size={8} className="text-fun-yellow" /> Welcome Back
-                  </p>
-                  <h2 className="text-lg sm:text-2xl font-black text-slate-800 tracking-tight truncate leading-none">
-                    {displayName}
-                  </h2>
-               </div>
-            </div>
-
-            <div className="relative z-10 w-full bg-slate-50 rounded-xl p-2.5 border border-slate-100 flex flex-col gap-1.5">
-               <div className="flex justify-between items-center">
-                  <div>
-                     <p className="font-black text-slate-800 text-xs sm:text-base flex items-center gap-1">
-                        <Award className="text-fun-blue" size={12} /> Level {stats.level}
-                     </p>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                     <div className="flex items-center gap-1 text-orange-500 font-black bg-orange-50 px-1.5 py-0.5 rounded border border-orange-100 text-[10px] sm:text-sm">
-                        <Flame size={10} className="fill-current" /> {stats.streakDays}
-                     </div>
-                     <div className="flex items-center gap-1 text-yellow-500 font-black bg-yellow-50 px-1.5 py-0.5 rounded border border-yellow-100 text-[10px] sm:text-sm">
-                        <Star size={10} className="fill-current" /> {stats.points}
+               <div className="flex-1 min-w-0 flex flex-col justify-center">
+                  <div className="flex items-center gap-2 mb-1">
+                     <h2 className="text-lg sm:text-2xl font-black text-slate-800 tracking-tight truncate leading-none">
+                       {displayName}
+                     </h2>
+                     {isAdmin && (
+                        <span className="bg-fun-pink text-white text-[9px] sm:text-[10px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-full flex items-center gap-0.5 shrink-0">
+                           <Award size={10} /> Admin
+                        </span>
+                     )}
+                     <span className="text-slate-400 font-bold uppercase tracking-widest text-[9px] sm:text-[10px] truncate hidden sm:block">
+                        {isPremium ? 'Super Pass' : 'Explorer'}
+                     </span>
+                     
+                     <div className="flex items-center gap-1.5 ml-auto shrink-0">
+                        <div className="flex items-center gap-1 text-orange-500 font-black bg-orange-50 px-1.5 py-0.5 rounded border border-orange-100 text-[10px] sm:text-xs">
+                           <Flame size={10} className="fill-current" /> {stats.streakDays}
+                        </div>
+                        <div className="flex items-center gap-1 text-yellow-500 font-black bg-yellow-50 px-1.5 py-0.5 rounded border border-yellow-100 text-[10px] sm:text-xs">
+                           <Star size={10} className="fill-current" /> {stats.points}
+                        </div>
                      </div>
                   </div>
-               </div>
-               <div className="flex flex-col gap-0.5">
-                  <div className="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden shadow-inner flex">
-                     <div className="h-full bg-gradient-to-r from-fun-blue to-teal-400 rounded-full shadow-[0_0_10px_rgba(56,189,248,0.4)] transition-all duration-1000 ease-out" style={{ width: `${progressPercent}%` }} />
+                  
+                  <div className="flex items-center gap-2 w-full mt-0.5">
+                     <span className="text-[10px] sm:text-xs font-black text-fun-blue flex items-center gap-0.5 shrink-0">
+                        <Award size={10} className="sm:hidden" />
+                        <Award size={12} className="hidden sm:block" /> 
+                        Lv.{stats.level}
+                     </span>
+                     <div className="flex-1 h-2 bg-slate-200 rounded-full overflow-hidden shadow-inner flex">
+                        <div className="h-full bg-gradient-to-r from-fun-blue to-teal-400 rounded-full shadow-[0_0_10px_rgba(56,189,248,0.4)] transition-all duration-1000 ease-out" style={{ width: `${progressPercent}%` }} />
+                     </div>
                   </div>
                </div>
             </div>
@@ -114,27 +118,27 @@ const Dashboard: React.FC = () => {
          <div className="flex gap-1 p-1 bg-slate-200/50 rounded-xl backdrop-blur-md overflow-x-auto scrollbar-none">
             <button
                onClick={() => navigate('/leaderboard')}
-               className="flex-shrink-0 min-w-[70px] flex-1 py-1.5 rounded-lg font-black text-[10px] sm:text-xs transition-all duration-300 flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1.5 text-slate-500 hover:text-slate-700 bg-transparent hover:bg-white/50"
+               className="flex-shrink-0 min-w-[70px] flex-1 py-1.5 rounded-lg font-black text-xs sm:text-sm transition-all duration-300 flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1.5 text-slate-500 hover:text-slate-700 bg-transparent hover:bg-white/50"
             >
-               <Users size={14} /> <span>Rankings</span>
+               <Users size={16} /> <span>Rankings</span>
             </button>
             <button
                onClick={() => navigate('/my-style')}
-               className="flex-shrink-0 min-w-[70px] flex-1 py-1.5 rounded-lg font-black text-[10px] sm:text-xs transition-all duration-300 flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1.5 text-slate-500 hover:text-slate-700 bg-transparent hover:bg-white/50"
+               className="flex-shrink-0 min-w-[70px] flex-1 py-1.5 rounded-lg font-black text-xs sm:text-sm transition-all duration-300 flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1.5 text-slate-500 hover:text-slate-700 bg-transparent hover:bg-white/50"
             >
-               <Palette size={14} /> <span>Style</span>
+               <Palette size={16} /> <span>Style</span>
             </button>
             <button
                onClick={() => navigate('/trophy-case')}
-               className="flex-shrink-0 min-w-[70px] flex-1 py-1.5 rounded-lg font-black text-[10px] sm:text-xs transition-all duration-300 flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1.5 text-slate-500 hover:text-slate-700 bg-transparent hover:bg-white/50"
+               className="flex-shrink-0 min-w-[70px] flex-1 py-1.5 rounded-lg font-black text-xs sm:text-sm transition-all duration-300 flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1.5 text-slate-500 hover:text-slate-700 bg-transparent hover:bg-white/50"
             >
-               <Award size={14} /> <span>Trophies</span>
+               <Award size={16} /> <span>Trophies</span>
             </button>
             <button
                onClick={() => navigate('/your-progress')}
-               className="flex-shrink-0 min-w-[70px] flex-1 py-1.5 rounded-lg font-black text-[10px] sm:text-xs transition-all duration-300 flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1.5 bg-white text-fun-blue shadow-sm"
+               className="flex-shrink-0 min-w-[70px] flex-1 py-1.5 rounded-lg font-black text-xs sm:text-sm transition-all duration-300 flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1.5 bg-white text-fun-blue shadow-sm"
             >
-               <Target size={14} /> <span>Progress</span>
+               <Target size={16} /> <span>Progress</span>
             </button>
          </div>
       </div>
@@ -143,33 +147,31 @@ const Dashboard: React.FC = () => {
       <div className="px-3 pb-3 sm:px-4 shrink-0">
          <div 
              onClick={() => navigate('/grammar-lessons')}
-             className="relative w-full rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden cursor-pointer shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group bg-slate-900 border-[3px] border-white ring-2 ring-transparent hover:ring-fun-blue/30 flex flex-row h-[85px] sm:h-[110px]"
+             className="relative w-full rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden cursor-pointer shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group bg-slate-900 border-[3px] border-white ring-2 ring-transparent hover:ring-fun-blue/30 flex flex-row h-[120px] sm:h-[140px]"
          >
              <div className="absolute inset-0 bg-gradient-to-br from-fun-blue to-teal-500 opacity-90 z-10" />
              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.3),transparent_60%)] z-10 pointer-events-none" />
              
-             <div className="relative z-20 flex-1 p-3 sm:p-5 flex flex-col justify-center text-white">
-                 <div className="inline-flex items-center gap-1 bg-white/20 backdrop-blur-md px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-black uppercase tracking-widest mb-1 sm:mb-2 w-fit">
-                    <BookOpen size={10} /> Grammar Coach
+             <div className="relative z-20 flex-1 p-4 sm:p-6 flex flex-col justify-center text-white truncate pr-2">
+                 <div className="inline-flex items-center gap-1.5 bg-white/20 backdrop-blur-md px-2.5 py-1 rounded-full text-[11px] sm:text-[13px] font-black uppercase tracking-widest mb-1.5 sm:mb-2 w-fit shrink-0">
+                    <BookOpen size={12} /> Grammar Coach
                  </div>
-                 <h2 className="font-black text-lg sm:text-2xl leading-none mb-1 drop-shadow-md line-clamp-1">{nextLessonTitle}</h2>
-                 <p className="text-white/90 font-bold text-[10px] sm:text-xs mb-2 line-clamp-1 max-w-[80%]">Master your English grammar.</p>
+                 <h2 className="font-black text-lg sm:text-3xl leading-snug mb-1 drop-shadow-md truncate">{nextLessonTitle}</h2>
+                 <p className="text-white/90 font-bold text-xs sm:text-sm mb-2 truncate">Master your English grammar.</p>
                  
-                 <div className="w-full max-w-[150px] h-1.5 bg-black/20 rounded-full overflow-hidden flex">
+                 <div className="w-full max-w-[150px] h-2 bg-black/20 rounded-full overflow-hidden flex shrink-0">
                     <div className="h-full bg-white rounded-full shadow-[0_0_10px_rgba(255,255,255,0.8)] transition-all duration-1000" style={{ width: `${grammarPercent}%` }} />
                  </div>
              </div>
              
-             <div className="relative z-20 w-[35%] h-full overflow-hidden flex items-end justify-end shrink-0">
-                 <img src={grammarImg} className="w-auto h-[90%] object-contain transform group-hover:scale-105 transition-transform duration-500 drop-shadow-[0_10px_10px_rgba(0,0,0,0.3)] origin-bottom-right" alt="Grammar" referrerPolicy="no-referrer" />
+             <div className="relative z-20 w-[35%] h-full overflow-hidden flex items-end justify-end shrink-0 py-2 pr-2">
+                 <img src={grammarImg} className="w-auto h-full object-contain transform group-hover:scale-105 transition-transform duration-500 drop-shadow-[0_10px_10px_rgba(0,0,0,0.3)] origin-bottom-right" alt="Grammar" referrerPolicy="no-referrer" />
              </div>
          </div>
       </div>
 
       {/* 5. Practice Games Area (Grid layout tailored to fit smaller space) */}
       <div className="px-3 pb-6 sm:px-4 flex-1 flex flex-col">
-         <div className="flex items-center justify-between mb-2.5 px-1 shrink-0">
-         </div>
          <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 xs:gap-3 flex-1">
             <PracticeCard 
                title="Dictionary" 

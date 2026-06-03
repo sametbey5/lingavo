@@ -184,11 +184,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       </div>
 
       {/* Main Content Area - Reduced padding for Pro mode */}
-      <main className={`md:ml-${isKids ? '72' : '64'} p-3 sm:p-4 md:px-${isKids ? '10' : '8'} md:pt-${isKids ? '10' : '8'} md:pb-4 pb-24 max-w-7xl mx-auto transition-all`}>
+      <main className={`md:ml-${isKids ? '72' : '64'} ${location.pathname === '/videos' ? 'p-0 pb-0' : 'p-3 sm:p-4 md:px-10 md:pt-10 md:pb-4 pb-24'} max-w-7xl mx-auto transition-all w-full h-full`}>
         {children}
       </main>
 
       {/* Floating Bottom Navigation (Mobile Only styling, but visible up to MD) */}
+      {location.pathname !== '/videos' && (
       <div className="md:hidden fixed bottom-3 left-3 right-3 sm:left-1/2 sm:-translate-x-1/2 sm:w-[500px] z-[60]">
          <div className="bg-white/95 backdrop-blur-xl border border-slate-200/50 p-1.5 rounded-[2rem] shadow-[0_10px_30px_rgba(0,0,0,0.1)] flex items-center justify-between">
              {[
@@ -219,6 +220,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
              })}
          </div>
       </div>
+      )}
     </div>
   );
 };
