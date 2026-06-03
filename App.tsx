@@ -128,6 +128,8 @@ const App: React.FC = () => {
                           
       if (isClickable) {
         playClickSound();
+        // The user specifically requested: "always go to the upper part of the page when you click on anything in the app"
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     };
     

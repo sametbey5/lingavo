@@ -1386,32 +1386,7 @@ const GrammarLessons: React.FC = () => {
            </div>
         </div>
 
-        {/* BOTTOM NAVIGATION MOBILE APP-LIKE FLOATING BAR */}
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-xl border border-slate-200/50 shadow-[0_10px_40px_rgba(0,0,0,0.1)] px-5 py-2.5 sm:hidden z-50 flex justify-between items-center h-16 rounded-[2rem] w-[90%] max-w-sm">
-           <button onClick={() => navigate('/lessons')} className="flex flex-col items-center gap-1 w-14 group">
-              <div className="w-12 h-12 rounded-full bg-fun-blue flex items-center justify-center group-hover:scale-105 transition-transform shadow-md shadow-fun-blue/30 relative">
-                 <BookOpen size={22} className="text-white" strokeWidth={2.5} />
-              </div>
-           </button>
-           <button onClick={() => navigate('/dashboard')} className="flex flex-col items-center gap-1 w-14 text-slate-400 hover:text-slate-700 transition-colors group">
-              <div className="w-10 h-10 rounded-full flex items-center justify-center group-hover:bg-slate-100 transition-colors">
-                 <LayoutGrid size={22} strokeWidth={2.5} />
-              </div>
-           </button>
-           <button onClick={() => navigate('/leaderboard')} className="flex flex-col items-center gap-1 w-14 text-slate-400 hover:text-slate-700 transition-colors group">
-              <div className="w-10 h-10 rounded-full flex items-center justify-center group-hover:bg-slate-100 transition-colors relative">
-                 <TrendingUp size={22} strokeWidth={2.5} />
-                 <span className="absolute top-1 right-2 w-2 h-2 bg-fun-pink rounded-full border border-white" />
-              </div>
-           </button>
-           <button onClick={() => navigate('/myself')} className="flex flex-col items-center gap-1 w-14 text-slate-400 hover:text-slate-700 transition-colors group">
-              <div className="w-10 h-10 rounded-full flex items-center justify-center group-hover:bg-slate-100 transition-colors">
-                 <span className="w-7 h-7 rounded-full bg-slate-200 block overflow-hidden border-2 border-white shadow-sm flex items-center justify-center">
-                    <span className="text-xs">👤</span>
-                 </span>
-              </div>
-           </button>
-        </div>
+        {/* The bottom navigation app-like floating bar has been removed */}
 
         {/* Video Tutorial Modal Overlay */}
         <AnimatePresence>
