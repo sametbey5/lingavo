@@ -92,7 +92,18 @@ const TrophyCase: React.FC = () => {
          )}
       </div>
 
-      {/* Empty state */}
+      {/* Trade Area Link */}
+      <div 
+        onClick={() => navigate('/trading')}
+         className="bg-gradient-to-r from-teal-500 to-emerald-500 p-5 rounded-2xl text-center shadow-md cursor-pointer hover:shadow-lg transition-transform hover:-translate-y-1"
+      >
+         <h3 className="text-white font-black text-lg mb-2 flex items-center justify-center gap-2 uppercase tracking-wide">
+            🤝 Badge Exchange
+         </h3>
+         <p className="text-white/90 font-bold text-sm">
+            Trade your badges with wandering merchants to collect rare ones!
+         </p>
+      </div>
       {earned.length === 0 && (
         <div className="bg-white rounded-2xl border-2 border-slate-100 p-8 text-center shadow-sm">
           <div className="text-4xl mb-3">🏆</div>

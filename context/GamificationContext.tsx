@@ -648,6 +648,14 @@ export const GamificationProvider: React.FC<{ children: ReactNode }> = ({ childr
     });
   };
 
+  const markGrammarLessonCompleted = (lessonId: string) => {
+    setStats(prev => {
+       const prevCompleted = prev.completedGrammar || [];
+       if (prevCompleted.includes(lessonId)) return prev;
+       return { ...prev, completedGrammar: [...prevCompleted, lessonId] };
+    });
+  };
+
   // NPC Trade
   const tradeBadge = (offerId: string) => {
     const offer = tradeOffers.find(t => t.id === offerId);
@@ -934,7 +942,7 @@ export const GamificationProvider: React.FC<{ children: ReactNode }> = ({ childr
   return (
     <GamificationContext.Provider value={{ 
       userId, isAdmin, login, logout, isLoading, loadError,
-      stats, badges, quests, tradeOffers, userTrades, awardPoints, completeQuest, updateRapport, claimDailyReward, tradeBadge, grantBadge, sendP2PTrade, respondToP2PTrade, 
+      stats, badges, quests, tradeOffers, userTrades, awardPoints, completeQuest, markGrammarLessonCompleted, updateRapport, claimDailyReward, tradeBadge, grantBadge, sendP2PTrade, respondToP2PTrade, 
       unlockPremium, restorePurchases, isPremium, premiumDetails, setThemeColor, setAvatar,
       notification, appNotifications, addAppNotification, deleteAppNotification, leaderboard, mode, setMode, 
       showLevelUp, closeLevelUp: () => setShowLevelUp(false),

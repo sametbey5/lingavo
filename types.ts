@@ -121,6 +121,8 @@ export interface UserStats {
   // Identity
   identityTitle: 'Explorer' | 'Speaker' | 'Communicator' | 'Fluent Hero' | 'Legend';
 
+  completedGrammar?: string[];
+
   // Legacy support
   messagesSent?: number;
   vocabGenerated?: number;
@@ -199,6 +201,7 @@ export interface GamificationContextType {
   updateRapport: (characterId: string, amount: number) => void;
   claimDailyReward: () => void;
   completeQuest: (id: string) => void;
+  markGrammarLessonCompleted: (lessonId: string) => void;
   tradeBadge: (offerId: string) => void;
   refreshTradeOffers: () => void;
   grantBadge: (badge: Badge) => void;

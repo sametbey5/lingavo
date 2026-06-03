@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { supabase } from '../services/supabase';
 import { 
   BookOpen, 
   CheckCircle,
@@ -827,7 +828,7 @@ const InteractiveExplanationScreen: React.FC<{
 };
 
 const GrammarLessons: React.FC = () => {
-  const { awardPoints, cefrLevel, updateProfile, preferredLanguage, stats } = useGamification();
+  const { awardPoints, cefrLevel, updateProfile, preferredLanguage, stats, markGrammarLessonCompleted } = useGamification();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   
@@ -895,7 +896,13 @@ const GrammarLessons: React.FC = () => {
   
   const [userAnswer, setUserAnswer] = useState('');
   const [feedback, setFeedback] = useState<{ isCorrect: boolean; message: string } | null>(null);
-  const [completedLessons, setCompletedLessons] = useState<string[]>([]);
+  const [completedLessons, setCompletedLessons] = useState<string[]>(stats?.completedGrammar || []);
+
+  useEffect(() => {
+    if (stats?.completedGrammar) {
+      setCompletedLessons(stats.completedGrammar);
+    }
+  }, [stats?.completedGrammar]);
 
   const handleStartLesson = (lesson: Lesson) => {
     setSelectedLesson(lesson);
@@ -928,7 +935,7 @@ const GrammarLessons: React.FC = () => {
     }
   };
 
-  const handleNextExercise = () => {
+  const handleNextExercise = async () => {
     playNextSound();
     if (!selectedLesson) return;
     
@@ -940,7 +947,10 @@ const GrammarLessons: React.FC = () => {
       playWinSound();
       setPhase('completed');
       if (!completedLessons.includes(selectedLesson.id)) {
-        setCompletedLessons([...completedLessons, selectedLesson.id]);
+        const nextCompleted = [...completedLessons, selectedLesson.id];
+        setCompletedLessons(nextCompleted);
+        
+        markGrammarLessonCompleted(selectedLesson.id);
         
         // Check if it's an exam
         if (selectedLesson.id.includes('exam')) {
@@ -1042,27 +1052,7 @@ const GrammarLessons: React.FC = () => {
                </div>
              </div>
           </div>
-          <div className="flex items-center gap-4">
-              <button 
-                onClick={() => navigate('/notifications')}
-                className="text-slate-400 hover:text-slate-600 transition-colors relative"
-              >
-                 <Bell size={20} />
-                 <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white" />
-              </button>
-              <div 
-                onClick={() => navigate('/myself')}
-                className="w-9 h-9 rounded-full bg-slate-200 overflow-hidden border-2 border-slate-100 shadow-sm shrink-0 flex items-center justify-center cursor-pointer hover:border-fun-blue transition-colors"
-              >
-                 {stats?.avatar ? (
-                   <img src={stats.avatar} alt="Profile" className="w-full h-full object-cover" />
-                 ) : (
-                   <span className="text-sm font-bold bg-fun-purple/10 text-fun-purple w-full h-full flex items-center justify-center border-2 border-white rounded-full">
-                     😎
-                   </span>
-                 )}
-              </div>
-          </div>
+          {/* Notifications and Profile removed as requested */}
         </div>
 
         <div className="max-w-6xl mx-auto px-4 py-6 sm:py-10 lg:flex lg:gap-10 justify-center">

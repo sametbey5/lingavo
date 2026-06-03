@@ -154,129 +154,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 <Bell size={18} />
                 <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-fun-orange rounded-full border border-white animate-pulse" />
             </NavLink>
-            
-            <button 
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 ml-1 text-slate-500 bg-white border border-slate-100 hover:bg-slate-50 rounded-2xl transition-all shadow-sm"
-            >
-              {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-            </button>
         </div>
       </div>
 
-      {/* Mobile Menu Overlay */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm animate-fade-in" onClick={() => setIsMobileMenuOpen(false)}>
-          <div className={`bg-white w-4/5 max-w-sm h-full p-6 overflow-y-auto flex flex-col shadow-2xl relative ${isKids ? '' : 'font-adult'}`} onClick={e => e.stopPropagation()}>
-            
-            <div className="flex justify-between items-center mb-8">
-                 <div className="flex items-center gap-2">
-                    <h2 className={`text-2xl text-slate-800 ${isKids ? 'font-black' : 'font-bold'}`}>Menu</h2>
-                 </div>
-                 <button onClick={() => setIsMobileMenuOpen(false)} className="bg-slate-100 p-2 rounded-full text-slate-500 hover:bg-slate-200 transition-colors">
-                    <X size={24} />
-                 </button>
-            </div>
-            
-            <nav className="space-y-4 flex-1">
-                {navItems.map((item) => (
-                <NavLink
-                    key={item.path}
-                    to={item.path}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className={({ isActive }) =>
-                    `flex items-center px-5 py-4 transition-all duration-200 ${
-                        isKids 
-                        ? `text-lg font-bold rounded-2xl border-2 ${isActive ? 'bg-blue-50 text-fun-blue border-fun-blue shadow-sm' : 'text-slate-500 border-transparent hover:bg-slate-50 hover:scale-105'}`
-                        : `text-base font-medium rounded-lg ${isActive ? 'bg-slate-100 text-slate-900' : 'text-slate-600 hover:bg-slate-50'}`
-                    }`
-                    }
-                >
-                    {({ isActive }) => (
-                      <>
-                        <span className={`mr-4 ${isActive && !isKids ? 'text-blue-600' : item.color}`}>
-                        {item.icon}
-                        </span>
-                        {item.name}
-                      </>
-                    )}
-                </NavLink>
-                ))}
-                
-                <button
-                    onClick={() => {
-                        setIsMobileMenuOpen(false);
-                        setIsContactOpen(true);
-                    }}
-                    className={`w-full flex items-center px-5 py-4 transition-all duration-200 ${
-                        isKids 
-                        ? `text-lg font-bold rounded-2xl border-2 text-slate-500 border-transparent hover:bg-slate-50`
-                        : `text-base font-medium rounded-lg text-slate-600 hover:bg-slate-50`
-                    }`}
-                >
-                    <span className={`mr-4 ${isKids ? 'text-slate-500' : 'text-slate-600'}`}>
-                        <HelpCircle size={24} />
-                    </span>
-                    {isKids ? 'Ask for Help' : 'Contact Support'}
-                </button>
-            </nav>
-
-            {/* Mobile Footer with Logout */}
-            <div className={`mt-6 pt-6 border-t ${isKids ? 'border-slate-100' : 'border-slate-200'} space-y-6`}>
-                {/* Language Switcher Mobile */}
-                <div className="relative">
-                    <button 
-                        onClick={() => setIsLangMenuOpen(!isLangMenuOpen)}
-                        className={`w-full flex items-center justify-between px-5 py-3 rounded-2xl border-2 transition-all ${
-                            isKids ? 'bg-slate-50 border-slate-100 text-slate-500' : 'bg-slate-50 border-slate-200 text-slate-600'
-                        } font-bold text-sm`}
-                    >
-                        <div className="flex items-center gap-2">
-                            <Globe size={18} className="text-fun-blue" />
-                            <span>{preferredLanguage || 'English'}</span>
-                        </div>
-                        <ChevronDown size={18} className={`transition-transform ${isLangMenuOpen ? 'rotate-180' : ''}`} />
-                    </button>
-                    
-                    {isLangMenuOpen && (
-                        <div className="absolute bottom-full left-0 w-full mb-2 bg-white border-4 border-slate-100 rounded-2xl shadow-2xl overflow-hidden z-50 max-h-48 overflow-y-auto">
-                            {SUPPORTED_LANGUAGES.map(lang => (
-                                <button
-                                    key={lang.code}
-                                    onClick={() => handleLanguageChange(lang.name)}
-                                    className="w-full px-5 py-3 text-left text-sm font-bold text-slate-500 hover:bg-blue-50 hover:text-fun-blue flex items-center gap-3 transition-colors"
-                                >
-                                    <span className="text-xl">{lang.flag}</span>
-                                    <span>{lang.name}</span>
-                                </button>
-                            ))}
-                        </div>
-                    )}
-                </div>
-
-                <div className="flex items-center justify-between">
-                   <div className="flex items-center gap-3 overflow-hidden max-w-[50%]">
-                      <div className={`w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center ${isKids ? 'bg-slate-100 text-slate-400' : 'bg-slate-200 text-slate-600'}`}>
-                         <User size={20} />
-                      </div>
-                      <span className={`font-bold truncate ${isKids ? 'text-slate-500' : 'text-slate-700'}`}>{userId}</span>
-                   </div>
-                   <button 
-                      onClick={() => {
-                          logout();
-                          setIsMobileMenuOpen(false);
-                      }}
-                      className={`flex items-center gap-2 font-bold px-4 py-2 rounded-xl transition-colors ${isKids ? 'bg-red-50 text-red-400 hover:bg-red-100' : 'bg-red-50 text-red-600 hover:bg-red-100'}`}
-                   >
-                      <LogOut size={20} />
-                      Logout
-                   </button>
-                </div>
-            </div>
-
-          </div>
-        </div>
-      )}
+      {/* Mobile Menu Overlay removed */}
 
       {/* Desktop Notifications / LevelUp */}
       <div className="hidden md:flex fixed top-4 left-1/2 -translate-x-1/2 z-[100] flex-col items-center gap-2 pointer-events-none">
@@ -312,9 +193,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
          <div className="bg-white/95 backdrop-blur-xl border border-slate-200/50 p-1.5 rounded-[2rem] shadow-[0_10px_30px_rgba(0,0,0,0.1)] flex items-center justify-between">
              {[
                 { id: 'home', icon: Home, label: 'Home', path: '/' },
-                { id: 'lessons', icon: BookOpen, label: 'Lessons', path: '/grammar-lessons' },
+                { id: 'lessons', icon: BookOpen, label: 'Grammar', path: '/grammar-lessons' },
+                { id: 'movies', icon: MonitorPlay, label: 'Movies', path: '/videos' },
                 { id: 'speaking', icon: Mic, label: 'Speak', path: '/pronunciation' },
-                { id: 'quests', icon: Target, label: 'Quests', path: '/your-progress' },
+                { id: 'quests', icon: Target, label: 'Progress', path: '/your-progress' },
                 { id: 'profile', icon: User, label: 'Profile', path: '/my-style' },
              ].map((item) => {
                 const isActive = location.pathname === item.path || (item.path !== '/' && location.pathname.startsWith(item.path));
@@ -325,12 +207,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                       onClick={() => {
                          if (location.pathname !== item.path) navigate(item.path);
                       }}
-                      className={`flex flex-col items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-[1.5rem] relative transition-all duration-300 ${isActive ? 'text-fun-blue scale-110' : 'text-slate-400 hover:text-slate-600 hover:bg-slate-50'}`}
+                      className={`flex flex-col items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-[1rem] relative transition-all duration-300 ${isActive ? 'text-fun-blue scale-110' : 'text-slate-400 hover:text-slate-600 hover:bg-slate-50'}`}
                    >
                       {isActive && (
                          <div className="absolute inset-0 bg-fun-blue/10 rounded-full -z-10" />
                       )}
-                      <Icon size={isActive ? 20 : 18} className={isActive ? 'fill-fun-blue/20' : ''} />
+                      <Icon size={isActive ? 18 : 16} className={isActive ? 'fill-fun-blue/20' : ''} />
                       {isActive && <span className="absolute -bottom-0.5 w-1 h-1 bg-fun-blue rounded-full" />}
                    </button>
                 )
