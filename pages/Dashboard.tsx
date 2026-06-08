@@ -42,24 +42,24 @@ const Dashboard: React.FC = () => {
   const PracticeCard = ({ title, desc, icon: Icon, imageSrc, onClick, colorFrom, colorTo, progress = 0 }: any) => (
       <div 
          onClick={onClick} 
-         className="relative w-full rounded-[1.25rem] border border-slate-100 overflow-hidden cursor-pointer hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group bg-white shadow-xs flex flex-col h-[100px] sm:h-full ring-2 ring-transparent hover:ring-fun-blue/20"
+         className="relative w-full rounded-[1.25rem] border border-slate-100 overflow-hidden cursor-pointer hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group bg-white shadow-xs flex flex-col h-full min-h-0 ring-2 ring-transparent hover:ring-fun-blue/20"
       >
-          <div className={`relative h-12 sm:h-20 w-full bg-gradient-to-br ${colorFrom} ${colorTo} overflow-hidden shrink-0`}>
+          <div className={`relative h-[55%] sm:h-[60%] w-full bg-gradient-to-br ${colorFrom} ${colorTo} overflow-hidden shrink-0`}>
               <div className="absolute inset-0 bg-white/20 blur-xl group-hover:bg-white/30 transition-colors" />
-              <img src={imageSrc} className="absolute -bottom-1 -right-1 w-16 h-16 sm:w-24 sm:h-24 object-contain transition-transform duration-500 group-hover:scale-110 drop-shadow-md origin-bottom-right" alt={title} referrerPolicy="no-referrer" />
-              <div className="absolute top-2 left-2 w-5 h-5 sm:w-8 sm:h-8 bg-white/30 backdrop-blur-md rounded-lg flex items-center justify-center text-white shadow-sm">
-                 <Icon size={12} />
+              <img src={imageSrc} className="absolute -bottom-1 -right-1 h-[130%] object-contain transition-transform duration-500 group-hover:scale-110 drop-shadow-md origin-bottom-right" alt={title} referrerPolicy="no-referrer" />
+              <div className="absolute top-2 left-2 w-5 h-5 sm:w-7 sm:h-7 bg-white/30 backdrop-blur-md rounded-lg flex items-center justify-center text-white shadow-sm">
+                 <Icon size={14} className="sm:w-4 sm:h-4" />
               </div>
           </div>
-          <div className="p-2 sm:p-3 flex flex-col flex-1 justify-center">
-             <h4 className="font-black text-slate-800 text-sm sm:text-lg mb-0.5 group-hover:text-fun-blue transition-colors line-clamp-1">{title}</h4>
-             <p className="text-xs sm:text-sm font-bold text-slate-400 line-clamp-1">{desc}</p>
+          <div className="p-2 sm:p-2.5 flex flex-col flex-1 justify-center min-h-0">
+             <h4 className="font-black text-slate-800 text-[13px] sm:text-base leading-tight mb-0.5 group-hover:text-fun-blue transition-colors line-clamp-1 xs:line-clamp-2 md:truncate">{title}</h4>
+             <p className="text-[10px] sm:text-xs font-bold text-slate-400 leading-tight line-clamp-1 xs:line-clamp-2 md:truncate">{desc}</p>
           </div>
       </div>
   );
 
   return (
-    <div className="w-full h-full flex flex-col pb-20 sm:pb-8 flex-1 animate-fade-in font-sans">
+    <div className="w-full h-full min-h-0 overflow-hidden flex flex-col pt-1 animate-fade-in font-sans">
       
       {/* 1. Profile Progress Card (Premium) */}
       <header className="px-2 pt-2 sm:px-4 sm:pt-4 shrink-0">
@@ -67,7 +67,7 @@ const Dashboard: React.FC = () => {
             <div className="absolute -top-10 -right-10 w-32 h-32 bg-fun-blue/5 rounded-full blur-2xl pointer-events-none" />
             
             <div className="flex items-center gap-2 relative z-10 w-full">
-               <div onClick={() => navigate('/my-style')} className={`w-12 h-12 sm:w-16 sm:h-16 shrink-0 ${stats.themeColor || 'bg-fun-blue'} rounded-xl border-[2px] border-white shadow-md flex items-center justify-center cursor-pointer hover:scale-105 transition-transform relative group overflow-hidden`}>
+               <div onClick={() => navigate('/my-style')} className={`w-14 h-14 sm:w-20 sm:h-20 shrink-0 ${stats.themeColor || 'bg-fun-blue'} rounded-xl border-[2px] border-white shadow-md flex items-center justify-center cursor-pointer hover:scale-105 transition-transform relative group overflow-hidden`}>
                   <img src={stats.avatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix'} alt="User Avatar" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                   <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
                     <Palette className="text-white w-4 h-4" />
@@ -76,24 +76,16 @@ const Dashboard: React.FC = () => {
                
                <div className="flex-1 min-w-0 flex flex-col justify-center">
                   <div className="flex items-center gap-2 mb-1">
-                     <h2 className="text-lg sm:text-2xl font-black text-slate-800 tracking-tight truncate leading-none">
+                     <h2 className="text-xl sm:text-3xl font-black text-slate-800 tracking-tight truncate leading-none">
                        {displayName}
                      </h2>
-                     {isAdmin && (
-                        <span className="bg-fun-pink text-white text-[9px] sm:text-[10px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-full flex items-center gap-0.5 shrink-0">
-                           <Award size={10} /> Admin
-                        </span>
-                     )}
-                     <span className="text-slate-400 font-bold uppercase tracking-widest text-[9px] sm:text-[10px] truncate hidden sm:block">
-                        {isPremium ? 'Super Pass' : 'Explorer'}
-                     </span>
                      
                      <div className="flex items-center gap-1.5 ml-auto shrink-0">
-                        <div className="flex items-center gap-1 text-orange-500 font-black bg-orange-50 px-1.5 py-0.5 rounded border border-orange-100 text-[10px] sm:text-xs">
-                           <Flame size={10} className="fill-current" /> {stats.streakDays}
+                        <div className="flex items-center gap-1 text-orange-500 font-black bg-orange-50 px-2 py-1 rounded border border-orange-100 text-[10px] sm:text-xs">
+                           <Flame size={12} className="fill-current" /> {stats.streakDays}
                         </div>
-                        <div className="flex items-center gap-1 text-yellow-500 font-black bg-yellow-50 px-1.5 py-0.5 rounded border border-yellow-100 text-[10px] sm:text-xs">
-                           <Star size={10} className="fill-current" /> {stats.points}
+                        <div className="flex items-center gap-1 text-yellow-500 font-black bg-yellow-50 px-2 py-1 rounded border border-yellow-100 text-[10px] sm:text-xs">
+                           <Star size={12} className="fill-current" /> {stats.points}
                         </div>
                      </div>
                   </div>
@@ -104,7 +96,7 @@ const Dashboard: React.FC = () => {
                         <Award size={12} className="hidden sm:block" /> 
                         Lv.{stats.level}
                      </span>
-                     <div className="flex-1 h-2 bg-slate-200 rounded-full overflow-hidden shadow-inner flex">
+                     <div className="flex-1 h-2.5 bg-slate-200 rounded-full overflow-hidden shadow-inner flex">
                         <div className="h-full bg-gradient-to-r from-fun-blue to-teal-400 rounded-full shadow-[0_0_10px_rgba(56,189,248,0.4)] transition-all duration-1000 ease-out" style={{ width: `${progressPercent}%` }} />
                      </div>
                   </div>
@@ -118,25 +110,25 @@ const Dashboard: React.FC = () => {
          <div className="flex gap-1 p-1 bg-slate-200/50 rounded-xl backdrop-blur-md overflow-x-auto scrollbar-none">
             <button
                onClick={() => navigate('/leaderboard')}
-               className="flex-shrink-0 min-w-[70px] flex-1 py-1.5 rounded-lg font-black text-xs sm:text-sm transition-all duration-300 flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1.5 text-slate-500 hover:text-slate-700 bg-transparent hover:bg-white/50"
+               className="flex-shrink-0 min-w-[70px] flex-1 py-1.5 rounded-lg font-black text-xs sm:text-sm transition-all duration-300 flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1.5 text-slate-600 hover:text-fun-blue bg-white/50 shadow-sm hover:shadow-md hover:bg-white"
             >
                <Users size={16} /> <span>Rankings</span>
             </button>
             <button
                onClick={() => navigate('/my-style')}
-               className="flex-shrink-0 min-w-[70px] flex-1 py-1.5 rounded-lg font-black text-xs sm:text-sm transition-all duration-300 flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1.5 text-slate-500 hover:text-slate-700 bg-transparent hover:bg-white/50"
+               className="flex-shrink-0 min-w-[70px] flex-1 py-1.5 rounded-lg font-black text-xs sm:text-sm transition-all duration-300 flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1.5 text-slate-600 hover:text-fun-blue bg-white/50 shadow-sm hover:shadow-md hover:bg-white"
             >
                <Palette size={16} /> <span>Style</span>
             </button>
             <button
                onClick={() => navigate('/trophy-case')}
-               className="flex-shrink-0 min-w-[70px] flex-1 py-1.5 rounded-lg font-black text-xs sm:text-sm transition-all duration-300 flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1.5 text-slate-500 hover:text-slate-700 bg-transparent hover:bg-white/50"
+               className="flex-shrink-0 min-w-[70px] flex-1 py-1.5 rounded-lg font-black text-xs sm:text-sm transition-all duration-300 flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1.5 text-slate-600 hover:text-fun-blue bg-white/50 shadow-sm hover:shadow-md hover:bg-white"
             >
                <Award size={16} /> <span>Trophies</span>
             </button>
             <button
                onClick={() => navigate('/your-progress')}
-               className="flex-shrink-0 min-w-[70px] flex-1 py-1.5 rounded-lg font-black text-xs sm:text-sm transition-all duration-300 flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1.5 bg-white text-fun-blue shadow-sm"
+               className="flex-shrink-0 min-w-[70px] flex-1 py-1.5 rounded-lg font-black text-xs sm:text-sm transition-all duration-300 flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-1.5 text-slate-600 hover:text-fun-blue bg-white/50 shadow-sm hover:shadow-md hover:bg-white"
             >
                <Target size={16} /> <span>Progress</span>
             </button>
@@ -147,7 +139,7 @@ const Dashboard: React.FC = () => {
       <div className="px-3 pb-3 sm:px-4 shrink-0">
          <div 
              onClick={() => navigate('/grammar-lessons')}
-             className="relative w-full rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden cursor-pointer shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group bg-slate-900 border-[3px] border-white ring-2 ring-transparent hover:ring-fun-blue/30 flex flex-row h-[120px] sm:h-[140px]"
+             className="relative w-full rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden cursor-pointer shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group bg-slate-900 border-[3px] border-white ring-2 ring-transparent hover:ring-fun-blue/30 flex flex-row h-[105px] xs:h-[115px] sm:h-[130px]"
          >
              <div className="absolute inset-0 bg-gradient-to-br from-fun-blue to-teal-500 opacity-90 z-10" />
              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.3),transparent_60%)] z-10 pointer-events-none" />
@@ -171,8 +163,8 @@ const Dashboard: React.FC = () => {
       </div>
 
       {/* 5. Practice Games Area (Grid layout tailored to fit smaller space) */}
-      <div className="px-3 pb-6 sm:px-4 flex-1 flex flex-col">
-         <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 xs:gap-3 flex-1">
+      <div className="px-3 pb-6 sm:px-4 flex-1 flex flex-col min-h-0">
+         <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 xs:gap-3 flex-1 min-h-0">
             <PracticeCard 
                title="Dictionary" 
                desc="Build vocab"

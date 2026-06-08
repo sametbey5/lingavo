@@ -38,7 +38,11 @@ import {
   XCircle,
   ThumbsUp,
   ThumbsDown,
-  Star as StarIcon
+  Star as StarIcon,
+  Puzzle,
+  Search,
+  Edit2,
+  Brain
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import ReactPlayer from 'react-player';
@@ -47,12 +51,15 @@ import { useGamification } from '../context/GamificationContext';
 import Confetti from '../components/Confetti';
 import { UI_TRANSLATIONS } from '../translations';
 
+import defaultLessonImage from '../src/assets/images/alphabettitle.png';
 import { LESSONS, Lesson, Level, Exercise } from '../components/grammarLessonsData';
 
+const firstScreenImages = import.meta.glob('../src/assets/images/*firstscreen*.{png,jpg,jpeg,svg}', { eager: true, import: 'default' });
+
 const LEVELS: { id: Level; title: string; desc: string; color: string }[] = [
-  { id: 'A1', title: 'Beginner', desc: 'Essential foundations', color: 'bg-green-500' },
-  { id: 'A2', title: 'Elementary', desc: 'Basic communication', color: 'bg-teal-500' },
-  { id: 'B1', title: 'Intermediate', desc: 'Everyday fluency', color: 'bg-blue-500' },
+  { id: 'A1', title: 'Beginner', desc: 'Essential foundations', color: 'bg-blue-500' },
+  { id: 'A2', title: 'Elementary', desc: 'Basic communication', color: 'bg-blue-500' },
+  { id: 'B1', title: 'Intermediate', desc: 'Everyday fluency', color: 'bg-cyan-500' },
   { id: 'B2', title: 'Upper Int.', desc: 'Complex ideas', color: 'bg-indigo-500' },
   { id: 'C1', title: 'Advanced', desc: 'Professional mastery', color: 'bg-purple-500' },
   { id: 'C2', title: 'Proficiency', desc: 'Native-like nuance', color: 'bg-pink-500' },
@@ -461,6 +468,8 @@ const getLessonVideo = (lesson: Lesson): GrammarVideo => {
   };
 };
 
+import LessonTemplate from '../components/LessonTemplate';
+
 const InteractiveExplanationScreen: React.FC<{
   lesson: Lesson;
   onNext: () => void; 
@@ -469,361 +478,192 @@ const InteractiveExplanationScreen: React.FC<{
   t: (k: string) => string;
   preferredLanguage: string;
   awardPoints: (amt: number, desc: string, category: 'grammar'|'vocabulary'|'speaking'|'listening'|'realLife') => void;
-}> = ({lesson, onNext, onBack, stats, t, preferredLanguage, awardPoints}) => {
-  const [activeTab, setActiveTab] = useState('learn');
-  const [activeVowel, setActiveVowel] = useState<string | null>(null);
-  
-  const isAlphabet = lesson.id === 'a1-m1-l1' || lesson.title === 'Alphabet';
+}> = ({lesson, onNext, onBack, t, preferredLanguage, awardPoints}) => {
+  const [pageIndex, setPageIndex] = useState(0);
+  const totalPages = 10;
   
   // Custom theme colors by level
-  const themeColors: Record<Level, {from: string; to: string; shadow: string; bg: string; text: string}> = {
-    'A1': {from: 'from-fun-blue', to: 'to-teal-400', shadow: 'shadow-fun-blue/30', bg: 'bg-fun-blue', text: 'text-fun-blue'},
-    'A2': {from: 'from-teal-400', to: 'to-emerald-500', shadow: 'shadow-teal-500/30', bg: 'bg-teal-500', text: 'text-teal-600'},
-    'B1': {from: 'from-blue-500', to: 'to-indigo-500', shadow: 'shadow-blue-500/30', bg: 'bg-blue-500', text: 'text-blue-600'},
-    'B2': {from: 'from-indigo-500', to: 'to-purple-500', shadow: 'shadow-indigo-500/30', bg: 'bg-indigo-500', text: 'text-indigo-600'},
-    'C1': {from: 'from-purple-500', to: 'to-pink-500', shadow: 'shadow-purple-500/30', bg: 'bg-purple-500', text: 'text-purple-600'},
-    'C2': {from: 'from-pink-500', to: 'to-orange-500', shadow: 'shadow-pink-500/30', bg: 'bg-pink-500', text: 'text-pink-600'},
+  const themeColors: Record<Level, {from: string; to: string; shadow: string; bg: string; text: string; hex?: string}> = {
+    'A1': {from: 'from-[#5a3cf3]', to: 'to-[#8050ff]', shadow: 'shadow-purple-500/30', bg: 'bg-[#6b42f6]', text: 'text-[#6b42f6]', hex: '#6b42f6'},
+    'A2': {from: 'from-teal-400', to: 'to-emerald-500', shadow: 'shadow-teal-500/30', bg: 'bg-teal-500', text: 'text-teal-600', hex: '#14b8a6'},
+    'B1': {from: 'from-blue-500', to: 'to-indigo-500', shadow: 'shadow-blue-500/30', bg: 'bg-blue-500', text: 'text-blue-600', hex: '#3b82f6'},
+    'B2': {from: 'from-indigo-500', to: 'to-purple-500', shadow: 'shadow-indigo-500/30', bg: 'bg-indigo-500', text: 'text-indigo-600', hex: '#6366f1'},
+    'C1': {from: 'from-purple-500', to: 'to-pink-500', shadow: 'shadow-purple-500/30', bg: 'bg-purple-500', text: 'text-purple-600', hex: '#a855f7'},
+    'C2': {from: 'from-pink-500', to: 'to-orange-500', shadow: 'shadow-pink-500/30', bg: 'bg-pink-500', text: 'text-pink-600', hex: '#ec4899'},
   };
   
   const theme = themeColors[lesson.level] || themeColors['A1'];
 
-  return (
-    <div className="w-full max-w-4xl mx-auto pb-32 animate-fade-in font-sans">
-      {/* 1. TOP PROGRESS AREA */}
-      <div className="flex items-center justify-between mb-8 px-4 sm:px-0">
-         <div className="space-y-1">
-            <div className="flex items-center gap-2 text-slate-400 font-bold text-xs sm:text-sm uppercase tracking-widest">
-                <button onClick={onBack} className="text-slate-400 hover:text-slate-600 transition-colors flex items-center pr-2">
-                    <ArrowLeft size={16} className="mr-1" /> Back
-                </button>
-                <span className="w-1.5 h-1.5 rounded-full bg-slate-300" />
-                <span className={theme.text}>{lesson.topic}</span>
+  // Subpages handling
+  if (pageIndex > 0) {
+    const isAnimal = lesson.title === 'Alphabet' || lesson.title === 'Animals';
+    const words = isAnimal ? ['Dog', 'Cat', 'Elephant', 'Lion', 'Tiger', 'Bear', 'Monkey', 'Rabbit', 'Fox', 'Deer'] :
+       ['Hello', 'Goodbye', 'Please', 'Thank you', 'Yes', 'No', 'Water', 'Food', 'Help', 'Friend'];
+    const emojis = isAnimal ? ['🐶', '🐱', '🐘', '🦁', '🐯', '🐻', '🐵', '🐰', '🦊', '🦌'] :
+       ['👋', '👋', '🙏', '🙏', '👍', '👎', '💧', '🍔', '🆘', '🤝'];
+    const word = words[pageIndex - 1];
+    const emoji = emojis[pageIndex - 1];
+
+    const playAudio = () => {
+       try {
+         const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+         const osc = audioCtx.createOscillator();
+         const gainNode = audioCtx.createGain();
+         osc.type = 'sine';
+         osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+         osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.1);
+         gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+         gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+         osc.connect(gainNode);
+         gainNode.connect(audioCtx.destination);
+         osc.start();
+         osc.stop(audioCtx.currentTime + 0.15);
+       } catch(e) {}
+    };
+
+    return (
+       <div className="fixed inset-0 z-[100] w-full h-[100dvh] flex flex-col font-sans bg-slate-50 pb-6 overflow-hidden">
+         {/* Top Bar with progress */}
+         <div className="px-5 py-4 flex items-center justify-between shrink-0 bg-transparent z-10 relative">
+            <button onClick={() => setPageIndex(pageIndex - 1)} className="text-slate-400 hover:text-slate-600 transition-colors p-1">
+               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+               </svg>
+            </button>
+            <div className="flex-1 flex justify-center px-4">
+                <div className="w-full max-w-[200px] h-3 bg-slate-200/60 rounded-full overflow-hidden flex">
+                   <div className={`h-full bg-gradient-to-r ${theme.from} ${theme.to} rounded-full transition-all duration-300`} style={{width: `${((pageIndex) / totalPages) * 100}%`}}></div>
+                </div>
             </div>
-            <div className="w-48 sm:w-64 h-2.5 bg-slate-100 rounded-full overflow-hidden shadow-inner flex">
-                <div className={`h-full bg-gradient-to-r ${theme.from} ${theme.to} w-[28%] rounded-full shadow-[0_0_10px_rgba(0,0,0,0.2)]`} />
+            <div className="flex items-center">
+                <div className="w-6 h-6"></div> {/* Spacer for perfect centering */}
             </div>
          </div>
-         <div className="hidden sm:flex items-center gap-3">
-             <div className="flex items-center gap-1.5 text-orange-500 font-bold bg-orange-50 px-3 py-1.5 rounded-xl border border-orange-100 shadow-sm text-sm">
-                <Flame size={16} fill="currentColor" /> {stats?.streakDays || 0}
-             </div>
-             <div className="flex items-center gap-1.5 text-fun-blue font-bold bg-blue-50 px-3 py-1.5 rounded-xl border border-blue-100 shadow-sm text-sm">
-                <TrendingUp size={16} className="text-fun-blue" strokeWidth={3} /> {stats?.points || 0} XP
-             </div>
-         </div>
-      </div>
 
-      {/* 2. LESSON HEADER */}
-      <div className={`relative bg-gradient-to-br ${theme.from} ${theme.to} rounded-[2.5rem] p-8 sm:p-12 text-white shadow-xl overflow-hidden mb-10 mx-4 sm:mx-0 border-b-[6px] border-black/10`}>
-         <div className="absolute top-4 right-10 text-white/10 text-9xl font-black rotate-12 pointer-events-none select-none">
-            {isAlphabet ? 'Aa' : lesson.title.charAt(0)}
-         </div>
-         <div className="absolute -bottom-6 right-32 text-white/10 text-8xl font-black -rotate-6 pointer-events-none select-none">
-            {isAlphabet ? 'Bb' : lesson.title.charAt(1) || ''}
-         </div>
-         <div className="absolute top-1/2 right-8 -translate-y-1/2 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none" />
-         
-         <div className="relative z-10 w-full sm:w-2/3 space-y-4">
-             <div className="inline-block bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-xs font-black uppercase tracking-widest text-white shadow-sm border border-white/20">
-                {lesson.level} • {lesson.topic.toUpperCase()}
-             </div>
-             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black drop-shadow-md leading-tight">{lesson.title}</h1>
-             <p className="text-white/90 font-bold text-sm sm:text-base md:text-lg max-w-sm drop-shadow-sm leading-relaxed">
-                {lesson.rawExplanation || `Time to learn some English rules about ${lesson.title}.`}
-             </p>
-         </div>
-         <div className="absolute bottom-0 right-0 w-32 sm:w-48 opacity-20 sm:opacity-100 pointer-events-none transform translate-y-4 flex items-end justify-end">
-             <div className="text-[120px] leading-none drop-shadow-2xl">{isAlphabet ? '🦉' : '🎓'}</div>
-         </div>
-      </div>
-
-      {/* 3. INTERACTIVE TABS */}
-      <div className="flex px-4 sm:px-0 mb-10">
-         <div className="flex w-full sm:w-auto bg-slate-100/80 p-1.5 rounded-[1.5rem] border-2 border-slate-200/60 shadow-inner overflow-x-auto scrollbar-hide">
-             {['Learn', 'Video', 'Speak', 'Quiz'].map((tab) => (
-                <button 
-                  key={tab} 
-                  onClick={() => setActiveTab(tab.toLowerCase())}
-                  className={`flex-1 sm:flex-none px-6 py-2.5 rounded-[1.25rem] text-sm font-black transition-all duration-300 ${
-                      activeTab === tab.toLowerCase() 
-                        ? 'bg-white text-slate-800 shadow-md scale-100' 
-                        : 'text-slate-500 hover:text-slate-700 bg-transparent scale-95'
-                  }`}
-                >
-                  {tab}
-                </button>
-             ))}
-         </div>
-      </div>
-
-      {/* CONTENT AREA */}
-      <AnimatePresence mode="wait">
-        {activeTab === 'learn' && (
-          <motion.div 
-            key="learn" 
-            initial={{opacity: 0, y: 10}} 
-            animate={{opacity: 1, y: 0}} 
-            exit={{opacity: 0, scale: 0.95}}
-            className="space-y-8 px-4 sm:px-0"
-          >
-             {isAlphabet ? (
-               <>
-                 {/* 4. INTRODUCTION CARD (Alphabet specific) */}
-                 <div className="bg-white p-6 sm:p-8 rounded-[2rem] border-4 border-slate-100 shadow-sm flex flex-col sm:flex-row gap-6 relative overflow-hidden group hover:border-fun-blue/30 transition-colors">
-                    <div className="absolute -right-16 -top-16 w-48 h-48 bg-fun-blue/5 rounded-full pointer-events-none group-hover:scale-125 transition-transform duration-700" />
-                    <div className="flex-1 space-y-3 z-10">
-                       <div className="flex items-center gap-2">
-                           <span className="w-6 h-6 rounded-full bg-fun-blue text-white flex items-center justify-center text-xs font-black shadow-sm">1</span>
-                           <h3 className="font-black text-slate-400 uppercase tracking-widest text-xs">Introduction</h3>
-                       </div>
-                       <h2 className="text-2xl font-black text-slate-800">The 26 Letters</h2>
-                       <p className="text-slate-600 font-bold leading-relaxed">
-                          The English alphabet has 26 letters. We use these letters to build every word in the language. There are two types of letters: <span className="text-fun-blue font-black bg-fun-blue/10 px-2 py-0.5 rounded-md">Vowels</span> and <span className="text-fun-green font-black bg-fun-green/10 px-2 py-0.5 rounded-md">Consonants</span>.
-                       </p>
-                    </div>
-                    <div className="w-full sm:w-48 h-32 bg-slate-50 rounded-2xl border-2 border-slate-100 flex items-center justify-center text-4xl gap-2 font-black shadow-inner z-10 shrink-0 overflow-hidden">
-                       <span className="text-fun-pink drop-shadow-sm group-hover:-translate-y-1 transition-transform">A</span>
-                       <span className="text-fun-blue drop-shadow-sm group-hover:-translate-y-2 transition-transform delay-75">B</span>
-                       <span className="text-fun-green drop-shadow-sm group-hover:-translate-y-1 transition-transform delay-150">C</span>
-                    </div>
-                 </div>
-
-                 {/* 5. KEY RULE SECTION (Alphabet specific) */}
-                 <div className="bg-fun-green/10 p-6 sm:p-8 rounded-[2rem] border-[4px] border-fun-green/20 relative overflow-hidden">
-                    <div className="flex items-center gap-4 mb-6 relative z-10">
-                        <div className="w-12 h-12 bg-fun-green text-white rounded-full flex items-center justify-center shadow-md shadow-fun-green/30 shrink-0">
-                           <Bookmark size={24} fill="currentColor" />
-                        </div>
-                        <div>
-                           <h4 className="font-black text-fun-green text-lg uppercase tracking-tight">Key Rule: Vowels</h4>
-                           <p className="text-emerald-700 font-bold text-sm">Every English word must have at least one vowel!</p>
-                        </div>
-                    </div>
-                    
-                    <div className="flex flex-wrap gap-3 sm:gap-4 justify-center relative z-10 py-2">
-                       {['A', 'E', 'I', 'O', 'U'].map((vowel, i) => (
-                          <button 
-                             key={i}
-                             onClick={() => setActiveVowel(activeVowel === vowel ? null : vowel)}
-                             className={`w-14 h-14 sm:w-16 sm:h-16 rounded-[1.25rem] flex items-center justify-center text-2xl font-black transition-all border-b-[4px] active:translate-y-1 active:border-b-0 ${
-                                activeVowel === vowel 
-                                   ? 'bg-fun-green text-white border-emerald-600 shadow-lg scale-110' 
-                                   : 'bg-white text-emerald-600 border-slate-200 shadow-sm hover:border-emerald-300'
-                             }`}
-                          >
-                             {vowel}
-                          </button>
-                       ))}
-                    </div>
-                    <AnimatePresence>
-                       {activeVowel && (
-                          <motion.div initial={{opacity: 0, height: 0}} animate={{opacity: 1, height: 'auto'}} exit={{opacity: 0, height: 0}} className="text-center mt-6">
-                             <p className="text-emerald-800 font-black text-lg bg-white/50 py-3 rounded-xl border border-white shadow-sm inline-block px-8 w-full max-w-sm mx-auto overflow-hidden">
-                               {activeVowel === 'A' && "A is for Apple 🍎"}
-                               {activeVowel === 'E' && "E is for Elephant 🐘"}
-                               {activeVowel === 'I' && "I is for Ice Cream 🍦"}
-                               {activeVowel === 'O' && "O is for Orange 🍊"}
-                               {activeVowel === 'U' && "U is for Umbrella ☔"}
-                             </p>
-                          </motion.div>
-                       )}
-                    </AnimatePresence>
-                 </div>
-
-                 {/* 6. EXAMPLES SECTION (Alphabet specific) */}
-                 <div>
-                    <div className="flex items-center gap-2 mb-4 px-2 mt-10">
-                        <span className="w-6 h-6 rounded-full bg-orange-400 text-white flex items-center justify-center text-xs font-black shadow-sm">2</span>
-                        <h3 className="font-black text-slate-400 uppercase tracking-widest text-xs">Examples</h3>
-                    </div>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                       {[
-                          { l: 'B', w: 'Ball', e: '⚽', bg: 'bg-orange-50', border: 'border-orange-100', text: 'text-orange-600' },
-                          { l: 'C', w: 'Cat', e: '🐱', bg: 'bg-fun-purple/10', border: 'border-fun-purple/20', text: 'text-fun-purple' },
-                          { l: 'D', w: 'Dog', e: '🐶', bg: 'bg-blue-50', border: 'border-blue-100', text: 'text-blue-600' },
-                          { l: 'F', w: 'Fish', e: '🐟', bg: 'bg-teal-50', border: 'border-teal-100', text: 'text-teal-600' },
-                       ].map((item, i) => (
-                          <div key={i} className={`${item.bg} ${item.border} border-2 rounded-[2rem] p-5 text-center flex flex-col items-center gap-4 hover:-translate-y-1 hover:shadow-lg transition-all duration-300 cursor-pointer`}>
-                             <div className={`w-16 h-16 bg-white rounded-full shadow-sm flex items-center justify-center text-3xl font-black ${item.text}`}>
-                                {item.l}
-                             </div>
-                             <div className="text-4xl">{item.e}</div>
-                             <div className="font-black text-slate-700 bg-white/60 px-4 py-1.5 rounded-xl text-sm w-full shadow-sm">{item.w}</div>
-                          </div>
-                       ))}
-                    </div>
-                 </div>
-
-                 {/* 7. COMMON MISTAKES SECTION (Alphabet specific) */}
-                 <div>
-                    <div className="flex items-center gap-2 mb-4 px-2 mt-10">
-                        <span className="w-6 h-6 rounded-full bg-fun-pink text-white flex items-center justify-center text-xs font-black shadow-sm">3</span>
-                        <h3 className="font-black text-slate-400 uppercase tracking-widest text-xs">Common Mistakes</h3>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                       <div className="bg-red-50 p-6 rounded-[2rem] border-2 border-red-100 flex items-start gap-4">
-                          <div className="w-10 h-10 bg-red-100 text-red-500 rounded-full flex items-center justify-center shrink-0">
-                             <XCircle size={24} />
-                          </div>
-                          <div>
-                             <p className="text-xs font-black text-red-400 uppercase tracking-widest mb-1">Incorrect Sound</p>
-                             <h4 className="font-black text-red-900 text-lg">“G” like “J”</h4>
-                             <p className="text-red-700 font-bold text-sm mt-1 leading-snug">The letter G is usually pronounced with a hard G (Go, Great), not always like J (Giraffe).</p>
-                          </div>
-                       </div>
-                       <div className="bg-emerald-50 p-6 rounded-[2rem] border-2 border-emerald-100 flex items-start gap-4">
-                          <div className="w-10 h-10 bg-emerald-100 text-emerald-500 rounded-full flex items-center justify-center shrink-0">
-                             <CheckCircle2 size={24} />
-                          </div>
-                          <div>
-                             <p className="text-xs font-black text-emerald-500 uppercase tracking-widest mb-1">Correct Sound</p>
-                             <h4 className="font-black text-emerald-900 text-lg">“C” like “K” or “S”</h4>
-                             <p className="text-emerald-700 font-bold text-sm mt-1 leading-snug">C sounds like K (Cat) or S (City). When in doubt, it forms its sound based on the next vowel!</p>
-                          </div>
-                       </div>
-                    </div>
-                 </div>
-               </>
-             ) : (
-               <>
-                 {/* GENERIC LESSON CONTENT */}
-                 <div className="bg-white p-6 sm:p-8 md:p-12 rounded-[3rem] border-[4px] border-slate-100 shadow-xl overflow-hidden relative group">
-                    <div className="absolute right-0 top-0 w-64 h-64 bg-slate-50 rounded-full blur-3xl -z-10 group-hover:scale-110 transition-transform duration-1000" />
-                    
-                    <div className="flex items-center gap-2 mb-8">
-                       <span className={`w-8 h-8 rounded-full ${theme.bg} text-white flex items-center justify-center text-sm font-black shadow-sm`}>1</span>
-                       <h3 className="font-black text-slate-400 uppercase tracking-widest text-sm">Explanation</h3>
-                    </div>
-
-                    <div className="prose prose-lg sm:prose-xl max-w-none min-h-[200px] text-slate-600 leading-relaxed marker:text-fun-blue prose-strong:font-black prose-strong:text-slate-800">
-                        {lesson.explanation}
-                    </div>
-                    
-                    {lesson.translations && lesson.translations[preferredLanguage] && preferredLanguage !== 'English' && (
-                        <div className="mt-10 pt-10 relative">
-                            <div className="absolute top-0 left-1/2 -translate-x-1/2 overflow-hidden flex justify-center w-full">
-                              <div className="w-[120%] border-t-[3px] border-slate-100 border-dashed" />
-                            </div>
-                            <div className="bg-slate-50 p-6 sm:p-8 rounded-[2.5rem] border-2 border-slate-100 shadow-sm animate-fade-in relative overflow-hidden">
-                                <div className="absolute -right-10 -bottom-10 w-32 h-32 bg-slate-200/50 rounded-full" />
-                                <h4 className="font-black text-slate-500 text-sm uppercase tracking-widest mb-4 flex items-center gap-2">
-                                    <Globe size={18} /> 
-                                    {t('support_language')}: {lesson.translations[preferredLanguage].title}
-                                </h4>
-                                <div className="prose prose-blue max-w-none whitespace-pre-wrap text-slate-600 font-medium">
-                                    {lesson.translations[preferredLanguage].explanation}
-                                </div>
-                            </div>
-                        </div>
-                    )}
-                 </div>
-               </>
-             )}
-          </motion.div>
-        )}
-        
-        {activeTab === 'quiz' && (
-           <motion.div key="quiz" initial={{opacity: 0, x: 20}} animate={{opacity: 1, x: 0}} className="space-y-6 px-4 sm:px-0 text-center py-10">
-              <div className="bg-white p-8 rounded-[3rem] border-[4px] border-slate-100 shadow-xl max-w-lg mx-auto">
-                 <div className={`w-20 h-20 bg-slate-100 ${theme.text} rounded-3xl mx-auto flex items-center justify-center mb-6 shadow-inner`}>
-                    <SearchCheck size={40} />
-                 </div>
-                 <h3 className="text-2xl font-black text-slate-800 mb-2">Ready to test?</h3>
-                 <p className="text-slate-500 font-bold mb-8">Take a short quiz to earn XP and strengthen your memory.</p>
-                 <Button onClick={onNext} className={`w-full py-4 text-lg bg-gradient-to-r ${theme.from} ${theme.to} border-0 shadow-lg`}>
-                    Start Practice Quiz
-                 </Button>
-              </div>
-           </motion.div>
-        )}
-
-        {activeTab === 'video' && (() => {
-           const currentVid = getLessonVideo(lesson);
-           return (
-             <motion.div key="video" initial={{opacity: 0, x: 20}} animate={{opacity: 1, x: 0}} className="space-y-6 px-4 sm:px-0 py-4">
-               <div className="relative aspect-video w-full bg-slate-950 overflow-hidden rounded-[2.5rem] border-4 border-slate-100 shadow-xl group">
-                 <ReactPlayer 
-                   url={currentVid.videoUrl} 
-                   controls 
-                   width="100%"
-                   height="100%"
-                   onEnded={() => {
-                     awardPoints(15, `Watched lesson explainer: ${lesson.title}`, 'grammar');
-                   }}
-                 />
-                 <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/50 to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity" />
-               </div>
-
-               <div className="bg-gradient-to-br from-pink-50 to-orange-50 p-6 sm:p-8 rounded-[2.5rem] border-2 border-pink-100 shadow-sm relative overflow-hidden">
-                 <div className="absolute top-0 right-0 w-32 h-32 bg-white/40 rounded-full blur-3xl" />
-                 <h4 className="font-black text-fun-pink mb-4 text-sm uppercase tracking-widest flex items-center gap-2 relative z-10">
-                   <Sparkles size={18} /> Tutor Highlights • {currentVid.tutor}
-                 </h4>
-                 <ul className="space-y-3 relative z-10">
-                   {currentVid.keyPoints.map((pt, idx) => (
-                     <li key={idx} className="text-sm sm:text-base font-bold text-slate-700 flex items-start gap-3">
-                       <span className="text-fun-pink shrink-0 mt-0.5">✔</span>
-                       <span>{pt}</span>
-                     </li>
-                   ))}
-                 </ul>
-               </div>
+         {/* Content */}
+         <div className="flex-1 px-4 sm:px-6 md:px-8 max-w-xl mx-auto w-full flex flex-col items-center justify-center shrink-0 py-8 relative">
+             <motion.div 
+               key={`page-${pageIndex}`}
+               initial={{ opacity: 0, scale: 0.95, y: 10 }}
+               animate={{ opacity: 1, scale: 1, y: 0 }}
+               className="w-full aspect-square max-h-[340px] bg-white rounded-[48px] shadow-[0_10px_40px_rgba(0,0,0,0.06)] flex items-center justify-center border border-slate-100 relative group mb-10"
+             >
+                 <button onClick={playAudio} className={`absolute top-6 right-6 w-14 h-14 bg-slate-50 hover:bg-slate-100 ${theme.text} rounded-full flex items-center justify-center transition-colors shadow-sm`}>
+                     <Volume2 size={26} fill="currentColor" />
+                 </button>
+                 <span className="text-[140px] leading-none select-none filter drop-shadow-sm">{emoji}</span>
              </motion.div>
-           );
-        })()}
-
-        {activeTab === 'speak' && (
-           <motion.div key="speak" initial={{opacity: 0, x: 20}} animate={{opacity: 1, x: 0}} className="space-y-6 px-4 sm:px-0 text-center py-10">
-              <div className="bg-slate-900 p-8 sm:p-12 rounded-[3.5rem] shadow-2xl max-w-xl mx-auto relative overflow-hidden border-4 border-slate-800">
-                 <div className={`absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.15),transparent_70%)]`} />
-                 
-                 <h3 className="text-white font-black text-2xl mb-8 relative z-10">Pronounce the concept:</h3>
-                 
-                 <div className="text-5xl font-black text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.2)] mb-12 relative z-10 leading-tight px-4 break-words">
-                    {lesson.title}
-                 </div>
-                 
-                 <div className="flex justify-center mb-8">
-                     <div className="relative group cursor-pointer w-28 h-28 flex items-center justify-center">
-                         <div className={`absolute inset-0 ${theme.bg} rounded-full animate-ping opacity-20 group-hover:opacity-40 transition-opacity`} />
-                         <div className={`w-24 h-24 ${theme.bg} text-white rounded-full flex items-center justify-center relative z-10 shadow-[0_0_30px_rgba(56,189,248,0.5)] border-[4px] border-white/10 hover:scale-105 transition-transform`}>
-                             <Mic size={40} />
-                         </div>
-                     </div>
-                 </div>
-
-                 <p className="text-slate-400 font-bold text-sm relative z-10">Tap and hold to speak</p>
-                 
-                 {/* Waveform Mock */}
-                 <div className="absolute bottom-0 left-0 right-0 h-16 flex items-end justify-center gap-1 opacity-20 pointer-events-none">
-                     {[...Array(30)].map((_, i) => (
-                         <div key={i} className={`w-1.5 sm:w-2 ${theme.bg} rounded-t-full`} style={{ height: `${Math.random() * 100}%` }} />
-                     ))}
-                 </div>
-              </div>
-           </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* 10. STICKY BOTTOM ACTION AREA (Desktop) */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-slate-200 p-4 sm:p-6 shadow-[0_-10px_20px_rgba(0,0,0,0.05)] z-40 hidden sm:block">
-         <div className="max-w-4xl mx-auto flex items-center justify-between">
-            <Button onClick={onBack} variant="secondary" className="px-8 py-3.5 border-2 border-slate-200 hover:border-slate-300 shadow-sm text-slate-500 hover:text-slate-700">
-                <ArrowLeft size={18} className="mr-2" /> Previous
-            </Button>
-            <Button onClick={onNext} className={`px-10 py-3.5 bg-gradient-to-r ${theme.from} ${theme.to} border-0 ${theme.shadow} shadow-lg hover:scale-[1.02] text-lg`}>
-                Continue Practice <ChevronRight size={20} className="ml-1" />
-            </Button>
+             
+             <motion.div 
+               key={`text-${pageIndex}`}
+               initial={{ opacity: 0, y: 10 }}
+               animate={{ opacity: 1, y: 0 }}
+               transition={{ delay: 0.1 }}
+               className="text-center"
+             >
+                 <h2 className="text-[44px] sm:text-[52px] font-bold text-slate-800 mb-3 tracking-tight leading-none">{word}</h2>
+                 <p className="text-xl text-slate-400 font-medium tracking-wide uppercase">{lesson.topic}</p>
+             </motion.div>
          </div>
-      </div>
-      
-      {/* Mobile Sticky action area */}
-      <div className="fixed bottom-[104px] left-4 right-4 sm:hidden z-40">
-         <Button onClick={onNext} className={`w-full py-4 bg-gradient-to-r ${theme.from} ${theme.to} ${theme.shadow} border-0 shadow-xl hover:scale-[1.02] text-lg rounded-[1.5rem]`}>
-             Continue <ChevronRight size={20} className="ml-1" />
-         </Button>
-      </div>
-    </div>
+
+         {/* Footer */}
+         <div className="fixed bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-slate-50 via-slate-50/100 to-transparent pointer-events-none z-50 flex flex-col items-center pb-8 pt-12">
+            <div className="max-w-[400px] w-full pointer-events-auto">
+               <button onClick={() => {
+                  if (pageIndex < totalPages) {
+                      setPageIndex(pageIndex + 1);
+                      awardPoints(5, "Word learned", "vocabulary");
+                  } else {
+                      onNext();
+                  }
+               }} className={`w-full py-4 bg-gradient-to-r ${theme.from} ${theme.to} hover:opacity-90 shadow-[0_4px_15px_rgba(0,0,0,0.1)] active:shadow-none active:translate-y-1 transition-all rounded-full flex items-center justify-center text-white border-0`}>
+                  <span className="font-semibold text-[17px] tracking-wide">{pageIndex === totalPages ? 'Finish' : 'Continue'}</span>
+               </button>
+            </div>
+         </div>
+       </div>
+    );
+  }
+
+  // 1. Objectives (matching structure from new image)
+  const isAlphabet = lesson.id === 'a1-m1-l1' || lesson.title === 'Alphabet';
+  
+  const customAlphabetObjectives = [
+     { icon: <BookOpen size={24} fill="currentColor" />, title: "Learn all 26 letters", desc: "Discover every English letter" },
+     { icon: <Volume2 size={24} fill="currentColor" />, title: "Listen to the sounds", desc: "Improve your hearing" },
+     { icon: <Search size={24} fill="currentColor" />, title: "Recognize letters", desc: "Identify them in words" },
+     { icon: <Edit2 size={24} fill="currentColor" />, title: "Practice spelling", desc: "Form simple words" },
+  ];
+
+  const objectives = isAlphabet ? customAlphabetObjectives : [
+     { icon: <BookOpen size={24} fill="currentColor" />, title: "Learn new words", desc: `Discover new ${lesson.topic.toLowerCase()} terms` },
+     { icon: <Volume2 size={24} fill="currentColor" />, title: "Listen & repeat", desc: "Improve pronunciation" },
+     { icon: <Puzzle size={24} fill="currentColor" />, title: "Practice", desc: "Use words in exercises" },
+     { icon: <Brain size={24} fill="currentColor" />, title: "Remember", desc: "Review and strengthen" }
+  ];
+
+  // 2. Key Rule
+  let ruleText = lesson.translations && lesson.translations[preferredLanguage] && lesson.translations[preferredLanguage].title 
+        ? `${lesson.title}\n(${lesson.translations[preferredLanguage].title})`
+        : `Vowels\nEvery English word must have at least one vowel.`;
+
+  // 3. Examples
+  const examples = lesson.exercises && lesson.exercises.length > 0 
+      ? lesson.exercises.slice(0, 4).map((ex, i) => ({
+         visual: ex.correctAnswer.charAt(0).toUpperCase() || ['A', 'B', 'C', 'D'][i % 4],
+         text: ex.correctAnswer,
+         subtext: ex.question.replace('_____', '...').replace('...', '_____')
+      }))
+      : [
+         { visual: "🐱", text: "Cat" },
+         { visual: "🐶", text: "Dog" },
+         { visual: "🐘", text: "Elephant" }
+      ];
+
+  // Choose illustration
+  let illustration = defaultLessonImage;
+  const lessonIdLower = lesson.id.toLowerCase(); // e.g. "a1-m1-l1"
+  
+  // Try to find a custom image matching: a1-m1-l1firstscreen or a1-1firstscreen
+  // Usually m1 = unit 1, l1 = lesson 1, so a1-1firstscreen might be meant for a1-m1-l1.
+  const match = lessonIdLower.match(/^([a-z0-9]+)-m(\d+)-l(\d+)$/);
+  const possibleNames = [
+     `${lessonIdLower}firstscreen`,
+     `${lessonIdLower}-firstscreen`
+  ];
+  if (match) {
+     possibleNames.push(`${match[1]}-${match[3]}firstscreen`);
+     possibleNames.push(`${match[1]}-${match[3]}-firstscreen`);
+     possibleNames.push(`${match[1]}-m${match[2]}-l${match[3]}firstscreen`);
+  }
+
+  const foundKey = Object.keys(firstScreenImages).find(path => {
+     const filename = path.split('/').pop()?.split('.')[0].toLowerCase() || '';
+     return possibleNames.includes(filename);
+  });
+
+  if (foundKey) {
+     illustration = firstScreenImages[foundKey] as string;
+  }
+
+  return (
+    <LessonTemplate
+       title={isAlphabet ? "Alphabet" : lesson.title}
+       subtitle={isAlphabet ? "Learn the 26 English letters and their sounds." : (lesson.rawExplanation || `Learn 15 common animal names.`)}
+       category={isAlphabet ? "ALPHABET" : lesson.topic}
+       level={lesson.level}
+       lessonNumber={parseInt(lesson.id.split('l')[1] || '1')}
+       themeColor={theme}
+       illustrationUrl={illustration}
+       objectives={objectives}
+       keyRule={null as any}
+       examples={[]}
+       chunks={[]}
+       onContinue={() => setPageIndex(1)}
+       onBack={onBack}
+       continueLabel="Continue"
+    />
   );
 };
 
@@ -1070,81 +910,47 @@ const GrammarLessons: React.FC = () => {
                </div>
 
                {/* LEVEL TABS REDESIGN */}
-               <div className="px-1">
-                 <div className="flex overflow-x-auto pb-4 scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0">
-                    <div className="flex items-center gap-1 p-1 bg-slate-200/40 rounded-[2rem] border border-slate-200 w-max shrink-0 shadow-inner">
+               <div className="px-1 relative z-10 w-full overflow-hidden">
+                 <div className="flex overflow-x-auto pb-6 scrollbar-hide gap-3 sm:gap-4 -mx-4 px-4 sm:mx-0 sm:px-1 w-full justify-start md:justify-center">
                       {LEVELS.map((lvl) => {
                         const locked = isLevelLocked(lvl.id);
                         const isActive = selectedLevel === lvl.id;
+                        const lvlLessons = LESSONS.filter(l => l.level === lvl.id);
+                        const completedCount = lvlLessons.filter(l => completedLessons.includes(l.id)).length;
+                        const progressPercentage = lvlLessons.length > 0 ? Math.round((completedCount / lvlLessons.length) * 100) : 0;
+                        
                         return (
-                          <button
-                            key={lvl.id}
-                            onClick={() => {
-                              if (!locked) {
-                                setSelectedLevel(lvl.id);
-                                setCurrentLessonPage(1);
-                              }
-                            }}
-                            disabled={locked}
-                            className={`flex justify-center items-center gap-2 px-6 py-2.5 rounded-[1.5rem] transition-all duration-300 ${
-                              isActive 
-                                ? 'bg-gradient-to-br from-fun-blue to-teal-400 text-white shadow-md font-black ring-[3px] ring-fun-blue/20 ring-offset-1 ring-offset-slate-50 scale-100 border border-teal-500/50' 
-                                : 'bg-transparent text-slate-500 hover:bg-white/60 hover:text-slate-800 font-bold'
-                            } ${locked ? 'opacity-40 grayscale cursor-not-allowed' : 'cursor-pointer'} shrink-0 min-w-[80px]`}
-                          >
-                            <span className="text-sm sm:text-base">{lvl.id}</span>
-                            {locked && <Lock size={14} className={isActive ? "text-white/80" : "text-slate-400"} />}
-                          </button>
+                          <div key={lvl.id} className={`flex flex-col gap-2 shrink-0 ${locked ? 'opacity-50 grayscale' : ''}`}>
+                            <button
+                              onClick={() => {
+                                if (!locked) {
+                                  setSelectedLevel(lvl.id);
+                                  setCurrentLessonPage(1);
+                                }
+                              }}
+                              disabled={locked}
+                              className={`flex flex-col justify-center items-center px-5 py-2.5 rounded-full transition-all duration-300 min-w-[70px] border-2 shadow-sm ${
+                                isActive 
+                                  ? 'bg-gradient-to-r from-fun-blue to-teal-400 text-white border-transparent scale-105 shadow-md ring-2 ring-fun-blue/20 ring-offset-2' 
+                                  : 'bg-white text-slate-500 border-slate-200 hover:border-slate-300 hover:bg-slate-50 font-bold'
+                              } ${locked ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                            >
+                               <div className="flex items-center gap-1.5">
+                                 <span className="text-sm sm:text-base font-black">{lvl.id}</span>
+                                 {locked && <Lock size={12} className={isActive ? "text-white" : "text-slate-400"} />}
+                               </div>
+                            </button>
+                            
+                            <div className="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden">
+                               <div 
+                                 className={`h-full rounded-full transition-all duration-1000 ${isActive ? 'bg-fun-blue' : 'bg-slate-400'}`} 
+                                 style={{ width: `${Math.max(5, progressPercentage)}%` }}
+                               />
+                            </div>
+                          </div>
                         );
                       })}
-                    </div>
                  </div>
-               </div>
-
-               {/* LARGE PROGRESS CARD */}
-               <div className="relative overflow-hidden rounded-[2rem] bg-white shadow-xl shadow-slate-200/50 border border-slate-100 p-6 sm:p-8 flex items-center gap-6 group hover:shadow-2xl transition-shadow duration-500">
-                   <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-fun-blue/10 to-teal-400/20 rounded-bl-full -mr-16 -mt-16 pointer-events-none" />
-                   
-                   <div className="shrink-0 relative hidden sm:block">
-                      <div className="w-24 h-24 sm:w-28 sm:h-28 bg-slate-50 border-[6px] border-slate-100 rounded-full flex items-center justify-center text-4xl sm:text-5xl shadow-inner z-10 relative group-hover:scale-105 transition-transform duration-500">
-                          🎓
-                      </div>
-                      <div className="absolute -bottom-2 -right-2 bg-white p-1 rounded-full shadow-sm z-20">
-                         <div className="bg-gradient-to-r from-fun-blue to-teal-400 text-white w-10 h-10 rounded-full flex items-center justify-center font-black text-sm border-2 border-white shadow-md">
-                            {selectedLevel}
-                         </div>
-                      </div>
-                   </div>
-
-                   <div className="flex-1 space-y-5 w-full z-10 text-center sm:text-left">
-                       <div>
-                          <h2 className="text-2xl sm:text-3xl font-black text-slate-800 tracking-tight flex items-center justify-center sm:justify-start gap-3">
-                             {LEVELS.find(l => l.id === selectedLevel)?.title}
-                             <span className="sm:hidden bg-fun-blue text-white text-xs px-2.5 py-0.5 rounded-full font-bold">{selectedLevel}</span>
-                          </h2>
-                          <p className="text-slate-500 font-bold text-sm mt-1">
-                             Module Progress • {levelCompletedCount} of {filteredLessons.length} lessons
-                          </p>
-                       </div>
-                       
-                       <div className="space-y-2 pt-1">
-                           <div className="w-full bg-slate-100 h-4 sm:h-5 rounded-full overflow-hidden shadow-inner flex items-center p-0.5">
-                              <motion.div 
-                                initial={{ width: 0 }}
-                                animate={{ width: `${Math.max(2, levelProgressScore)}%` }}
-                                className="h-full bg-gradient-to-r from-fun-blue to-teal-400 rounded-full relative overflow-hidden"
-                              >
-                                <div className="absolute inset-0 w-full h-full bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.2)_50%,transparent_75%,transparent_100%)] bg-[length:20px_20px] animate-[shimmer_2s_linear_infinite]" />
-                              </motion.div>
-                           </div>
-                           <div className="flex justify-between items-center text-[11px] sm:text-xs font-black uppercase tracking-widest">
-                              <span className="text-slate-400">0%</span>
-                              <span className="text-fun-blue">{levelProgressScore}% Complete</span>
-                           </div>
-                       </div>
-                       
-                       {levelProgressScore > 0 && <p className="text-fun-green font-bold text-sm bg-fun-green/10 inline-block px-4 py-1.5 rounded-full shadow-sm border border-fun-green/20">Great progress! Keep it up! 🚀</p>}
-                   </div>
                </div>
 
                {/* FEATURED CONTINUE LEARNING CARD */}

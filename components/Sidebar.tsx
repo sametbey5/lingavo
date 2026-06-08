@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { LayoutDashboard, MessageCircle, BookOpen, PenTool, Trophy, Gamepad2, Briefcase, Zap, Sword, Brain, MonitorPlay, BarChart3, Settings, Mic, Crown, Store, ArrowRightLeft, LogOut, User, ShieldCheck, HelpCircle, Globe, ChevronDown, GraduationCap, Volume2, Bell, Flag } from 'lucide-react';
 import { useGamification } from '../context/GamificationContext';
 import { SUPPORTED_LANGUAGES } from '../constants';
@@ -11,6 +11,11 @@ const Sidebar: React.FC = () => {
   const { userId, logout, isAdmin, setIsContactOpen, preferredLanguage, updateProfile, stats, isPremium, wordBank } = useGamification();
   const isKids = true; // Forced to kids mode
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
+  const location = useLocation();
+
+  if (location.pathname === '/videos') {
+      return null;
+  }
 
   const today = new Date().toISOString().split('T')[0];
   const dueCount = wordBank.filter(w => w.nextReviewAt.split('T')[0] <= today).length;

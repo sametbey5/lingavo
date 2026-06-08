@@ -77,7 +77,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   }
 
   return (
-    <div className={`min-h-screen ${isKids ? 'font-sans bg-white' : 'font-adult bg-slate-50 text-slate-900'}`}>
+    <div className={`${location.pathname === '/' ? 'h-[100dvh] overflow-hidden flex flex-col' : 'min-h-screen'} ${isKids ? 'font-sans bg-white' : 'font-adult bg-slate-50 text-slate-900'}`}>
       <div id="google_translate_element" className="absolute opacity-0 pointer-events-none w-0 h-0 overflow-hidden"></div>
       <style>
         {isKids ? `
@@ -184,7 +184,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       </div>
 
       {/* Main Content Area - Reduced padding for Pro mode */}
-      <main className={`md:ml-${isKids ? '72' : '64'} ${location.pathname === '/videos' ? 'p-0 pb-0' : 'p-3 sm:p-4 md:px-10 md:pt-10 md:pb-4 pb-24'} max-w-7xl mx-auto transition-all w-full h-full`}>
+      <main className={`${location.pathname === '/videos' ? 'md:ml-0 p-0 pb-0' : `md:ml-${isKids ? '72' : '64'} p-3 sm:p-4 md:px-10 md:pt-10 md:pb-4 pb-24`} max-w-7xl mx-auto transition-all w-full flex-1 min-h-0 ${location.pathname === '/' ? 'h-auto overflow-hidden' : 'h-full'}`}>
         {children}
       </main>
 
@@ -213,7 +213,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                       {isActive && (
                          <div className="absolute inset-0 bg-fun-blue/10 rounded-full -z-10" />
                       )}
-                      <Icon size={isActive ? 18 : 16} className={isActive ? 'fill-fun-blue/20' : ''} />
+                      <Icon size={isActive ? 24 : 22} className={isActive ? 'fill-fun-blue/20' : ''} />
                       {isActive && <span className="absolute -bottom-0.5 w-1 h-1 bg-fun-blue rounded-full" />}
                    </button>
                 )
