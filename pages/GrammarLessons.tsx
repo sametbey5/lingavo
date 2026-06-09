@@ -483,13 +483,13 @@ const InteractiveExplanationScreen: React.FC<{
   const totalPages = 10;
   
   // Custom theme colors by level
-  const themeColors: Record<Level, {from: string; to: string; shadow: string; bg: string; text: string; hex?: string}> = {
-    'A1': {from: 'from-[#5a3cf3]', to: 'to-[#8050ff]', shadow: 'shadow-purple-500/30', bg: 'bg-[#6b42f6]', text: 'text-[#6b42f6]', hex: '#6b42f6'},
-    'A2': {from: 'from-teal-400', to: 'to-emerald-500', shadow: 'shadow-teal-500/30', bg: 'bg-teal-500', text: 'text-teal-600', hex: '#14b8a6'},
-    'B1': {from: 'from-blue-500', to: 'to-indigo-500', shadow: 'shadow-blue-500/30', bg: 'bg-blue-500', text: 'text-blue-600', hex: '#3b82f6'},
-    'B2': {from: 'from-indigo-500', to: 'to-purple-500', shadow: 'shadow-indigo-500/30', bg: 'bg-indigo-500', text: 'text-indigo-600', hex: '#6366f1'},
-    'C1': {from: 'from-purple-500', to: 'to-pink-500', shadow: 'shadow-purple-500/30', bg: 'bg-purple-500', text: 'text-purple-600', hex: '#a855f7'},
-    'C2': {from: 'from-pink-500', to: 'to-orange-500', shadow: 'shadow-pink-500/30', bg: 'bg-pink-500', text: 'text-pink-600', hex: '#ec4899'},
+  const themeColors: Record<Level, {from: string; to: string; shadow: string; bg: string; text: string; hex?: string; textHex?: string}> = {
+    'A1': {from: 'from-[#8FB8FF]', to: 'to-[#8FB8FF]', shadow: 'shadow-[#8FB8FF]/30', bg: 'bg-[#5D8EF7]', text: 'text-[#ffffff]', hex: '#5D8EF7', textHex: '#ffffff'},
+    'A2': {from: 'from-[#7FD6FF]', to: 'to-[#7FD6FF]', shadow: 'shadow-[#7FD6FF]/30', bg: 'bg-[#5FB2E2]', text: 'text-[#ffffff]', hex: '#5FB2E2', textHex: '#ffffff'},
+    'B1': {from: 'from-[#8DE0C1]', to: 'to-[#8DE0C1]', shadow: 'shadow-[#8DE0C1]/30', bg: 'bg-[#5FBF9B]', text: 'text-[#ffffff]', hex: '#5FBF9B', textHex: '#ffffff'},
+    'B2': {from: 'from-[#FFE38A]', to: 'to-[#FFE38A]', shadow: 'shadow-[#FFE38A]/30', bg: 'bg-[#D3B15A]', text: 'text-[#ffffff]', hex: '#D3B15A', textHex: '#ffffff'},
+    'C1': {from: 'from-[#FFC48C]', to: 'to-[#FFC48C]', shadow: 'shadow-[#FFC48C]/30', bg: 'bg-[#D7915D]', text: 'text-[#ffffff]', hex: '#D7915D', textHex: '#ffffff'},
+    'C2': {from: 'from-[#FF8A7A]', to: 'to-[#FF8A7A]', shadow: 'shadow-[#FF8A7A]/30', bg: 'bg-[#D16B6B]', text: 'text-[#ffffff]', hex: '#D16B6B', textHex: '#ffffff'},
   };
   
   const theme = themeColors[lesson.level] || themeColors['A1'];

@@ -112,13 +112,13 @@ const LessonTemplate: React.FC<LessonTemplateProps> = ({
               </div>
            )}
            
-           <div className="bg-white/20 rounded-full px-3 py-1 text-white font-bold text-[10px] uppercase tracking-widest relative z-10 backdrop-blur-sm shadow-sm inline-block">
+           <div className={`rounded-full px-3 py-1 font-bold text-[10px] uppercase tracking-widest relative z-10 backdrop-blur-sm shadow-sm inline-block ${themeColor.textHex ? '' : 'bg-white/20 text-white'}`} style={themeColor.textHex ? { color: themeColor.textHex, backgroundColor: `${themeColor.textHex}20` } : {}}>
               {category}
            </div>
 
-           <div className="text-white relative z-10 w-full space-y-1">
+           <div className={`relative z-10 w-full space-y-1 ${themeColor.textHex ? '' : 'text-white'}`} style={themeColor.textHex ? { color: themeColor.textHex } : {}}>
               <h1 className="text-[28px] sm:text-[34px] font-bold leading-none tracking-tight">{title}</h1>
-              <p className="text-white/90 text-[13px] sm:text-[15px] leading-snug tracking-wide pt-1">
+              <p className={`text-[13px] sm:text-[15px] leading-snug tracking-wide pt-1 ${themeColor.textHex ? 'opacity-90' : 'text-white/90'}`}>
                  {subtitle}
               </p>
            </div>
