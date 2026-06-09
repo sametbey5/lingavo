@@ -51,18 +51,18 @@ const Dashboard: React.FC = () => {
                  <Icon size={14} className="sm:w-4 sm:h-4" />
               </div>
           </div>
-          <div className="p-2 sm:p-2.5 flex flex-col flex-1 justify-center min-h-0">
-             <h4 className="font-black text-slate-800 text-[13px] sm:text-base leading-tight mb-0.5 group-hover:text-fun-blue transition-colors line-clamp-1 xs:line-clamp-2 md:truncate">{title}</h4>
-             <p className="text-[10px] sm:text-xs font-bold text-slate-400 leading-tight line-clamp-1 xs:line-clamp-2 md:truncate">{desc}</p>
+          <div className="p-2 sm:p-2.5 flex flex-col flex-1 justify-center min-h-0 overflow-hidden">
+             <h4 className="font-black text-slate-800 text-[14px] xs:text-[15px] sm:text-base leading-tight mb-0.5 group-hover:text-fun-blue transition-colors truncate">{title}</h4>
+             <p className="text-[11px] xs:text-[12px] sm:text-xs font-bold text-slate-400 leading-tight truncate">{desc}</p>
           </div>
       </div>
   );
 
   return (
-    <div className="w-full h-full min-h-0 overflow-hidden flex flex-col pt-1 animate-fade-in font-sans">
+    <div className="w-full flex flex-col justify-between animate-fade-in font-sans h-full min-h-0 -mt-2">
       
       {/* 1. Profile Progress Card (Premium) */}
-      <header className="px-2 pt-2 sm:px-4 sm:pt-4 shrink-0">
+      <header className="px-2 pt-0 sm:px-4 sm:pt-2 shrink-0">
          <div className="bg-white rounded-[1.25rem] p-3 shadow-sm border border-slate-100 relative overflow-hidden flex flex-col gap-2">
             <div className="absolute -top-10 -right-10 w-32 h-32 bg-fun-blue/5 rounded-full blur-2xl pointer-events-none" />
             
@@ -139,32 +139,30 @@ const Dashboard: React.FC = () => {
       <div className="px-3 pb-3 sm:px-4 shrink-0">
          <div 
              onClick={() => navigate('/grammar-lessons')}
-             className="relative w-full rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden cursor-pointer shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group bg-slate-900 border-[3px] border-white ring-2 ring-transparent hover:ring-fun-blue/30 flex flex-row h-[105px] xs:h-[115px] sm:h-[130px]"
+             className="relative w-full rounded-[1.25rem] border border-slate-100 overflow-hidden cursor-pointer shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group bg-white ring-2 ring-transparent hover:ring-fun-blue/20 flex flex-row h-[110px] xs:h-[120px] sm:h-[140px]"
          >
-             <div className="absolute inset-0 bg-gradient-to-br from-fun-blue to-teal-500 opacity-90 z-10" />
-             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.3),transparent_60%)] z-10 pointer-events-none" />
-             
-             <div className="relative z-20 flex-1 p-4 sm:p-6 flex flex-col justify-center text-white truncate pr-2">
-                 <div className="inline-flex items-center gap-1.5 bg-white/20 backdrop-blur-md px-2.5 py-1 rounded-full text-[11px] sm:text-[13px] font-black uppercase tracking-widest mb-1.5 sm:mb-2 w-fit shrink-0">
-                    <BookOpen size={12} /> Grammar Coach
+             <div className="flex-1 p-4 sm:p-6 flex flex-col justify-center min-w-0 overflow-hidden z-20">
+                 <div className="inline-flex items-center gap-1 sm:gap-1.5 text-slate-400 font-bold uppercase tracking-widest text-[9px] sm:text-[10px] mb-1">
+                    <BookOpen size={10} className="text-fun-blue" /> <span className="truncate">Grammar Coach</span>
                  </div>
-                 <h2 className="font-black text-lg sm:text-3xl leading-snug mb-1 drop-shadow-md truncate">{nextLessonTitle}</h2>
-                 <p className="text-white/90 font-bold text-xs sm:text-sm mb-2 truncate">Master your English grammar.</p>
+                 <h2 className="font-black text-slate-800 text-lg sm:text-2xl truncate mb-0.5 sm:mb-1 group-hover:text-fun-blue transition-colors leading-snug">{nextLessonTitle}</h2>
+                 <p className="text-[11px] sm:text-xs font-bold text-slate-400 leading-tight truncate mb-2 sm:mb-2.5">Master your English grammar.</p>
                  
-                 <div className="w-full max-w-[150px] h-2 bg-black/20 rounded-full overflow-hidden flex shrink-0">
-                    <div className="h-full bg-white rounded-full shadow-[0_0_10px_rgba(255,255,255,0.8)] transition-all duration-1000" style={{ width: `${grammarPercent}%` }} />
+                 <div className="w-full max-w-[150px] h-1.5 sm:h-2 bg-slate-100 rounded-full overflow-hidden flex shrink-0">
+                    <div className="h-full bg-fun-blue rounded-full transition-all duration-1000" style={{ width: `${grammarPercent}%` }} />
                  </div>
              </div>
              
-             <div className="relative z-20 w-[35%] h-full overflow-hidden flex items-end justify-end shrink-0 py-2 pr-2">
-                 <img src={grammarImg} className="w-auto h-full object-contain transform group-hover:scale-105 transition-transform duration-500 drop-shadow-[0_10px_10px_rgba(0,0,0,0.3)] origin-bottom-right" alt="Grammar" referrerPolicy="no-referrer" />
+             <div className="relative w-[35%] sm:w-[40%] bg-gradient-to-br from-fun-blue to-teal-500 overflow-hidden shrink-0">
+                 <div className="absolute inset-0 bg-white/20 blur-xl group-hover:bg-white/30 transition-colors" />
+                 <img src={grammarImg} className="absolute -bottom-1 -right-2 h-[120%] sm:h-[130%] object-contain transition-transform duration-500 group-hover:scale-110 drop-shadow-md origin-bottom-right" alt="Grammar" referrerPolicy="no-referrer" />
              </div>
          </div>
       </div>
 
       {/* 5. Practice Games Area (Grid layout tailored to fit smaller space) */}
-      <div className="px-3 pb-6 sm:px-4 flex-1 flex flex-col min-h-0">
-         <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 xs:gap-3 flex-1 min-h-0">
+      <div className="px-3 pb-0 sm:px-4 flex-1 flex flex-col min-h-0 mt-1">
+         <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 xs:gap-3 flex-1 min-h-[140px] mb-1">
             <PracticeCard 
                title="Dictionary" 
                desc="Build vocab"
