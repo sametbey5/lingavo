@@ -208,13 +208,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                       onClick={() => {
                          if (location.pathname !== item.path) navigate(item.path);
                       }}
-                      className={`flex flex-col items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-[1rem] relative transition-all duration-300 ${isActive ? 'text-fun-blue scale-110' : 'text-slate-400 hover:text-slate-600 hover:bg-slate-50'}`}
+                      className={`flex flex-col items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-[1rem] relative transition-all duration-300 ${isActive ? 'text-fun-blue scale-105' : 'text-slate-400 hover:text-slate-600 hover:bg-slate-50'}`}
                    >
                       {isActive && (
-                         <div className="absolute inset-0 bg-fun-blue/10 rounded-full -z-10" />
+                         <div className="absolute inset-0 bg-fun-blue/10 rounded-[1rem] -z-10" />
                       )}
-                      <Icon size={isActive ? 24 : 22} className={isActive ? 'fill-fun-blue/20' : ''} />
-                      {isActive && <span className="absolute -bottom-0.5 w-1 h-1 bg-fun-blue rounded-full" />}
+                      <Icon size={isActive ? 22 : 20} className={isActive ? 'fill-fun-blue/20' : ''} />
+                      <span className={`text-[9px] sm:text-[10px] font-bold mt-0.5 ${isActive ? 'text-fun-blue' : 'text-slate-400'}`}>{item.label}</span>
                    </button>
                 )
              })}

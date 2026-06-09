@@ -42,7 +42,8 @@ import {
   Puzzle,
   Search,
   Edit2,
-  Brain
+  Brain,
+  Image as ImageIcon
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import ReactPlayer from 'react-player';
@@ -56,13 +57,13 @@ import { LESSONS, Lesson, Level, Exercise } from '../components/grammarLessonsDa
 
 const firstScreenImages = import.meta.glob('../src/assets/images/*firstscreen*.{png,jpg,jpeg,svg}', { eager: true, import: 'default' });
 
-const LEVELS: { id: Level; title: string; desc: string; color: string }[] = [
-  { id: 'A1', title: 'Beginner', desc: 'Essential foundations', color: 'bg-blue-500' },
-  { id: 'A2', title: 'Elementary', desc: 'Basic communication', color: 'bg-blue-500' },
-  { id: 'B1', title: 'Intermediate', desc: 'Everyday fluency', color: 'bg-cyan-500' },
-  { id: 'B2', title: 'Upper Int.', desc: 'Complex ideas', color: 'bg-indigo-500' },
-  { id: 'C1', title: 'Advanced', desc: 'Professional mastery', color: 'bg-purple-500' },
-  { id: 'C2', title: 'Proficiency', desc: 'Native-like nuance', color: 'bg-pink-500' },
+const LEVELS: { id: Level; title: string; desc: string; color: string; hex: string }[] = [
+  { id: 'A1', title: 'Beginner', desc: 'Essential foundations', color: 'bg-blue-500', hex: '#5D8EF7' },
+  { id: 'A2', title: 'Elementary', desc: 'Basic communication', color: 'bg-blue-500', hex: '#5FB2E2' },
+  { id: 'B1', title: 'Intermediate', desc: 'Everyday fluency', color: 'bg-cyan-500', hex: '#5FBF9B' },
+  { id: 'B2', title: 'Upper Int.', desc: 'Complex ideas', color: 'bg-indigo-500', hex: '#D3B15A' },
+  { id: 'C1', title: 'Advanced', desc: 'Professional mastery', color: 'bg-purple-500', hex: '#D7915D' },
+  { id: 'C2', title: 'Proficiency', desc: 'Native-like nuance', color: 'bg-pink-500', hex: '#D16B6B' },
 ];
 
 interface GrammarVideo {
@@ -686,6 +687,7 @@ const GrammarLessons: React.FC = () => {
   const [currentLessonPage, setCurrentLessonPage] = useState(1);
   const [activeTab, setActiveTab] = useState<'lessons' | 'videos'>('lessons');
   const [showLevelDropdown, setShowLevelDropdown] = useState(false);
+  const [showOtherLevels, setShowOtherLevels] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState<GrammarVideo | null>(null);
   
   const [videoWatchedCompleted, setVideoWatchedCompleted] = useState<string[]>([]);
@@ -909,108 +911,94 @@ const GrammarLessons: React.FC = () => {
                   </p>
                </div>
 
-               {/* LEVEL TABS REDESIGN */}
-               <div className="px-1 relative z-10 w-full overflow-hidden">
-                 <div className="flex overflow-x-auto pb-6 scrollbar-hide gap-3 sm:gap-4 -mx-4 px-4 sm:mx-0 sm:px-1 w-full justify-start md:justify-center">
-                      {LEVELS.map((lvl) => {
-                        const locked = isLevelLocked(lvl.id);
-                        const isActive = selectedLevel === lvl.id;
-                        const lvlLessons = LESSONS.filter(l => l.level === lvl.id);
-                        const completedCount = lvlLessons.filter(l => completedLessons.includes(l.id)).length;
-                        const progressPercentage = lvlLessons.length > 0 ? Math.round((completedCount / lvlLessons.length) * 100) : 0;
-                        
-                        return (
-                          <div key={lvl.id} className={`flex flex-col gap-2 shrink-0 ${locked ? 'opacity-50 grayscale' : ''}`}>
-                            <button
-                              onClick={() => {
-                                if (!locked) {
-                                  setSelectedLevel(lvl.id);
-                                  setCurrentLessonPage(1);
-                                }
-                              }}
-                              disabled={locked}
-                              className={`flex flex-col justify-center items-center px-5 py-2.5 rounded-full transition-all duration-300 min-w-[70px] border-2 shadow-sm ${
-                                isActive 
-                                  ? 'bg-gradient-to-r from-fun-blue to-teal-400 text-white border-transparent scale-105 shadow-md ring-2 ring-fun-blue/20 ring-offset-2' 
-                                  : 'bg-white text-slate-500 border-slate-200 hover:border-slate-300 hover:bg-slate-50 font-bold'
-                              } ${locked ? 'cursor-not-allowed' : 'cursor-pointer'}`}
-                            >
-                               <div className="flex items-center gap-1.5">
-                                 <span className="text-sm sm:text-base font-black">{lvl.id}</span>
-                                 {locked && <Lock size={12} className={isActive ? "text-white" : "text-slate-400"} />}
-                               </div>
-                            </button>
-                            
-                            <div className="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden">
-                               <div 
-                                 className={`h-full rounded-full transition-all duration-1000 ${isActive ? 'bg-fun-blue' : 'bg-slate-400'}`} 
-                                 style={{ width: `${Math.max(5, progressPercentage)}%` }}
-                               />
-                            </div>
-                          </div>
-                        );
-                      })}
-                 </div>
-               </div>
-
-               {/* FEATURED CONTINUE LEARNING CARD */}
+               {/* LEVEL PROGRESS CARD */}
                {(() => {
-                 const nextLesson = filteredLessons.find(l => !completedLessons.includes(l.id)) || filteredLessons[0];
-                 if (!nextLesson) return null;
-                 const iconProps = getTopicColor(nextLesson.topic);
-                 const isCompleted = completedLessons.includes(nextLesson.id);
-
+                 const currentLevelDetails = LEVELS.find(l => l.id === selectedLevel);
+                 const lvlLessons = LESSONS.filter(l => l.level === selectedLevel);
+                 const completedCount = lvlLessons.filter(l => completedLessons.includes(l.id)).length;
+                 const progressPercentage = lvlLessons.length > 0 ? Math.round((completedCount / lvlLessons.length) * 100) : 0;
+                 
                  return (
-                   <div 
-                     onClick={() => handleStartLesson(nextLesson)}
-                     className="bg-white rounded-[2rem] p-6 sm:p-7 border-b-4 border-slate-200 border-x border-t border-x-slate-100 border-t-slate-100 shadow-sm cursor-pointer hover:border-b-fun-blue hover:translate-y-[-2px] transition-all relative overflow-hidden group"
-                   >
-                     {!isCompleted ? (
-                       <div className="absolute top-5 right-5 bg-gradient-to-r from-fun-pink to-orange-400 text-white text-[10px] font-black px-2.5 py-1 rounded-md uppercase tracking-wider shadow-sm z-20 shadow-orange-500/20">
-                          Up Next
-                       </div>
-                     ) : (
-                       <div className="absolute top-5 right-5 bg-fun-green text-white text-[10px] font-black px-2.5 py-1 rounded-md uppercase tracking-wider shadow-sm z-20">
-                          Completed
-                       </div>
-                     )}
-                     
-                     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5 sm:gap-6 relative z-10">
-                       <div className={`w-16 h-16 sm:w-20 sm:h-20 rounded-[1.5rem] flex items-center justify-center shrink-0 shadow-sm border-[4px] border-white bg-gradient-to-br ${iconProps.split(' ')[0]} ${iconProps.split(' ')[1]}`}>
-                         <span className="scale-125 transform opacity-90">{getTopicIcon(nextLesson.topic)}</span>
-                       </div>
-                       <div className="space-y-2 flex-1">
-                          <p className="text-[11px] font-black uppercase text-slate-400 tracking-widest">{nextLesson.topic}</p>
-                          <h3 className="text-xl sm:text-2xl font-black text-slate-800 leading-tight group-hover:text-fun-blue transition-colors line-clamp-2">{nextLesson.title}</h3>
-                          <div className="flex items-center gap-3 pt-1">
-                             <div className="flex items-center gap-1.5 bg-yellow-50 border border-yellow-200 text-yellow-600 px-3 py-0.5 rounded-full text-xs font-bold shadow-sm">
-                               <Star size={14} fill="currentColor" /> +100 XP
-                             </div>
-                             <div className="text-slate-400 text-xs font-bold font-mono bg-slate-50 px-2 py-0.5 rounded-md border border-slate-100">
-                                {nextLesson.exercises.length} Exercises
-                             </div>
-                          </div>
-                          
-                          {!isCompleted && (
-                            <div className="w-full bg-slate-100 h-1.5 rounded-full mt-3 overflow-hidden shadow-inner">
-                               <div className="h-full bg-fun-blue w-0 rounded-full" />
-                            </div>
-                          )}
-                       </div>
-                       <div className="hidden sm:flex items-center justify-center w-14 h-14 bg-slate-50 text-slate-400 rounded-[1rem] group-hover:bg-fun-blue group-hover:text-white transition-colors border-2 border-slate-100 shadow-sm shrink-0">
-                          <Play size={24} className="ml-1" fill="currentColor" />
-                       </div>
+                   <div className="flex flex-col gap-3">
+                     <div className="bg-white rounded-[1.5rem] p-5 sm:p-6 border-2 border-slate-100 shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 relative z-10 mx-1">
+                        <div className="flex items-center gap-4">
+                           <div className="w-16 h-16 rounded-2xl flex items-center justify-center shrink-0 text-white font-black text-2xl shadow-inner border-2 border-white" style={{ backgroundColor: currentLevelDetails?.hex }}>
+                             {selectedLevel}
+                           </div>
+                           <div>
+                              <h3 className="text-xl sm:text-2xl font-black text-slate-800">{currentLevelDetails?.title} Level</h3>
+                              <p className="text-slate-500 font-bold text-sm">{currentLevelDetails?.desc}</p>
+                           </div>
+                        </div>
+                        <div className="w-full sm:w-48 bg-slate-100 rounded-full h-3 overflow-hidden shadow-inner">
+                           <div 
+                             className="h-full rounded-full transition-all duration-1000" 
+                             style={{ width: `${Math.max(5, progressPercentage)}%`, backgroundColor: currentLevelDetails?.hex }}
+                           />
+                        </div>
                      </div>
+                     <button
+                        onClick={() => setShowOtherLevels(!showOtherLevels)}
+                        className="self-center px-6 py-2 text-sm font-bold text-slate-500 hover:text-slate-700 bg-white border-2 border-slate-200 rounded-full hover:bg-slate-50 transition-colors flex items-center justify-center shadow-sm z-10"
+                     >
+                        {showOtherLevels ? 'Hide other levels' : 'Show other levels'}
+                        <ChevronDown size={16} className={`ml-1 transform transition-transform ${showOtherLevels ? 'rotate-180' : ''}`} />
+                     </button>
                    </div>
                  );
                })()}
 
+               {/* OTHER LEVELS (CONDITIONAL) */}
+               {showOtherLevels && (
+                 <div className="px-1 relative z-10 w-full mt-4">
+                   <div className="grid grid-cols-3 md:grid-cols-6 gap-3 sm:gap-4 w-full">
+                        {LEVELS.map((lvl) => {
+                          const locked = isLevelLocked(lvl.id);
+                          const isActive = selectedLevel === lvl.id;
+                          const lvlLessons = LESSONS.filter(l => l.level === lvl.id);
+                          const completedCount = lvlLessons.filter(l => completedLessons.includes(l.id)).length;
+                          const progressPercentage = lvlLessons.length > 0 ? Math.round((completedCount / lvlLessons.length) * 100) : 0;
+                          
+                          return (
+                            <div key={lvl.id} className={`flex flex-col gap-2 w-full ${locked ? 'opacity-50 grayscale' : ''}`}>
+                              <button
+                                onClick={() => {
+                                  if (!locked) {
+                                    setSelectedLevel(lvl.id);
+                                    setCurrentLessonPage(1);
+                                    setShowOtherLevels(false);
+                                  }
+                                }}
+                                disabled={locked}
+                                style={isActive ? { backgroundColor: lvl.hex, borderColor: lvl.hex, color: 'white' } : {}}
+                                className={`flex flex-col justify-center items-center py-2.5 rounded-xl transition-all duration-300 w-full border-2 shadow-sm ${
+                                  isActive 
+                                    ? 'scale-105 shadow-md ring-2 ring-offset-2' 
+                                    : 'bg-white text-slate-500 border-slate-200 hover:border-slate-300 hover:bg-slate-50 font-bold'
+                                } ${locked ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                              >
+                                 <div className="flex items-center gap-1.5">
+                                   <span className="text-sm sm:text-base font-black">{lvl.id}</span>
+                                   {locked && <Lock size={12} className={isActive ? "text-white" : "text-slate-400"} />}
+                                 </div>
+                              </button>
+                              
+                              <div className="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden hidden sm:block">
+                                 <div 
+                                   className={`h-full rounded-full transition-all duration-1000 ${!isActive ? 'bg-slate-400' : ''}`} 
+                                   style={{ width: `${Math.max(5, progressPercentage)}%`, ...(isActive ? { backgroundColor: lvl.hex } : {}) }}
+                                 />
+                              </div>
+                            </div>
+                          );
+                        })}
+                   </div>
+                 </div>
+               )}
+
                {/* VISUAL PROGRESSION PATH */}
                <div className="relative pt-8 pb-12 sm:pt-10 ml-4 sm:ml-10">
-                  {/* Vertical Path Line */}
-                  <div className="absolute left-6 top-14 bottom-10 w-2.5 bg-slate-200 rounded-full -z-10 shadow-inner border border-slate-300" />
-                  
-                  <div className="space-y-8 sm:space-y-10">
+                  <div className="flex flex-col w-full">
                      {filteredLessons.map((lesson, idx) => {
                        const isCompleted = completedLessons.includes(lesson.id);
                        const isExam = lesson.id.includes('exam');
@@ -1018,23 +1006,27 @@ const GrammarLessons: React.FC = () => {
                        const isUpNext = !isCompleted && (idx === 0 || completedLessons.includes(filteredLessons[idx - 1]?.id));
                        
                        return (
-                         <div key={lesson.id} className="group flex items-center gap-5 sm:gap-8 relative z-10 w-full max-w-2xl">
+                         <div key={lesson.id} className="group flex items-stretch gap-5 sm:gap-8 relative z-10 w-full max-w-2xl min-h-[130px] pb-6 sm:pb-8">
                              {/* Path Node */}
-                             <div className="relative shrink-0 flex items-center justify-center">
-                                <div className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center border-[6px] border-[#F7F9FC] shadow-sm transition-all duration-300 transform group-hover:scale-110 relative z-20
+                             <div className="relative shrink-0 flex flex-col items-center w-14 sm:w-16">
+                                <div className={`w-14 h-14 sm:w-16 sm:h-16 shrink-0 rounded-full flex items-center justify-center border-[6px] border-[#F7F9FC] shadow-sm transition-all duration-300 transform group-hover:scale-110 relative z-20
                                   ${isCompleted ? 'bg-fun-green text-white border-fun-green-100' : isUpNext ? 'bg-fun-blue text-white shadow-fun-blue/30 ring-4 ring-fun-blue/20' : 'bg-slate-200 text-slate-400 border-slate-300 shadow-inner'}
                                 `}>
                                    {isCompleted ? <Check size={28} strokeWidth={4} /> : <div className="font-black text-lg sm:text-xl">{idx + 1}</div>}
                                 </div>
                                 {isUpNext && (
-                                   <div className="absolute inset-0 bg-fun-blue rounded-full animate-ping opacity-20" />
+                                   <div className="absolute top-0 w-14 h-14 sm:w-16 sm:h-16 bg-fun-blue rounded-full animate-ping opacity-20 z-10" />
+                                )}
+                                {/* Connecting line to next node */}
+                                {idx < filteredLessons.length - 1 && (
+                                  <div className={`w-2.5 flex-1 rounded-full -mt-2 -mb-8 sm:-mb-10 z-0 ${isCompleted ? 'bg-fun-green' : 'bg-slate-200 shadow-inner border border-slate-300'}`} />
                                 )}
                              </div>
 
                              {/* Lesson Card */}
                              <div 
                                onClick={() => handleStartLesson(lesson)}
-                               className={`flex-1 p-5 rounded-[1.5rem] bg-white transition-all duration-300 cursor-pointer hover:-translate-y-1 relative group w-full 
+                               className={`flex-1 min-w-0 p-4 sm:p-5 rounded-[1.5rem] bg-white transition-all duration-300 cursor-pointer hover:-translate-y-1 relative group w-full flex flex-col sm:flex-row sm:min-h-[130px]
                                  ${isCompleted 
                                    ? 'border-b-[4px] border-slate-300 border-x border-t border-x-slate-200 border-t-slate-200 shadow-sm opacity-90' 
                                    : isUpNext
@@ -1043,19 +1035,24 @@ const GrammarLessons: React.FC = () => {
                                  }
                                `}
                              >
-                                <div className="flex items-center justify-between gap-4">
-                                  <div className="flex-1 min-w-0 pr-2 space-y-1 sm:space-y-1.5">
+                                <div className="w-full h-32 sm:w-32 sm:h-auto bg-slate-100 rounded-xl shrink-0 flex flex-col items-center justify-center border-2 border-dashed border-slate-300 text-slate-400 mb-3 sm:mb-0 sm:mr-4">
+                                   <ImageIcon className="mb-1" size={20} />
+                                   <span className="text-[10px] font-bold uppercase tracking-wider">Image Idea</span>
+                                </div>
+                                <div className="flex-1 flex flex-row items-center justify-between gap-4 w-full min-w-0">
+                                  <div className="flex-1 min-w-0 pr-1 space-y-1 sm:space-y-1.5 flex flex-col justify-center">
                                     <div className="flex items-center gap-2">
                                       {isExam && <span className="bg-orange-500 text-white text-[9px] uppercase tracking-wider font-black px-1.5 py-0.5 rounded-sm shadow-sm flex items-center gap-1"><Star size={10} fill="currentColor"/> Exam</span>}
                                       <span className={`text-[10px] sm:text-xs font-black uppercase tracking-widest truncate ${isCompleted ? 'text-fun-green' : isUpNext ? 'text-fun-blue' : 'text-slate-400'}`}>
                                         {lesson.topic}
                                       </span>
                                     </div>
-                                    <h3 className={`text-base sm:text-lg lg:text-xl font-black truncate leading-tight ${isUpNext ? 'text-fun-blue' : isCompleted ? 'text-slate-800' : 'text-slate-600'}`}>
+                                    <h3 className={`text-lg sm:text-xl font-black truncate leading-tight ${isUpNext ? 'text-fun-blue' : isCompleted ? 'text-slate-800' : 'text-slate-600'}`}>
                                       {lesson.title}
                                     </h3>
+                                    <p className="text-xs sm:text-sm font-bold text-slate-400 truncate pt-0.5">{lesson.desc}</p>
                                   </div>
-                                  <div className={`hidden sm:flex w-14 h-14 rounded-2xl items-center justify-center shrink-0 shadow-inner border border-black/5 ${isCompleted ? 'bg-fun-green/10 text-fun-green border-fun-green/10' : iconProps} group-hover:scale-110 transition-transform duration-300`}>
+                                  <div className={`hidden sm:flex w-12 h-12 sm:w-14 sm:h-14 rounded-2xl items-center justify-center shrink-0 shadow-inner border border-black/5 ${isCompleted ? 'bg-fun-green/10 text-fun-green border-fun-green/10' : iconProps} group-hover:scale-110 transition-transform duration-300`}>
                                     {getTopicIcon(lesson.topic)}
                                   </div>
                                 </div>
@@ -1073,14 +1070,11 @@ const GrammarLessons: React.FC = () => {
 
                {/* MODULE UNLOCK SYSTEM */}
                {levelProgressScore < 100 ? (
-                 <div className="bg-gradient-to-tr from-orange-400 to-fun-pink p-8 sm:p-10 rounded-[2.5rem] shadow-xl text-white flex flex-col sm:flex-row items-center text-center sm:text-left gap-6 sm:gap-8 border-b-[8px] border-black/10 transition-transform hover:scale-[1.01] duration-300 mx-2 sm:mx-0">
-                    <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center text-4xl shadow-inner border-2 border-white/30 backdrop-blur-sm shrink-0">
-                       <Lock className="text-white relative z-10" size={32} />
+                 <div className="bg-white p-4 rounded-2xl shadow-sm border-2 border-slate-100 flex flex-row items-center justify-center text-center gap-3 w-full max-w-sm mx-auto">
+                    <div className="w-8 h-8 bg-slate-100 rounded-full flex items-center justify-center text-slate-400 shrink-0">
+                       <Lock size={16} />
                     </div>
-                    <div className="flex-1 space-y-2">
-                      <h3 className="text-2xl sm:text-3xl font-black drop-shadow-md">Unlock the Next Module</h3>
-                      <p className="text-sm sm:text-base font-bold text-white/90">Complete {filteredLessons.length - levelCompletedCount} more lessons to access new topics!</p>
-                    </div>
+                    <p className="text-sm font-bold text-slate-500">Complete all lessons for the next level</p>
                  </div>
                ) : (
                  <div className="bg-gradient-to-tr from-fun-green to-emerald-400 p-8 sm:p-10 rounded-[2.5rem] shadow-xl text-white flex flex-col sm:flex-row items-center text-center sm:text-left gap-6 sm:gap-8 border-b-[8px] border-black/10 transition-transform hover:scale-[1.01] duration-300 mx-2 sm:mx-0">
