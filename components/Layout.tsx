@@ -1,7 +1,6 @@
 
 import React, { ReactNode, useState, useEffect } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import Sidebar from './Sidebar';
 import { Menu, X, LayoutDashboard, MessageCircle, BookOpen, PenTool, Trophy, Gamepad2, Briefcase, MonitorPlay, Crown, Store, ArrowRightLeft, LogOut, User, HelpCircle, Globe, ChevronDown, Bell, Flag, ShieldCheck, Zap, Gift, Award, Sparkles, Star, Mic, Target, Home } from 'lucide-react';
 import { useGamification } from '../context/GamificationContext';
 import ContactModal from './ContactModal';
@@ -77,7 +76,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   }
 
   return (
-    <div className={`${location.pathname === '/' ? 'h-[100dvh] overflow-hidden flex flex-col' : 'min-h-screen'} ${isKids ? 'font-sans bg-white' : 'font-adult bg-slate-50 text-slate-900'}`}>
+    <div className={`h-[100dvh] overflow-hidden flex flex-col ${isKids ? 'font-sans bg-white' : 'font-adult bg-slate-50 text-slate-900'}`}>
       <div id="google_translate_element" className="absolute opacity-0 pointer-events-none w-0 h-0 overflow-hidden"></div>
       <style>
         {isKids ? `
@@ -99,11 +98,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           .skiptranslate { display: none !important; }
         `}
       </style>
-      <Sidebar />
       <ContactModal />
       
       {/* Mobile Header */}
-      <div className={`md:hidden px-4 py-3 flex items-center justify-between sticky top-0 z-50 backdrop-blur-xl bg-white/80 border-b border-white/20 shadow-[0_4px_30px_rgba(0,0,0,0.03)]`}>
+      <div className={`px-4 py-3 flex items-center justify-between sticky top-0 z-50 backdrop-blur-xl bg-white/80 border-b border-white/20 shadow-[0_4px_30px_rgba(0,0,0,0.03)]`}>
         <div className="flex items-center gap-3">
             <img 
               src="https://i.ibb.co/TMMP1KYB/smart.png" 
@@ -157,40 +155,14 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </div>
       </div>
 
-      {/* Mobile Menu Overlay removed */}
-
-      {/* Desktop Notifications / LevelUp */}
-      <div className="hidden md:flex fixed top-4 left-1/2 -translate-x-1/2 z-[100] flex-col items-center gap-2 pointer-events-none">
-           {notification && (
-              <div className="animate-fade-in pointer-events-auto">
-                 <div className="bg-slate-900 text-white px-4 py-2 rounded-full shadow-2xl flex items-center gap-3 border border-white/20 whitespace-nowrap bg-opacity-95 backdrop-blur-md">
-                    {notification.type === 'xp' && <Zap className="text-yellow-400 fill-current" size={18} />}
-                    {notification.type === 'reward' && <Gift className="text-fun-pink fill-current" size={18} />}
-                    {notification.type === 'badge' && <Award className="text-fun-green fill-current" size={18} />}
-                    {notification.type === 'trade' && <ArrowRightLeft className="text-fun-blue fill-current" size={18} />}
-                    <span className="font-bold text-sm">{notification.text}</span>
-                 </div>
-              </div>
-           )}
-           
-           {showLevelUp && !notification && (
-              <div className="animate-bounce-slow pointer-events-auto">
-                 <div onClick={closeLevelUp} className="bg-gradient-to-r from-fun-blue to-cyan-400 text-white px-5 py-2.5 rounded-full shadow-2xl flex items-center gap-3 border border-white/20 hover:scale-105 transition-transform cursor-pointer">
-                    <Star className="text-fun-yellow fill-current animate-pulse" size={20} />
-                    <span className="font-black text-sm tracking-wide">LEVEL {stats.level}!</span>
-                 </div>
-              </div>
-           )}
-      </div>
-
-      {/* Main Content Area - Reduced padding for Pro mode */}
-      <main className={`${location.pathname === '/videos' ? 'md:ml-0 p-0 pb-0' : `md:ml-${isKids ? '72' : '64'} p-3 sm:p-4 md:px-10 md:pt-10 md:pb-4 pb-24`} max-w-7xl mx-auto transition-all w-full flex-1 min-h-0 ${location.pathname === '/' ? 'h-auto overflow-hidden' : 'h-full'}`}>
+      {/* Main Content Area */}
+      <main className={`${location.pathname === '/videos' ? 'p-0 pb-0' : 'p-3 pb-24'} w-full flex-1 min-h-0 overflow-y-auto`}>
         {children}
       </main>
 
-      {/* Floating Bottom Navigation (Mobile Only styling, but visible up to MD) */}
+      {/* Floating Bottom Navigation */}
       {location.pathname !== '/videos' && (
-      <div className="md:hidden fixed bottom-3 left-3 right-3 sm:left-1/2 sm:-translate-x-1/2 sm:w-[500px] z-[60]">
+      <div className="fixed bottom-3 left-3 right-3 z-[60]">
          <div className="bg-white/95 backdrop-blur-xl border border-slate-200/50 p-1.5 rounded-[2rem] shadow-[0_10px_30px_rgba(0,0,0,0.1)] flex items-center justify-between">
              {[
                 { id: 'home', icon: Home, label: 'Home', path: '/' },
@@ -208,13 +180,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                       onClick={() => {
                          if (location.pathname !== item.path) navigate(item.path);
                       }}
-                      className={`flex flex-col items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-[1rem] relative transition-all duration-300 ${isActive ? 'text-fun-blue scale-105' : 'text-slate-400 hover:text-slate-600 hover:bg-slate-50'}`}
+                      className={`flex flex-col items-center justify-center w-12 h-12 rounded-[1rem] relative transition-all duration-300 ${isActive ? 'text-fun-blue scale-105' : 'text-slate-400 hover:text-slate-600 hover:bg-slate-50'}`}
                    >
                       {isActive && (
                          <div className="absolute inset-0 bg-fun-blue/10 rounded-[1rem] -z-10" />
                       )}
                       <Icon size={isActive ? 22 : 20} className={isActive ? 'fill-fun-blue/20' : ''} />
-                      <span className={`text-[9px] sm:text-[10px] font-bold mt-0.5 ${isActive ? 'text-fun-blue' : 'text-slate-400'}`}>{item.label}</span>
+                      <span className={`text-[9px] font-bold mt-0.5 ${isActive ? 'text-fun-blue' : 'text-slate-400'}`}>{item.label}</span>
                    </button>
                 )
              })}

@@ -880,29 +880,13 @@ const GrammarLessons: React.FC = () => {
     };
 
     return (
-      <div className="min-h-screen bg-[#F7F9FC] pb-24 font-sans selection:bg-fun-blue/20">
-        {/* TOP STATS HEADER */}
-        <div className="bg-white px-4 py-3 sm:py-4 sticky top-0 z-40 shadow-sm flex items-center justify-between border-b border-slate-100">
-          <div className="flex items-center gap-4">
-             <h1 className="text-xl font-black tracking-tight text-slate-800 hidden sm:block font-serif italic">Linguist</h1>
-             <div className="flex items-center gap-3">
-               <div className="flex items-center gap-1.5 text-orange-500 font-bold bg-orange-50 px-2.5 py-1 rounded-lg border border-orange-100 shadow-sm text-sm">
-                  <Flame size={16} fill="currentColor" /> {stats?.streakDays || 0}
-               </div>
-               <div className="flex items-center gap-1.5 text-fun-blue font-bold bg-blue-50 px-2.5 py-1 rounded-lg border border-blue-100 shadow-sm text-sm">
-                  <Zap size={16} fill="currentColor" /> {stats?.points || 0}
-               </div>
-             </div>
-          </div>
-          {/* Notifications and Profile removed as requested */}
-        </div>
-
-        <div className="max-w-6xl mx-auto px-4 py-6 sm:py-10 lg:flex lg:gap-10 justify-center">
+      <div className="h-full bg-[#F7F9FC] pb-24 font-sans selection:bg-fun-blue/20">
+<div className="max-w-6xl mx-auto px-4 py-2 sm:py-4 lg:flex lg:gap-10 justify-center">
            {/* MAIN LEARNING AREA */}
            <div className="flex-1 max-w-3xl space-y-8">
                
                {/* TITLE SECTION */}
-               <div className="text-center sm:text-left space-y-2 mt-2 px-2">
+               <div className="text-center sm:text-left space-y-1 mt-0 px-2">
                   <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-800 tracking-tight uppercase drop-shadow-sm">
                      Grammar Academy
                   </h1>
