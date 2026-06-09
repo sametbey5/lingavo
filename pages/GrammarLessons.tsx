@@ -883,7 +883,7 @@ const GrammarLessons: React.FC = () => {
       <div className="h-full bg-[#F7F9FC] pb-24 font-sans selection:bg-fun-blue/20">
 <div className="max-w-6xl mx-auto px-4 py-2 sm:py-4 lg:flex lg:gap-10 justify-center">
            {/* MAIN LEARNING AREA */}
-           <div className="flex-1 max-w-3xl space-y-8">
+           <div className="flex-1 max-w-3xl space-y-4">
                
                {/* TITLE SECTION */}
                <div className="text-center sm:text-left space-y-1 mt-0 px-2">
@@ -981,7 +981,7 @@ const GrammarLessons: React.FC = () => {
                )}
 
                {/* VISUAL PROGRESSION PATH */}
-               <div className="relative pt-8 pb-12 sm:pt-10 ml-4 sm:ml-10">
+               <div className="relative pt-4 pb-8 sm:pt-6 ml-4 sm:ml-10">
                   <div className="flex flex-col w-full">
                      {filteredLessons.map((lesson, idx) => {
                        const isCompleted = completedLessons.includes(lesson.id);
@@ -1019,9 +1019,15 @@ const GrammarLessons: React.FC = () => {
                                  }
                                `}
                              >
-                                <div className="w-full h-32 sm:w-32 sm:h-auto bg-slate-100 rounded-xl shrink-0 flex flex-col items-center justify-center border-2 border-dashed border-slate-300 text-slate-400 mb-3 sm:mb-0 sm:mr-4">
-                                   <ImageIcon className="mb-1" size={20} />
-                                   <span className="text-[10px] font-bold uppercase tracking-wider">Image Idea</span>
+                                <div className="w-full h-32 sm:w-32 sm:h-auto bg-slate-100 rounded-xl shrink-0 flex flex-col items-center justify-center border-2 border-dashed border-slate-300 text-slate-400 mb-3 sm:mb-0 sm:mr-4 overflow-hidden relative">
+                                   {lesson.imageUrl ? (
+                                      <img src={lesson.imageUrl} alt={lesson.title} className="w-full h-full object-cover rounded-lg absolute inset-0 z-10" />
+                                   ) : (
+                                      <>
+                                        <ImageIcon className="mb-1" size={20} />
+                                        <span className="text-[10px] font-bold uppercase tracking-wider">Image Idea</span>
+                                      </>
+                                   )}
                                 </div>
                                 <div className="flex-1 flex flex-row items-center justify-between gap-4 w-full min-w-0">
                                   <div className="flex-1 min-w-0 pr-1 space-y-1 sm:space-y-1.5 flex flex-col justify-center">

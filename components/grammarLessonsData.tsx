@@ -27,6 +27,7 @@ export type Lesson = {
   rawExplanation?: string;
   exercises: Exercise[];
   translations?: Record<string, LessonTranslation>;
+  imageUrl?: string;
 };
 
 const createLesson = (
@@ -38,7 +39,8 @@ const createLesson = (
   q1: string, 
   a1: string, 
   opts1: string[],
-  translations?: Record<string, { title: string; desc: string; rule: string }>
+  translations?: Record<string, { title: string; desc: string; rule: string }>,
+  imageUrl?: string
 ): Lesson => {
   const processedTranslations: Record<string, LessonTranslation> = {};
   
@@ -66,6 +68,7 @@ const createLesson = (
     title,
     topic,
     rawExplanation: desc,
+    imageUrl,
     explanation: (
       <div className="space-y-4 text-slate-700 text-lg">
         <p>{desc}</p>
@@ -97,7 +100,7 @@ const createLesson = (
 };
 
 export const LESSONS: Lesson[] = [
-  createLesson('a1-m1-l1', 'A1', 'Alphabet', 'First English', 'Learn about Alphabet.', 'What is the correct form for Alphabet?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
+  createLesson('a1-m1-l1', 'A1', 'Alphabet', 'First English', 'Learn about Alphabet.', 'What is the correct form for Alphabet?', 'Option 1', ['Option 1', 'Option 2', 'Option 3'], undefined, '/src/assets/images/alphabettitle.png'),
   createLesson('a1-m1-l2', 'A1', 'Greetings', 'First English', 'Learn about Greetings.', 'What is the correct form for Greetings?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
   createLesson('a1-m1-l3', 'A1', 'Numbers', 'First English', 'Learn about Numbers.', 'What is the correct form for Numbers?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
   createLesson('a1-m1-l4', 'A1', 'Days & Months', 'First English', 'Learn about Days & Months.', 'What is the correct form for Days & Months?', 'Option 1', ['Option 1', 'Option 2', 'Option 3']),
