@@ -19,31 +19,17 @@ const PlaySection: React.FC = () => {
                 </div>
             </header>
 
-            <div className="grid grid-cols-1 gap-4 flex-1 h-full min-h-0">
+            <div className="grid grid-cols-1 gap-4 flex-1 min-h-0">
                 <div 
-                    onClick={() => navigate('/game/racer')}
+                    onClick={() => navigate('/vocab')}
                     className="w-full bg-gradient-to-br from-orange-400 to-yellow-400 rounded-3xl p-6 shadow-md border-b-[6px] border-orange-500 cursor-pointer hover:-translate-y-1 transition-transform relative overflow-hidden group h-[180px]"
                 >
                     <div className="absolute top-4 right-4 w-12 h-12 bg-white/30 rounded-2xl flex items-center justify-center text-white backdrop-blur-sm">
                         <Zap size={24} className="fill-current" />
                     </div>
                     <div className="relative z-10 flex flex-col h-full justify-end">
-                        <h2 className="text-3xl font-black text-white mb-1 drop-shadow-sm">Speed Racer</h2>
-                        <p className="text-white/90 font-bold text-sm">Race against the clock</p>
-                    </div>
-                    <div className="absolute -bottom-8 -right-8 w-40 h-40 bg-white/10 rounded-full blur-2xl group-hover:bg-white/20 transition-colors" />
-                </div>
-
-                <div 
-                    onClick={() => navigate('/game/whack')}
-                    className="w-full bg-gradient-to-br from-fun-blue to-cyan-400 rounded-3xl p-6 shadow-md border-b-[6px] border-blue-600 cursor-pointer hover:-translate-y-1 transition-transform relative overflow-hidden group h-[180px]"
-                >
-                    <div className="absolute top-4 right-4 w-12 h-12 bg-white/30 rounded-2xl flex items-center justify-center text-white backdrop-blur-sm">
-                        <Brain size={24} />
-                    </div>
-                    <div className="relative z-10 flex flex-col h-full justify-end">
-                        <h2 className="text-3xl font-black text-white mb-1 drop-shadow-sm">Word Whack</h2>
-                        <p className="text-white/90 font-bold text-sm">Hit the correct words</p>
+                        <h2 className="text-3xl font-black text-white mb-1 drop-shadow-sm">Word Rush</h2>
+                        <p className="text-white/90 font-bold text-sm">Beat the clock and find words!</p>
                     </div>
                     <div className="absolute -bottom-8 -right-8 w-40 h-40 bg-white/10 rounded-full blur-2xl group-hover:bg-white/20 transition-colors" />
                 </div>

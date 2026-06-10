@@ -9,8 +9,6 @@ import GrammarLessons from './pages/GrammarLessons';
 import PlaySection from './pages/PlaySection';
 import Leaderboard from './pages/Leaderboard';
 import VideoLearning from './pages/VideoLearning';
-import SpeedRacer from './pages/SpeedRacer';
-import WordWhack from './pages/WordWhack';
 import BadgeTrading from './pages/BadgeTrading';
 import AdminPanel from './pages/AdminPanel';
 import UserProfileView from './pages/UserProfileView';
@@ -70,8 +68,6 @@ const AppRoutes: React.FC = () => {
       <Route path="/admin" element={<AuthWrapper><AdminPanel /></AuthWrapper>} />
       
       {/* Game Routes */}
-      <Route path="/game/racer" element={<AuthWrapper><SpeedRacer /></AuthWrapper>} />
-      <Route path="/game/whack" element={<AuthWrapper><WordWhack /></AuthWrapper>} />
       <Route path="/race" element={<AuthWrapper><RaceMode /></AuthWrapper>} />
       <Route path="/my-style" element={<AuthWrapper><MyStyle /></AuthWrapper>} />
       <Route path="/trophy-case" element={<AuthWrapper><TrophyCase /></AuthWrapper>} />
