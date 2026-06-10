@@ -5,8 +5,8 @@ import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
 import VocabBuilder from './pages/VocabBuilder';
 import GrammarCoach from './pages/GrammarCoach';
-import ScrambleMaster from './pages/ScrambleMaster';
 import GrammarLessons from './pages/GrammarLessons';
+import PlaySection from './pages/PlaySection';
 import Leaderboard from './pages/Leaderboard';
 import VideoLearning from './pages/VideoLearning';
 import SpeedRacer from './pages/SpeedRacer';
@@ -60,8 +60,8 @@ const AppRoutes: React.FC = () => {
       <Route path="/wordbank" element={<AuthWrapper><WordBank /></AuthWrapper>} />
       <Route path="/grammar" element={<AuthWrapper><GrammarCoach /></AuthWrapper>} />
       <Route path="/grammar-lessons" element={<AuthWrapper><GrammarLessons /></AuthWrapper>} />
-      <Route path="/game/scramble" element={<AuthWrapper><ScrambleMaster /></AuthWrapper>} />
       <Route path="/videos" element={<AuthWrapper><VideoLearning /></AuthWrapper>} />
+      <Route path="/play" element={<AuthWrapper><PlaySection /></AuthWrapper>} />
       <Route path="/leaderboard" element={<AuthWrapper><Leaderboard /></AuthWrapper>} />
       <Route path="/profile/:userId" element={<AuthWrapper><UserProfileView /></AuthWrapper>} />
       <Route path="/trading" element={<AuthWrapper><BadgeTrading /></AuthWrapper>} />

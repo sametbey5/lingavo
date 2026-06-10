@@ -101,19 +101,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <ContactModal />
       
       {/* Mobile Header */}
-      <div className={`px-4 py-3 flex items-center justify-between sticky top-0 z-50 backdrop-blur-xl bg-white/80 border-b border-white/20 shadow-[0_4px_30px_rgba(0,0,0,0.03)]`}>
-        <div className="flex items-center gap-3">
-            <img 
-              src="https://i.ibb.co/TMMP1KYB/smart.png" 
-              alt="Lingavo Logo" 
-              className="h-8 w-auto object-contain drop-shadow-sm"
-              referrerPolicy="no-referrer"
-            />
-        </div>
+      <div className={`px-4 py-3 flex items-center justify-between sticky top-0 z-50 backdrop-blur-xl bg-white/80 border-b border-white/20 shadow-[0_4px_30px_rgba(0,0,0,0.03)] relative`}>
         
-        <div className="flex-1 px-2 flex justify-center flex-col items-center overflow-hidden relative min-h-[40px]">
+        {/* Left Side (Notifications/Level Up) */}
+        <div className="flex-1 flex justify-start items-center overflow-hidden relative min-h-[40px]">
            {notification && (
-              <div className="absolute inset-0 flex items-center justify-center animate-fade-in z-50">
+              <div className="absolute left-0 flex items-center animate-fade-in z-50">
                  <div className={`text-white px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 border border-white/20 whitespace-nowrap overflow-hidden bg-slate-800/90 backdrop-blur-md`}>
                     {notification.type === 'xp' && <Zap className="text-yellow-400 fill-current shrink-0" size={12} />}
                     {notification.type === 'reward' && <Gift className="text-fun-pink fill-current shrink-0" size={12} />}
@@ -125,7 +118,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
            )}
            
            {showLevelUp && !notification && (
-              <div className="absolute inset-0 flex items-center justify-center animate-bounce-slow z-50">
+              <div className="absolute left-0 flex items-center animate-bounce-slow z-50">
                  <div onClick={closeLevelUp} className="bg-gradient-to-r from-fun-blue to-cyan-400 text-white px-4 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 border border-white/20 cursor-pointer hover:scale-105 transition-transform">
                     <Star className="text-fun-yellow fill-current animate-pulse shrink-0" size={14} />
                     <span className="font-black text-[10px] tracking-wider whitespace-nowrap">LEVEL {stats.level}!</span>
@@ -133,8 +126,18 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               </div>
            )}
         </div>
+
+        {/* Center Logo */}
+        <div className="flex items-center justify-center absolute left-1/2 -translate-x-1/2">
+            <img 
+              src="https://i.ibb.co/TMMP1KYB/smart.png" 
+              alt="Lingavo Logo" 
+              className="h-8 w-auto object-contain drop-shadow-sm"
+              referrerPolicy="no-referrer"
+            />
+        </div>
         
-        <div className="flex items-center gap-1.5 ml-auto">
+        <div className="flex items-center justify-end flex-1 gap-1.5 ml-auto">
             {/* Language Switch */}
             <button 
               onClick={() => handleLanguageChange(preferredLanguage === 'English' ? 'Turkish' : 'English')}
@@ -166,10 +169,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
          <div className="bg-white/95 backdrop-blur-xl border border-slate-200/50 p-1.5 rounded-[2rem] shadow-[0_10px_30px_rgba(0,0,0,0.1)] flex items-center justify-between">
              {[
                 { id: 'home', icon: Home, label: 'Home', path: '/' },
-                { id: 'lessons', icon: BookOpen, label: 'Grammar', path: '/grammar-lessons' },
-                { id: 'movies', icon: MonitorPlay, label: 'Movies', path: '/videos' },
-                { id: 'speaking', icon: Mic, label: 'Speak', path: '/pronunciation' },
-                { id: 'quests', icon: Target, label: 'Progress', path: '/your-progress' },
+                { id: 'lessons', icon: BookOpen, label: 'Lessons', path: '/grammar-lessons' },
+                { id: 'watch', icon: MonitorPlay, label: 'Watch', path: '/videos' },
+                { id: 'speak', icon: Mic, label: 'Speak', path: '/pronunciation' },
+                { id: 'play', icon: Gamepad2, label: 'Play', path: '/play' },
                 { id: 'profile', icon: User, label: 'Profile', path: '/my-style' },
              ].map((item) => {
                 const isActive = location.pathname === item.path || (item.path !== '/' && location.pathname.startsWith(item.path));

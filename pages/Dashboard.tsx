@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Zap, Brain, Star, Flame, CheckCircle2, PlayCircle, Sparkles, Wand2, Award, Palette, Mic, Map, Flag, MonitorPlay, Target, Bell, BookOpen, Users, User, ChevronRight, X, ArrowLeft, Heart, Medal, Gift, Lock, MessageCircle, Home } from 'lucide-react';
+import { Zap, Brain, Star, Flame, CheckCircle2, PlayCircle, Sparkles, Wand2, Award, Palette, Mic, Map, Flag, MonitorPlay, Target, Bell, BookOpen, Users, User, ChevronRight, X, ArrowLeft, Heart, Medal, Gift, Lock, MessageCircle, Home, Gamepad2 } from 'lucide-react';
 import Button from '../components/Button';
 import { Badge } from '../types';
 import { useGamification } from '../context/GamificationContext';
@@ -14,7 +14,6 @@ import watchImage from '../src/assets/images/watch.png';
 
 import grammarImg from '../src/assets/images/grammar.png';
 import vocImg from '../src/assets/images/dictionary.png';
-import scrambleImg from '../src/assets/images/scramble.png';
 import wordRushImg from '../src/assets/images/race.png';
 
 const Dashboard: React.FC = () => {
@@ -39,10 +38,10 @@ const Dashboard: React.FC = () => {
   const progressPercent = (currentLevelPoints / pointsPerLevel) * 100;
   const pointsToNextLevel = pointsPerLevel - currentLevelPoints;
 
-  const PracticeCard = ({ title, desc, icon: Icon, imageSrc, onClick, colorFrom, colorTo, progress = 0 }: any) => (
+  const PracticeCard = ({ title, desc, icon: Icon, imageSrc, onClick, colorFrom, colorTo, borderColor, progress = 0 }: any) => (
       <div 
          onClick={onClick} 
-         className="relative w-full rounded-[1.25rem] border border-slate-100 overflow-hidden cursor-pointer hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group bg-white shadow-xs flex flex-col h-full min-h-0 ring-2 ring-transparent hover:ring-fun-blue/20"
+         className={`relative w-full rounded-[1.25rem] border-[2px] ${borderColor || 'border-slate-100'} overflow-hidden cursor-pointer hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group bg-white shadow-sm flex flex-col h-full min-h-0 ring-2 ring-transparent hover:ring-black/5`}
       >
           <div className={`relative h-[55%] sm:h-[60%] w-full bg-gradient-to-br ${colorFrom} ${colorTo} overflow-hidden shrink-0`}>
               <div className="absolute inset-0 bg-white/20 blur-xl group-hover:bg-white/30 transition-colors" />
@@ -81,23 +80,23 @@ const Dashboard: React.FC = () => {
                      </h2>
                      
                      <div className="flex items-center gap-1.5 ml-auto shrink-0">
-                        <div className="flex items-center gap-1 text-orange-500 font-black bg-orange-50 px-2 py-1 rounded border border-orange-100 text-[10px] sm:text-xs">
-                           <Flame size={12} className="fill-current" /> {stats.streakDays}
+                        <div className="flex items-center gap-1 text-orange-500 font-black bg-orange-50 px-2 py-1 rounded border border-orange-100 text-[13px] sm:text-[15px]">
+                           <Flame size={14} className="fill-current sm:w-4 sm:h-4" /> {stats.streakDays}
                         </div>
-                        <div className="flex items-center gap-1 text-yellow-500 font-black bg-yellow-50 px-2 py-1 rounded border border-yellow-100 text-[10px] sm:text-xs">
-                           <Star size={12} className="fill-current" /> {stats.points}
+                        <div className="flex items-center gap-1 text-yellow-500 font-black bg-yellow-50 px-2 py-1 rounded border border-yellow-100 text-[13px] sm:text-[15px]">
+                           <Star size={14} className="fill-current sm:w-4 sm:h-4" /> {stats.points}
                         </div>
                      </div>
                   </div>
                   
                   <div className="flex items-center gap-2 w-full mt-0.5">
-                     <span className="text-[10px] sm:text-xs font-black text-fun-blue flex items-center gap-0.5 shrink-0">
-                        <Award size={10} className="sm:hidden" />
-                        <Award size={12} className="hidden sm:block" /> 
+                     <span className="text-[13px] sm:text-[15px] font-black text-fun-blue flex items-center gap-1 shrink-0">
+                        <Award size={14} className="sm:hidden" />
+                        <Award size={16} className="hidden sm:block" /> 
                         Lv.{stats.level}
                      </span>
-                     <div className="flex-1 h-2.5 bg-slate-200 rounded-full overflow-hidden shadow-inner flex">
-                        <div className="h-full bg-gradient-to-r from-fun-blue to-teal-400 rounded-full shadow-[0_0_10px_rgba(56,189,248,0.4)] transition-all duration-1000 ease-out" style={{ width: `${progressPercent}%` }} />
+                     <div className="flex-1 h-3 sm:h-3.5 bg-slate-200 rounded-full overflow-hidden shadow-inner flex">
+                        <div className="h-full bg-fun-blue rounded-full shadow-[0_0_10px_rgba(56,189,248,0.4)] transition-all duration-1000 ease-out" style={{ width: `${progressPercent}%` }} />
                      </div>
                   </div>
                </div>
@@ -139,13 +138,13 @@ const Dashboard: React.FC = () => {
       <div className="px-3 pb-3 sm:px-4 shrink-0">
          <div 
              onClick={() => navigate('/grammar-lessons')}
-             className="relative w-full rounded-[1.25rem] border border-slate-100 overflow-hidden cursor-pointer shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group bg-white ring-2 ring-transparent hover:ring-fun-blue/20 flex flex-row h-[110px] xs:h-[120px] sm:h-[140px]"
+             className="relative w-full rounded-[1.25rem] border-[2px] border-fun-blue overflow-hidden cursor-pointer shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group bg-white ring-2 ring-transparent hover:ring-fun-blue/20 flex flex-row h-[110px] xs:h-[120px] sm:h-[140px]"
          >
              <div className="flex-1 p-4 sm:p-6 flex flex-col justify-center min-w-0 overflow-hidden z-20">
                  <div className="inline-flex items-center gap-1 sm:gap-1.5 text-slate-400 font-bold uppercase tracking-widest text-[9px] sm:text-[10px] mb-1">
-                    <BookOpen size={10} className="text-fun-blue" /> <span className="truncate">Grammar Coach</span>
+                    <BookOpen size={10} className="text-fun-blue" /> <span className="truncate">Lessons</span>
                  </div>
-                 <h2 className="font-black text-slate-800 text-lg sm:text-2xl truncate mb-0.5 sm:mb-1 group-hover:text-fun-blue transition-colors leading-snug">{nextLessonTitle}</h2>
+                 <h2 className="font-black text-slate-800 text-xl sm:text-3xl truncate mb-0.5 sm:mb-1 group-hover:text-fun-blue transition-colors leading-snug">{nextLessonTitle}</h2>
                  <p className="text-[11px] sm:text-xs font-bold text-slate-400 leading-tight truncate mb-2 sm:mb-2.5">Master your English grammar.</p>
                  
                  <div className="w-full max-w-[150px] h-1.5 sm:h-2 bg-slate-100 rounded-full overflow-hidden flex shrink-0">
@@ -164,41 +163,45 @@ const Dashboard: React.FC = () => {
       <div className="px-3 pb-0 sm:px-4 flex-1 flex flex-col min-h-0 mt-1">
          <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 xs:gap-3 flex-1 min-h-[140px] mb-1">
             <PracticeCard 
-               title="Dictionary" 
-               desc="Build vocab"
-               icon={BookOpen}
-               imageSrc={vocImg}
-               onClick={() => navigate('/wordbank')}
-               colorFrom="from-fun-pink"
-               colorTo="to-rose-400"
-               progress={40}
-            />
-            <PracticeCard 
-               title="Word Rush" 
-               desc="Beat the clock"
-               icon={Zap}
-               imageSrc={wordRushImg}
-               onClick={() => navigate('/vocab')}
-               colorFrom="from-orange-400"
-               colorTo="to-yellow-400"
-            />
-            <PracticeCard 
-               title="Scramble" 
-               desc="Fix sentences"
-               icon={Brain}
-               imageSrc={scrambleImg}
-               onClick={() => navigate('/game/scramble')}
-               colorFrom="from-fun-purple"
-               colorTo="to-indigo-400"
-            />
-            <PracticeCard 
                title="Speak" 
                desc="Pronounce"
                icon={Mic}
                imageSrc={speakImage}
                onClick={() => navigate('/pronunciation')}
+               colorFrom="from-fun-pink"
+               colorTo="to-rose-400"
+               borderColor="border-rose-400"
+               progress={40}
+            />
+            <PracticeCard 
+               title="Words" 
+               desc="Build vocab"
+               icon={BookOpen}
+               imageSrc={vocImg}
+               onClick={() => navigate('/wordbank')}
+               colorFrom="from-orange-400"
+               colorTo="to-yellow-400"
+               borderColor="border-orange-400"
+            />
+            <PracticeCard 
+               title="Watch" 
+               desc="Watch & Learn"
+               icon={MonitorPlay}
+               imageSrc={watchImage}
+               onClick={() => navigate('/videos')}
+               colorFrom="from-fun-purple"
+               colorTo="to-indigo-400"
+               borderColor="border-indigo-400"
+            />
+            <PracticeCard 
+               title="Play" 
+               desc="Have fun"
+               icon={Gamepad2}
+               imageSrc={wordRushImg}
+               onClick={() => navigate('/play')}
                colorFrom="from-teal-400"
                colorTo="to-emerald-400"
+               borderColor="border-teal-400"
                progress={15}
             />
          </div>
