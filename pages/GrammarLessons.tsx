@@ -481,7 +481,13 @@ const InteractiveExplanationScreen: React.FC<{
   awardPoints: (amt: number, desc: string, category: 'grammar'|'vocabulary'|'speaking'|'listening'|'realLife') => void;
 }> = ({lesson, onNext, onBack, t, preferredLanguage, awardPoints}) => {
   const [pageIndex, setPageIndex] = useState(0);
-  const totalPages = 10;
+  const [micState, setMicState] = useState<'idle' | 'listening' | 'success'>('idle');
+  const isAlphabet = lesson.id === 'a1-m1-l1' || lesson.title === 'Alphabet';
+  const totalPages = isAlphabet ? 26 : 10;
+  
+  useEffect(() => {
+    setMicState('idle');
+  }, [pageIndex]);
   
   // Custom theme colors by level
   const themeColors: Record<Level, {from: string; to: string; shadow: string; bg: string; text: string; hex?: string; textHex?: string}> = {
@@ -497,14 +503,6 @@ const InteractiveExplanationScreen: React.FC<{
 
   // Subpages handling
   if (pageIndex > 0) {
-    const isAnimal = lesson.title === 'Alphabet' || lesson.title === 'Animals';
-    const words = isAnimal ? ['Dog', 'Cat', 'Elephant', 'Lion', 'Tiger', 'Bear', 'Monkey', 'Rabbit', 'Fox', 'Deer'] :
-       ['Hello', 'Goodbye', 'Please', 'Thank you', 'Yes', 'No', 'Water', 'Food', 'Help', 'Friend'];
-    const emojis = isAnimal ? ['🐶', '🐱', '🐘', '🦁', '🐯', '🐻', '🐵', '🐰', '🦊', '🦌'] :
-       ['👋', '👋', '🙏', '🙏', '👍', '👎', '💧', '🍔', '🆘', '🤝'];
-    const word = words[pageIndex - 1];
-    const emoji = emojis[pageIndex - 1];
-
     const playAudio = () => {
        try {
          const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
@@ -521,6 +519,141 @@ const InteractiveExplanationScreen: React.FC<{
          osc.stop(audioCtx.currentTime + 0.15);
        } catch(e) {}
     };
+
+    const handleMicClick = () => {
+      setMicState('listening');
+      setTimeout(() => {
+        setMicState('success');
+        awardPoints(2, 'Perfect pronunciation!', 'speaking');
+      }, 1500);
+    };
+
+    if (isAlphabet) {
+      const alphabets = [
+        { letter: 'A', pron: '/eɪ/', word: 'Apple', emoji: '🍎' },
+        { letter: 'B', pron: '/biː/', word: 'Bear', emoji: '🐻' },
+        { letter: 'C', pron: '/siː/', word: 'Cat', emoji: '🐱' },
+        { letter: 'D', pron: '/diː/', word: 'Dog', emoji: '🐶' },
+        { letter: 'E', pron: '/iː/', word: 'Elephant', emoji: '🐘' },
+        { letter: 'F', pron: '/ɛf/', word: 'Fox', emoji: '🦊' },
+        { letter: 'G', pron: '/dʒiː/', word: 'Giraffe', emoji: '🦒' },
+        { letter: 'H', pron: '/eɪtʃ/', word: 'Horse', emoji: '🐴' },
+        { letter: 'I', pron: '/aɪ/', word: 'Ice Cream', emoji: '🍦' },
+        { letter: 'J', pron: '/dʒeɪ/', word: 'Juice', emoji: '🧃' },
+        { letter: 'K', pron: '/keɪ/', word: 'Kangaroo', emoji: '🦘' },
+        { letter: 'L', pron: '/ɛl/', word: 'Lion', emoji: '🦁' },
+        { letter: 'M', pron: '/ɛm/', word: 'Monkey', emoji: '🐵' },
+        { letter: 'N', pron: '/ɛn/', word: 'Nest', emoji: '🪹' },
+        { letter: 'O', pron: '/oʊ/', word: 'Owl', emoji: '🦉' },
+        { letter: 'P', pron: '/piː/', word: 'Penguin', emoji: '🐧' },
+        { letter: 'Q', pron: '/kjuː/', word: 'Queen', emoji: '👑' },
+        { letter: 'R', pron: '/ɑːr/', word: 'Rabbit', emoji: '🐰' },
+        { letter: 'S', pron: '/ɛs/', word: 'Sun', emoji: '☀️' },
+        { letter: 'T', pron: '/tiː/', word: 'Tiger', emoji: '🐯' },
+        { letter: 'U', pron: '/juː/', word: 'Umbrella', emoji: '☂️' },
+        { letter: 'V', pron: '/viː/', word: 'Violin', emoji: '🎻' },
+        { letter: 'W', pron: '/dʌbəl juː/', word: 'Whale', emoji: '🐳' },
+        { letter: 'X', pron: '/ɛks/', word: 'Xylophone', emoji: '🎹' },
+        { letter: 'Y', pron: '/waɪ/', word: 'Yoyo', emoji: '🪀' },
+        { letter: 'Z', pron: '/zɛd/', word: 'Zebra', emoji: '🦓' }
+      ];
+      const item = alphabets[pageIndex - 1];
+      
+      return (
+         <div className="fixed inset-0 z-[100] w-full h-[100dvh] flex flex-col font-sans bg-slate-50 pb-6 overflow-hidden">
+           {/* Top Bar with close button left, progress bar below */}
+           <div className="px-5 py-4 flex flex-col shrink-0 bg-transparent z-10 relative">
+              <div className="flex items-center w-full mb-3">
+                 <button onClick={() => setPageIndex(0)} className="text-slate-400 hover:text-slate-600 transition-colors p-1 flex items-center justify-center">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                       <line x1="18" y1="6" x2="6" y2="18"></line>
+                       <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                 </button>
+              </div>
+              <div className="w-full h-3 bg-slate-200/60 rounded-full overflow-hidden flex">
+                 <div className={`h-full bg-gradient-to-r ${theme.from} ${theme.to} rounded-full transition-all duration-300`} style={{width: `${((pageIndex) / totalPages) * 100}%`}}></div>
+              </div>
+           </div>
+ 
+           {/* Main content */}
+           <div className="flex-1 overflow-y-auto min-h-0 w-full px-4 sm:px-6 md:px-8 max-w-xl mx-auto flex flex-col items-center justify-start sm:justify-center pb-28 pt-2 sm:pt-4 relative">
+               <motion.div 
+                 key={`page-${pageIndex}`}
+                 initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                 animate={{ opacity: 1, scale: 1, y: 0 }}
+                 className="w-full max-w-[300px] xs:max-w-[340px] sm:max-w-[380px] mx-auto min-h-[300px] flex-1 max-h-[460px] bg-white rounded-[32px] shadow-[0_10px_40px_rgba(0,0,0,0.06)] flex flex-col items-center justify-center border border-slate-100 relative group mb-4 shrink-0 px-4 py-8"
+               >
+                 {pageIndex > 1 && (
+                   <button onClick={() => setPageIndex(pageIndex - 1)} className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 text-slate-300 hover:text-slate-500 w-10 h-10 flex items-center justify-center z-10">
+                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                   </button>
+                 )}
+                 
+                 {pageIndex < totalPages && (
+                   <button onClick={() => {
+                     setPageIndex(pageIndex + 1);
+                     awardPoints(5, "Letter learned", "vocabulary");
+                   }} className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 text-slate-300 hover:text-slate-500 w-10 h-10 flex items-center justify-center z-10">
+                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                   </button>
+                 )}
+
+                 <div className="text-[80px] xs:text-[100px] sm:text-[120px] font-black leading-none text-[#5d8ef7] mb-1">{item.letter}</div>
+                 <div className="text-[14px] xs:text-[16px] sm:text-[20px] text-slate-400 font-mono tracking-widest mb-2 sm:mb-4">{item.pron}</div>
+                 <div className="text-[60px] xs:text-[70px] sm:text-[90px] drop-shadow-md mb-2 sm:mb-3">{item.emoji}</div>
+                 <div className="text-[18px] xs:text-[20px] sm:text-[24px] font-bold text-slate-700 tracking-wide uppercase">{item.word}</div>
+               </motion.div>
+               
+               <div className="flex flex-col items-center space-y-3 sm:space-y-4 shrink-0 mt-auto w-full">
+                  <div className="flex gap-4 items-center">
+                    <button onClick={playAudio} className={`w-14 h-14 sm:w-16 sm:h-16 bg-white hover:bg-slate-50 ${theme.textHex ? `text-[${theme.textHex}]` : 'text-slate-600'} rounded-full flex items-center justify-center transition-colors shadow-sm border border-slate-100`}>
+                        <Volume2 size={28} stroke={theme.hex || "currentColor"} />
+                    </button>
+                    <button 
+                        onClick={handleMicClick} 
+                        className={`w-14 h-14 sm:w-16 sm:h-16 ${micState === 'success' ? 'bg-green-50 text-green-500 border border-green-200' : micState === 'listening' ? 'bg-red-50 text-red-500 border border-red-200 animate-pulse' : 'bg-white hover:bg-slate-50 text-slate-600 border border-slate-100'} rounded-full flex items-center justify-center transition-colors shadow-sm`}
+                    >
+                        {micState === 'success' ? <CheckCircle2 size={28} /> : <Mic size={28} stroke={micState === 'idle' ? (theme.hex || "currentColor") : 'currentColor'} />}
+                    </button>
+                  </div>
+                  <div className="flex gap-1 flex-wrap justify-center px-2 max-w-full">
+                     {alphabets.map((_, i) => (
+                       <div key={i} className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full ${pageIndex === i + 1 ? (theme.bg || 'bg-blue-500') : 'bg-slate-200'}`} />
+                     ))}
+                  </div>
+                  <div className="text-xs sm:text-sm font-bold text-slate-400">
+                     {pageIndex} / {totalPages}
+                  </div>
+               </div>
+           </div>
+ 
+           {/* Footer */}
+           <div className="fixed bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-slate-50 via-slate-50/100 to-transparent pointer-events-none z-50 flex flex-col items-center pb-8 pt-12">
+              <div className="max-w-[400px] w-full pointer-events-auto">
+                 <button onClick={() => {
+                    if (pageIndex < totalPages) {
+                        setPageIndex(pageIndex + 1);
+                        awardPoints(5, "Letter learned", "vocabulary");
+                    } else {
+                        onNext();
+                    }
+                 }} className={`w-full py-4 bg-gradient-to-r ${theme.from} ${theme.to} hover:opacity-90 shadow-[0_4px_15px_rgba(0,0,0,0.1)] active:shadow-none active:translate-y-1 transition-all rounded-full flex items-center justify-center text-white border-0`}>
+                    <span className="font-semibold text-[17px] tracking-wide">{pageIndex === totalPages ? 'Finish' : 'Continue'}</span>
+                 </button>
+              </div>
+           </div>
+         </div>
+      );
+    }
+
+    const isAnimal = lesson.title === 'Animals';
+    const words = isAnimal ? ['Dog', 'Cat', 'Elephant', 'Lion', 'Tiger', 'Bear', 'Monkey', 'Rabbit', 'Fox', 'Deer'] :
+       ['Hello', 'Goodbye', 'Please', 'Thank you', 'Yes', 'No', 'Water', 'Food', 'Help', 'Friend'];
+    const emojis = isAnimal ? ['🐶', '🐱', '🐘', '🦁', '🐯', '🐻', '🐵', '🐰', '🦊', '🦌'] :
+       ['👋', '👋', '🙏', '🙏', '👍', '👎', '💧', '🍔', '🆘', '🤝'];
+    const word = words[(pageIndex - 1) % 10];
+    const emoji = emojis[(pageIndex - 1) % 10];
 
     return (
        <div className="fixed inset-0 z-[100] w-full h-[100dvh] flex flex-col font-sans bg-slate-50 pb-6 overflow-hidden">
@@ -587,9 +720,6 @@ const InteractiveExplanationScreen: React.FC<{
     );
   }
 
-  // 1. Objectives (matching structure from new image)
-  const isAlphabet = lesson.id === 'a1-m1-l1' || lesson.title === 'Alphabet';
-  
   const customAlphabetObjectives = [
      { icon: <BookOpen size={24} fill="currentColor" />, title: "Learn all 26 letters", desc: "Discover every English letter" },
      { icon: <Volume2 size={24} fill="currentColor" />, title: "Listen to the sounds", desc: "Improve your hearing" },
@@ -1040,7 +1170,7 @@ const GrammarLessons: React.FC = () => {
                                     <h3 className={`text-lg sm:text-xl font-black truncate leading-tight ${isUpNext ? 'text-fun-blue' : isCompleted ? 'text-slate-800' : 'text-slate-600'}`}>
                                       {lesson.title}
                                     </h3>
-                                    <p className="text-xs sm:text-sm font-bold text-slate-400 truncate pt-0.5">{lesson.desc}</p>
+                                    <p className="text-xs sm:text-sm font-bold text-slate-400 truncate pt-0.5">{lesson.rawExplanation || lesson.title}</p>
                                   </div>
                                   <div className={`hidden sm:flex w-12 h-12 sm:w-14 sm:h-14 rounded-2xl items-center justify-center shrink-0 shadow-inner border border-black/5 ${isCompleted ? 'bg-fun-green/10 text-fun-green border-fun-green/10' : iconProps} group-hover:scale-110 transition-transform duration-300`}>
                                     {getTopicIcon(lesson.topic)}

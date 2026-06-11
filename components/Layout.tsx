@@ -171,7 +171,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 { id: 'home', icon: Home, label: 'Home', path: '/' },
                 { id: 'lessons', icon: BookOpen, label: 'Lessons', path: '/grammar-lessons' },
                 { id: 'watch', icon: MonitorPlay, label: 'Watch', path: '/videos' },
-                { id: 'speak', icon: Mic, label: 'Speak', path: '/pronunciation' },
+                { id: 'speak', icon: Mic, label: 'Speak', path: '/speak' },
+                { id: 'write', icon: PenTool, label: 'Write', path: '/write' },
                 { id: 'play', icon: Gamepad2, label: 'Play', path: '/play' },
                 { id: 'profile', icon: User, label: 'Profile', path: '/my-style' },
              ].map((item) => {

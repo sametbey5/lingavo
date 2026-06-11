@@ -7,6 +7,7 @@ import VocabBuilder from './pages/VocabBuilder';
 import GrammarCoach from './pages/GrammarCoach';
 import GrammarLessons from './pages/GrammarLessons';
 import PlaySection from './pages/PlaySection';
+import WriteSection from './pages/WriteSection';
 import Leaderboard from './pages/Leaderboard';
 import VideoLearning from './pages/VideoLearning';
 import BadgeTrading from './pages/BadgeTrading';
@@ -17,6 +18,8 @@ import Login from './pages/Login';
 import Onboarding from './pages/Onboarding';
 import StoryMode from './pages/StoryMode';
 import PronunciationPractice from './pages/PronunciationPractice';
+import SpeakSection from './pages/SpeakSection';
+import RoleplayChat from './pages/RoleplayChat';
 import Notifications from './pages/Notifications';
 import RaceMode from './pages/RaceMode';
 import WordBank from './pages/WordBank';
@@ -53,13 +56,16 @@ const AppRoutes: React.FC = () => {
       <Route path="/onboarding" element={userId ? <Onboarding /> : <Login />} />
       <Route path="/story" element={<AuthWrapper><StoryMode /></AuthWrapper>} />
       <Route path="/" element={<AuthWrapper><Dashboard /></AuthWrapper>} />
-      <Route path="/pronunciation" element={<AuthWrapper><PronunciationPractice /></AuthWrapper>} />
+      <Route path="/speak" element={<AuthWrapper><SpeakSection /></AuthWrapper>} />
+      <Route path="/pronunciation-practice" element={<AuthWrapper><PronunciationPractice /></AuthWrapper>} />
+      <Route path="/conversation" element={<AuthWrapper><RoleplayChat /></AuthWrapper>} />
       <Route path="/vocab" element={<AuthWrapper><VocabBuilder /></AuthWrapper>} />
       <Route path="/wordbank" element={<AuthWrapper><WordBank /></AuthWrapper>} />
       <Route path="/grammar" element={<AuthWrapper><GrammarCoach /></AuthWrapper>} />
       <Route path="/grammar-lessons" element={<AuthWrapper><GrammarLessons /></AuthWrapper>} />
       <Route path="/videos" element={<AuthWrapper><VideoLearning /></AuthWrapper>} />
       <Route path="/play" element={<AuthWrapper><PlaySection /></AuthWrapper>} />
+      <Route path="/write" element={<AuthWrapper><WriteSection /></AuthWrapper>} />
       <Route path="/leaderboard" element={<AuthWrapper><Leaderboard /></AuthWrapper>} />
       <Route path="/profile/:userId" element={<AuthWrapper><UserProfileView /></AuthWrapper>} />
       <Route path="/trading" element={<AuthWrapper><BadgeTrading /></AuthWrapper>} />

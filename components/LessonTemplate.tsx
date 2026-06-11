@@ -11,7 +11,7 @@ export interface LessonTemplateProps {
   level?: string;
   lessonNumber?: number;
   illustrationUrl?: string;
-  themeColor?: { from: string; to: string; text: string; bg: string; hex?: string };
+  themeColor?: { from: string; to: string; text: string; bg: string; hex?: string; textHex?: string };
 
   // 2. Learning Objectives
   objectives: { icon: React.FC<any> | JSX.Element; title: string; desc: string }[];
