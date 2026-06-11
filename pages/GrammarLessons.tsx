@@ -43,7 +43,8 @@ import {
   Search,
   Edit2,
   Brain,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Info
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import ReactPlayer from 'react-player';
@@ -482,11 +483,24 @@ const InteractiveExplanationScreen: React.FC<{
 }> = ({lesson, onNext, onBack, t, preferredLanguage, awardPoints}) => {
   const [pageIndex, setPageIndex] = useState(0);
   const [micState, setMicState] = useState<'idle' | 'listening' | 'success'>('idle');
+  const [selectedLeft, setSelectedLeft] = useState<string | null>(null);
+  const [selectedRight, setSelectedRight] = useState<string | null>(null);
+  const [matchedPairs, setMatchedPairs] = useState<string[]>([]);
+  const [listenGuess, setListenGuess] = useState<string | null>(null);
+  const [practiceAnswer, setPracticeAnswer] = useState<string | null>(null);
+  const [practiceStatus, setPracticeStatus] = useState<'idle' | 'correct' | 'incorrect'>('idle');
   const isAlphabet = lesson.id === 'a1-m1-l1' || lesson.title === 'Alphabet';
-  const totalPages = isAlphabet ? 26 : 10;
+  const isGreetings = lesson.id === 'a1-m1-l2' || lesson.title === 'Greetings';
+  const totalPages = isAlphabet ? 78 : (isGreetings ? 6 : 10);
   
   useEffect(() => {
     setMicState('idle');
+    setSelectedLeft(null);
+    setSelectedRight(null);
+    setMatchedPairs([]);
+    setListenGuess(null);
+    setPracticeAnswer(null);
+    setPracticeStatus('idle');
   }, [pageIndex]);
   
   // Custom theme colors by level
@@ -530,45 +544,249 @@ const InteractiveExplanationScreen: React.FC<{
 
     if (isAlphabet) {
       const alphabets = [
-        { letter: 'A', pron: '/eɪ/', word: 'Apple', emoji: '🍎' },
-        { letter: 'B', pron: '/biː/', word: 'Bear', emoji: '🐻' },
-        { letter: 'C', pron: '/siː/', word: 'Cat', emoji: '🐱' },
-        { letter: 'D', pron: '/diː/', word: 'Dog', emoji: '🐶' },
-        { letter: 'E', pron: '/iː/', word: 'Elephant', emoji: '🐘' },
-        { letter: 'F', pron: '/ɛf/', word: 'Fox', emoji: '🦊' },
-        { letter: 'G', pron: '/dʒiː/', word: 'Giraffe', emoji: '🦒' },
-        { letter: 'H', pron: '/eɪtʃ/', word: 'Horse', emoji: '🐴' },
-        { letter: 'I', pron: '/aɪ/', word: 'Ice Cream', emoji: '🍦' },
-        { letter: 'J', pron: '/dʒeɪ/', word: 'Juice', emoji: '🧃' },
-        { letter: 'K', pron: '/keɪ/', word: 'Kangaroo', emoji: '🦘' },
-        { letter: 'L', pron: '/ɛl/', word: 'Lion', emoji: '🦁' },
-        { letter: 'M', pron: '/ɛm/', word: 'Monkey', emoji: '🐵' },
-        { letter: 'N', pron: '/ɛn/', word: 'Nest', emoji: '🪹' },
-        { letter: 'O', pron: '/oʊ/', word: 'Owl', emoji: '🦉' },
-        { letter: 'P', pron: '/piː/', word: 'Penguin', emoji: '🐧' },
-        { letter: 'Q', pron: '/kjuː/', word: 'Queen', emoji: '👑' },
-        { letter: 'R', pron: '/ɑːr/', word: 'Rabbit', emoji: '🐰' },
-        { letter: 'S', pron: '/ɛs/', word: 'Sun', emoji: '☀️' },
-        { letter: 'T', pron: '/tiː/', word: 'Tiger', emoji: '🐯' },
-        { letter: 'U', pron: '/juː/', word: 'Umbrella', emoji: '☂️' },
-        { letter: 'V', pron: '/viː/', word: 'Violin', emoji: '🎻' },
-        { letter: 'W', pron: '/dʌbəl juː/', word: 'Whale', emoji: '🐳' },
-        { letter: 'X', pron: '/ɛks/', word: 'Xylophone', emoji: '🎹' },
-        { letter: 'Y', pron: '/waɪ/', word: 'Yoyo', emoji: '🪀' },
-        { letter: 'Z', pron: '/zɛd/', word: 'Zebra', emoji: '🦓' }
+        { letter: 'A', pron: '/eɪ/', word: 'Apple', image: '/src/assets/images/alphabet/apple.png' },
+        { letter: 'B', pron: '/biː/', word: 'Bear', image: '/src/assets/images/alphabet/bear.png' },
+        { letter: 'C', pron: '/siː/', word: 'Cat', image: '/src/assets/images/alphabet/cat.png' },
+        { letter: 'D', pron: '/diː/', word: 'Dog', image: '/src/assets/images/alphabet/dog.png' },
+        { letter: 'E', pron: '/iː/', word: 'Elephant', image: '/src/assets/images/alphabet/elephant.png' },
+        { letter: 'F', pron: '/ɛf/', word: 'Fox', image: '/src/assets/images/alphabet/fox.png' },
+        { letter: 'G', pron: '/dʒiː/', word: 'Giraffe', image: '/src/assets/images/alphabet/giraffe.png' },
+        { letter: 'H', pron: '/eɪtʃ/', word: 'Horse', image: '/src/assets/images/alphabet/horse.png' },
+        { letter: 'I', pron: '/aɪ/', word: 'Ice Cream', image: '/src/assets/images/alphabet/ice_cream.png' },
+        { letter: 'J', pron: '/dʒeɪ/', word: 'Juice', image: '/src/assets/images/alphabet/juice.png' },
+        { letter: 'K', pron: '/keɪ/', word: 'Kangaroo', image: '/src/assets/images/alphabet/kangaroo.png' },
+        { letter: 'L', pron: '/ɛl/', word: 'Lion', image: '/src/assets/images/alphabet/lion.png' },
+        { letter: 'M', pron: '/ɛm/', word: 'Monkey', image: '/src/assets/images/alphabet/monkey.png' },
+        { letter: 'N', pron: '/ɛn/', word: 'Nest', image: '/src/assets/images/alphabet/nest.png' },
+        { letter: 'O', pron: '/oʊ/', word: 'Owl', image: '/src/assets/images/alphabet/owl.png' },
+        { letter: 'P', pron: '/piː/', word: 'Penguin', image: '/src/assets/images/alphabet/penguin.png' },
+        { letter: 'Q', pron: '/kjuː/', word: 'Queen', image: '/src/assets/images/alphabet/queen.png' },
+        { letter: 'R', pron: '/ɑːr/', word: 'Rabbit', image: '/src/assets/images/alphabet/rabbit.png' },
+        { letter: 'S', pron: '/ɛs/', word: 'Sun', image: '/src/assets/images/alphabet/sun.png' },
+        { letter: 'T', pron: '/tiː/', word: 'Tiger', image: '/src/assets/images/alphabet/tiger.png' },
+        { letter: 'U', pron: '/juː/', word: 'Umbrella', image: '/src/assets/images/alphabet/umbrella.png' },
+        { letter: 'V', pron: '/viː/', word: 'Violin', image: '/src/assets/images/alphabet/violin.png' },
+        { letter: 'W', pron: '/dʌbəl juː/', word: 'Whale', image: '/src/assets/images/alphabet/whale.png' },
+        { letter: 'X', pron: '/ɛks/', word: 'Xylophone', image: '/src/assets/images/alphabet/xylophone.png' },
+        { letter: 'Y', pron: '/waɪ/', word: 'Yoyo', image: '/src/assets/images/alphabet/yoyo.png' },
+        { letter: 'Z', pron: '/zɛd/', word: 'Zebra', image: '/src/assets/images/alphabet/zebra.png' }
       ];
-      const item = alphabets[pageIndex - 1];
+      let content;
+      let canContinue = true;
+
+      // Phase 1: Letter learning screens
+      if (pageIndex <= 26) {
+         const item = alphabets[pageIndex - 1];
+         
+         content = (
+            <div className="flex-1 overflow-y-auto min-h-0 w-full px-4 sm:px-6 md:px-8 max-w-xl mx-auto flex flex-col items-center justify-start sm:justify-center pb-28 pt-2 sm:pt-4 relative">
+                <motion.div 
+                  key={`page-${pageIndex}`}
+                  initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  className="w-full max-w-[300px] xs:max-w-[340px] sm:max-w-[380px] mx-auto min-h-[300px] flex-1 max-h-[460px] bg-white rounded-[32px] shadow-[0_10px_40px_rgba(0,0,0,0.06)] flex flex-col items-center justify-center border border-slate-100 relative group mb-4 shrink-0 px-4 py-8"
+                >
+                  {pageIndex > 1 && (
+                    <button onClick={() => setPageIndex(pageIndex - 1)} className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 text-slate-300 hover:text-slate-500 w-10 h-10 flex items-center justify-center z-10">
+                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                    </button>
+                  )}
+                  
+                  {pageIndex < totalPages && (
+                    <button onClick={() => {
+                      setPageIndex(pageIndex + 1);
+                      awardPoints(5, "Letter learned", "vocabulary");
+                    }} className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 text-slate-300 hover:text-slate-500 w-10 h-10 flex items-center justify-center z-10">
+                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </button>
+                  )}
+ 
+                  <div className="text-[80px] xs:text-[100px] sm:text-[120px] font-black leading-none text-[#5d8ef7] mb-1">{item.letter}</div>
+                  <div className="text-[14px] xs:text-[16px] sm:text-[20px] text-slate-400 font-mono tracking-widest mb-2 sm:mb-4">{item.pron}</div>
+                  <div className="w-24 h-24 xs:w-28 xs:h-28 sm:w-32 sm:h-32 mb-2 sm:mb-3 rounded-2xl overflow-hidden shadow-md">
+                     <img src={item.image} alt={item.word} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                  </div>
+                  <div className="text-[18px] xs:text-[20px] sm:text-[24px] font-bold text-slate-700 tracking-wide uppercase">{item.word}</div>
+                </motion.div>
+                
+                <div className="flex flex-col items-center space-y-3 sm:space-y-4 shrink-0 mt-auto w-full">
+                   <div className="flex gap-4 items-center">
+                     <button onClick={playAudio} className={`w-14 h-14 sm:w-16 sm:h-16 bg-white hover:bg-slate-50 ${theme.textHex ? `text-[${theme.textHex}]` : 'text-slate-600'} rounded-full flex items-center justify-center transition-colors shadow-sm border border-slate-100`}>
+                         <Volume2 size={28} stroke={theme.hex || "currentColor"} />
+                     </button>
+                     <button 
+                         onClick={handleMicClick} 
+                         className={`w-14 h-14 sm:w-16 sm:h-16 ${micState === 'success' ? 'bg-green-50 text-green-500 border border-green-200' : micState === 'listening' ? 'bg-red-50 text-red-500 border border-red-200 animate-pulse' : 'bg-white hover:bg-slate-50 text-slate-600 border border-slate-100'} rounded-full flex items-center justify-center transition-colors shadow-sm`}
+                     >
+                         {micState === 'success' ? <CheckCircle2 size={28} /> : <Mic size={28} stroke={micState === 'idle' ? (theme.hex || "currentColor") : 'currentColor'} />}
+                     </button>
+                   </div>
+                   <div className="flex gap-1 flex-wrap justify-center px-2 max-w-full">
+                      {alphabets.map((_, i) => (
+                        <div key={i} className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full ${pageIndex === i + 1 ? (theme.bg || 'bg-blue-500') : 'bg-slate-200'}`} />
+                      ))}
+                   </div>
+                   <div className="text-xs sm:text-sm font-bold text-slate-400">
+                      {pageIndex} / 26
+                   </div>
+                </div>
+            </div>
+         );
+      } else if (pageIndex <= 52) {
+         // Phase 2: Missing Letter (Match letter to word image)
+         const matchIndex = pageIndex - 27; // 0 to 25
+         const currentItem = alphabets[matchIndex];
+         
+         canContinue = matchedPairs.includes(currentItem.letter);
+         
+         const hash = (matchIndex * 137) % 6;
+         const permutations = [ [0,1,2], [0,2,1], [1,0,2], [1,2,0], [2,0,1], [2,1,0] ];
+         const order = permutations[hash] || [0,1,2];
+         
+         const rawOpts = [
+            currentItem,
+            alphabets[(matchIndex * 3 + 7) % 26],
+            alphabets[(matchIndex * 7 + 14) % 26]
+         ];
+         if (rawOpts[1].letter === rawOpts[0].letter) rawOpts[1] = alphabets[(matchIndex + 1) % 26];
+         if (rawOpts[2].letter === rawOpts[0].letter || rawOpts[2].letter === rawOpts[1].letter) rawOpts[2] = alphabets[(matchIndex + 2) % 26];
+
+         const opts = [rawOpts[order[0]], rawOpts[order[1]], rawOpts[order[2]]];
+
+         const wordRest = currentItem.word.substring(1);
+
+         const handleOptionClick = (letter: string) => {
+            if (matchedPairs.includes(currentItem.letter)) return;
+            setSelectedLeft(letter);
+            if (letter === currentItem.letter) {
+                 setMatchedPairs(prev => [...prev, letter]);
+                 awardPoints(5, "Correct!", "vocabulary");
+            }
+         };
+
+         content = (
+            <div className="flex-1 w-full px-4 sm:px-6 max-w-xl mx-auto flex flex-col items-center justify-center pb-28 pt-2 relative">
+              <h2 className="text-xl sm:text-2xl font-black text-slate-800 mb-8 text-center tracking-tight">Complete the Word</h2>
+              <div className="w-full max-w-[280px] xs:max-w-[320px] sm:max-w-[420px] mx-auto bg-white rounded-[40px] shadow-[0_15px_50px_rgba(0,0,0,0.08)] flex flex-col items-center justify-center border border-slate-100 p-6 sm:p-12 mb-6 sm:mb-10 shrink-0">
+                 <div className="w-24 h-24 xs:w-28 xs:h-28 sm:w-40 sm:h-40 mb-4 sm:mb-6 rounded-3xl overflow-hidden shadow-xl border-4 border-slate-50 shrink-0">
+                    <img src={currentItem.image} alt={currentItem.word} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                 </div>
+                 <div className="flex items-end justify-center text-[28px] xs:text-[34px] sm:text-[56px] font-black tracking-tight text-slate-800 uppercase space-x-1 max-w-full overflow-hidden px-2">
+                    <div className={`w-8 xs:w-10 sm:w-16 flex justify-center text-center pb-1 shrink-0 ${canContinue ? 'text-green-500' : 'text-slate-200 border-b-4 border-slate-300'}`}>
+                       {canContinue ? currentItem.letter : (selectedLeft && selectedLeft !== currentItem.letter ? <span className="text-red-400">{selectedLeft}</span> : "")}
+                    </div>
+                    <span className="truncate">{wordRest}</span>
+                 </div>
+              </div>
+
+              <div className="w-full flex justify-center gap-3 sm:gap-6 mt-2 sm:mt-4">
+                 {opts.map(opt => (
+                    <button 
+                       key={opt.letter} 
+                       onClick={() => handleOptionClick(opt.letter)}
+                       disabled={canContinue}
+                       className={`flex-1 max-w-[80px] xs:max-w-[90px] sm:max-w-[100px] aspect-square rounded-[24px] sm:rounded-[30px] border-2 font-black text-3xl sm:text-5xl transition-all shadow-sm ${
+                          canContinue && opt.letter === currentItem.letter ? 'bg-green-100 border-green-500 text-green-600 shadow-md scale-105' : 
+                          selectedLeft === opt.letter && !canContinue ? 'bg-red-50 border-red-400 text-red-500' : 
+                          'bg-white border-slate-200 text-slate-700 hover:border-slate-300 hover:shadow-md hover:scale-105 active:scale-95'
+                       }`}
+                    >
+                       {opt.letter}
+                    </button>
+                 ))}
+              </div>
+              <div className="h-16 mt-4 sm:mt-8 flex items-center justify-center">
+                 {canContinue && (
+                     <div className="text-green-500 font-bold text-xl drop-shadow-sm flex items-center gap-2 animate-bounce">
+                        <CheckCircle2 size={24} /> Perfect!
+                     </div>
+                 )}
+              </div>
+            </div>
+         );
+      } else {
+         // Phase 3: Listen & Guess Game
+         const guessIndex = pageIndex - 53; // 0 to 25
+         const correctItem = alphabets[guessIndex];
+         canContinue = listenGuess !== null;
+         
+         // Predictable random options
+         const hash = (guessIndex * 97) % 24;
+         const rawOpts = [
+            correctItem, 
+            alphabets[(guessIndex * 3 + 5) % 26], 
+            alphabets[(guessIndex * 7 + 12) % 26], 
+            alphabets[(guessIndex * 11 + 19) % 26]
+         ];
+         const distinctOpts = [rawOpts[0]];
+         for (let i = 1; i < 4; i++) {
+            let item = rawOpts[i];
+            let fallback = 1;
+            while(distinctOpts.find(o => o.letter === item.letter)) {
+               item = alphabets[(guessIndex + fallback++) % 26];
+            }
+            distinctOpts.push(item);
+         }
+         
+         const opts = [...distinctOpts];
+         for (let i = opts.length - 1; i > 0; i--) {
+            const j = (hash + i) % (i + 1);
+            [opts[i], opts[j]] = [opts[j], opts[i]];
+         }
+ 
+         content = (
+            <div className="flex-1 w-full px-4 sm:px-6 max-w-xl mx-auto flex flex-col items-center justify-center pb-28 pt-2 relative">
+              <h2 className="text-xl sm:text-2xl font-black text-slate-800 mb-8 text-center tracking-tight">Listen & Guess</h2>
+              
+              <button onClick={playAudio} className={`w-28 h-28 sm:w-32 sm:h-32 mb-10 bg-white hover:bg-slate-50 ${theme.textHex ? `text-[${theme.textHex}]` : 'text-slate-600'} rounded-full flex items-center justify-center transition-all shadow-lg border border-slate-100 hover:scale-105 active:scale-95`}>
+                  <Volume2 size={48} stroke={theme.hex || "currentColor"} />
+              </button>
+ 
+              <div className="grid grid-cols-2 gap-4 w-full">
+                 {opts.map(opt => (
+                    <button 
+                      key={opt.letter}
+                      onClick={() => {
+                         setListenGuess(opt.letter);
+                         if (opt.letter === correctItem.letter) {
+                            awardPoints(5, "Correct!", "listening");
+                         }
+                      }}
+                      disabled={listenGuess !== null}
+                      className={`py-6 rounded-3xl border-2 font-black text-4xl transition-all ${
+                         listenGuess === opt.letter ? 
+                            (opt.letter === correctItem.letter ? 'bg-green-100 border-green-500 text-green-600 shadow-md' : 'bg-red-100 border-red-500 text-red-600 shadow-sm') :
+                         listenGuess !== null && opt.letter === correctItem.letter ? 'bg-green-100 border-green-500 text-green-600' :
+                         'bg-white border-slate-200 text-slate-700 hover:border-slate-300 shadow-sm hover:shadow-md'
+                      }`}
+                    >
+                      {opt.letter}
+                    </button>
+                 ))}
+              </div>
+              <div className="h-16 mt-4 sm:mt-8 flex flex-col items-center justify-center">
+                 {listenGuess !== null && listenGuess !== correctItem.letter && (
+                    <div className="text-red-500 font-bold text-lg bg-red-50 px-6 py-3 rounded-2xl border border-red-100 flex items-center gap-2">
+                       <AlertCircle size={20} /> It was <span>{correctItem.letter}</span>
+                    </div>
+                 )}
+                 {listenGuess === correctItem.letter && (
+                    <div className="text-green-500 font-bold text-lg flex items-center gap-2 animate-bounce">
+                       <CheckCircle2 size={24} /> Correct!
+                    </div>
+                 )}
+              </div>
+            </div>
+         );
+      }
       
       return (
          <div className="fixed inset-0 z-[100] w-full h-[100dvh] flex flex-col font-sans bg-slate-50 pb-6 overflow-hidden">
            {/* Top Bar with close button left, progress bar below */}
            <div className="px-5 py-4 flex flex-col shrink-0 bg-transparent z-10 relative">
               <div className="flex items-center w-full mb-3">
-                 <button onClick={() => setPageIndex(0)} className="text-slate-400 hover:text-slate-600 transition-colors p-1 flex items-center justify-center">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                       <line x1="18" y1="6" x2="6" y2="18"></line>
-                       <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
+                 <button onClick={() => setPageIndex(pageIndex - 1)} className="text-slate-400 hover:text-slate-600 transition-colors p-1 flex items-center justify-center">
+                    <ArrowLeft size={24} strokeWidth={2.5} />
                  </button>
               </div>
               <div className="w-full h-3 bg-slate-200/60 rounded-full overflow-hidden flex">
@@ -576,75 +794,569 @@ const InteractiveExplanationScreen: React.FC<{
               </div>
            </div>
  
-           {/* Main content */}
-           <div className="flex-1 overflow-y-auto min-h-0 w-full px-4 sm:px-6 md:px-8 max-w-xl mx-auto flex flex-col items-center justify-start sm:justify-center pb-28 pt-2 sm:pt-4 relative">
-               <motion.div 
-                 key={`page-${pageIndex}`}
-                 initial={{ opacity: 0, scale: 0.95, y: 10 }}
-                 animate={{ opacity: 1, scale: 1, y: 0 }}
-                 className="w-full max-w-[300px] xs:max-w-[340px] sm:max-w-[380px] mx-auto min-h-[300px] flex-1 max-h-[460px] bg-white rounded-[32px] shadow-[0_10px_40px_rgba(0,0,0,0.06)] flex flex-col items-center justify-center border border-slate-100 relative group mb-4 shrink-0 px-4 py-8"
-               >
-                 {pageIndex > 1 && (
-                   <button onClick={() => setPageIndex(pageIndex - 1)} className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 text-slate-300 hover:text-slate-500 w-10 h-10 flex items-center justify-center z-10">
-                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
-                   </button>
-                 )}
-                 
-                 {pageIndex < totalPages && (
-                   <button onClick={() => {
-                     setPageIndex(pageIndex + 1);
-                     awardPoints(5, "Letter learned", "vocabulary");
-                   }} className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 text-slate-300 hover:text-slate-500 w-10 h-10 flex items-center justify-center z-10">
-                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                   </button>
-                 )}
-
-                 <div className="text-[80px] xs:text-[100px] sm:text-[120px] font-black leading-none text-[#5d8ef7] mb-1">{item.letter}</div>
-                 <div className="text-[14px] xs:text-[16px] sm:text-[20px] text-slate-400 font-mono tracking-widest mb-2 sm:mb-4">{item.pron}</div>
-                 <div className="text-[60px] xs:text-[70px] sm:text-[90px] drop-shadow-md mb-2 sm:mb-3">{item.emoji}</div>
-                 <div className="text-[18px] xs:text-[20px] sm:text-[24px] font-bold text-slate-700 tracking-wide uppercase">{item.word}</div>
-               </motion.div>
-               
-               <div className="flex flex-col items-center space-y-3 sm:space-y-4 shrink-0 mt-auto w-full">
-                  <div className="flex gap-4 items-center">
-                    <button onClick={playAudio} className={`w-14 h-14 sm:w-16 sm:h-16 bg-white hover:bg-slate-50 ${theme.textHex ? `text-[${theme.textHex}]` : 'text-slate-600'} rounded-full flex items-center justify-center transition-colors shadow-sm border border-slate-100`}>
-                        <Volume2 size={28} stroke={theme.hex || "currentColor"} />
-                    </button>
-                    <button 
-                        onClick={handleMicClick} 
-                        className={`w-14 h-14 sm:w-16 sm:h-16 ${micState === 'success' ? 'bg-green-50 text-green-500 border border-green-200' : micState === 'listening' ? 'bg-red-50 text-red-500 border border-red-200 animate-pulse' : 'bg-white hover:bg-slate-50 text-slate-600 border border-slate-100'} rounded-full flex items-center justify-center transition-colors shadow-sm`}
-                    >
-                        {micState === 'success' ? <CheckCircle2 size={28} /> : <Mic size={28} stroke={micState === 'idle' ? (theme.hex || "currentColor") : 'currentColor'} />}
-                    </button>
-                  </div>
-                  <div className="flex gap-1 flex-wrap justify-center px-2 max-w-full">
-                     {alphabets.map((_, i) => (
-                       <div key={i} className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full ${pageIndex === i + 1 ? (theme.bg || 'bg-blue-500') : 'bg-slate-200'}`} />
-                     ))}
-                  </div>
-                  <div className="text-xs sm:text-sm font-bold text-slate-400">
-                     {pageIndex} / {totalPages}
-                  </div>
-               </div>
-           </div>
+           {content}
  
            {/* Footer */}
            <div className="fixed bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-slate-50 via-slate-50/100 to-transparent pointer-events-none z-50 flex flex-col items-center pb-8 pt-12">
               <div className="max-w-[400px] w-full pointer-events-auto">
-                 <button onClick={() => {
-                    if (pageIndex < totalPages) {
-                        setPageIndex(pageIndex + 1);
-                        awardPoints(5, "Letter learned", "vocabulary");
-                    } else {
-                        onNext();
-                    }
-                 }} className={`w-full py-4 bg-gradient-to-r ${theme.from} ${theme.to} hover:opacity-90 shadow-[0_4px_15px_rgba(0,0,0,0.1)] active:shadow-none active:translate-y-1 transition-all rounded-full flex items-center justify-center text-white border-0`}>
+                 <button 
+                    disabled={!canContinue}
+                    onClick={() => {
+                        if (pageIndex < totalPages) {
+                            setPageIndex(pageIndex + 1);
+                        } else {
+                            onNext();
+                        }
+                    }} 
+                    className={`w-full py-4 bg-gradient-to-r transition-all rounded-full flex items-center justify-center text-white border-0 ${
+                        !canContinue 
+                           ? 'from-slate-300 to-slate-400 opacity-60 cursor-not-allowed shadow-none' 
+                           : `${theme.from} ${theme.to} hover:opacity-90 shadow-[0_4px_15px_rgba(0,0,0,0.1)] active:shadow-none active:translate-y-1`
+                    }`}
+                 >
                     <span className="font-semibold text-[17px] tracking-wide">{pageIndex === totalPages ? 'Finish' : 'Continue'}</span>
                  </button>
               </div>
            </div>
          </div>
       );
+    }
+
+    if (isGreetings) {
+      if (pageIndex === 1) {
+        const phrases = [
+          { en: "Hello!", tr: "Merhaba!", es: "¡Hola!" },
+          { en: "Hi!", tr: "Selam!", es: "¡Hola!" },
+          { en: "Good morning!", tr: "Günaydın!", es: "¡Buenos días!" },
+          { en: "Good afternoon!", tr: "Tünaydın!", es: "¡Buenas tardes!" },
+          { en: "Good evening!", tr: "İyi akşamlar!", es: "¡Buenas noches!" },
+          { en: "Nice to meet you!", tr: "Tanıştığıma memnun oldum!", es: "¡Mucho gusto!" },
+        ];
+
+        return (
+          <div className="fixed inset-0 z-[100] w-full h-[100dvh] flex flex-col font-sans bg-slate-50 pb-6 overflow-hidden">
+            {/* Top Bar with progress */}
+            <div className="px-5 py-4 flex items-center justify-between shrink-0 bg-transparent z-10 relative">
+               <button onClick={() => setPageIndex(pageIndex - 1)} className="text-slate-400 hover:text-slate-600 transition-colors p-1">
+                  <ArrowLeft size={24} strokeWidth={2.5} />
+               </button>
+               <div className="flex-1 flex justify-center px-4">
+                   <div className="w-full max-w-[200px] h-3 bg-slate-200/60 rounded-full overflow-hidden flex">
+                      <div className={`h-full bg-gradient-to-r ${theme.from} ${theme.to} rounded-full transition-all duration-300`} style={{width: `33%`}}></div>
+                   </div>
+               </div>
+               <div className="flex items-center">
+                   <div className="w-6 h-6"></div>
+               </div>
+            </div>
+
+            {/* Content */}
+            <div className="flex-1 px-4 sm:px-6 w-full max-w-xl mx-auto overflow-y-auto pb-24 pt-2">
+               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-4 text-center">
+                  <h2 className="text-xl sm:text-2xl font-black text-slate-800 tracking-tight mb-1">Key Phrases</h2>
+                  <p className="text-sm text-slate-500 font-medium">These phrases will help you</p>
+               </motion.div>
+               
+               <div className="flex flex-col gap-2.5">
+                  {phrases.map((phrase, idx) => {
+                     const translation = (preferredLanguage === 'Turkish' && phrase.tr) ||
+                                         (preferredLanguage === 'Spanish' && phrase.es) ||
+                                         phrase.es; // Fallback syntax
+                     return (
+                        <motion.div 
+                           key={idx}
+                           initial={{ opacity: 0, y: 10 }}
+                           animate={{ opacity: 1, y: 0 }}
+                           transition={{ delay: idx * 0.1 }}
+                           className="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 flex items-center justify-between group"
+                        >
+                           <div>
+                              <div className="text-[17px] font-bold text-slate-800 mb-0.5">{phrase.en}</div>
+                              <div className="text-[13px] text-slate-400 font-medium">{translation}</div>
+                           </div>
+                           <button onClick={() => {
+                              const utterance = new SpeechSynthesisUtterance(phrase.en);
+                              utterance.lang = 'en-US';
+                              window.speechSynthesis.speak(utterance);
+                           }} className={`w-10 h-10 bg-slate-50 hover:bg-slate-100 ${theme.textHex ? `text-[${theme.textHex}]` : 'text-slate-600'} rounded-full flex items-center justify-center transition-colors shadow-sm shrink-0`}>
+                              <Volume2 size={20} stroke={theme.hex || "currentColor"} />
+                           </button>
+                        </motion.div>
+                     );
+                  })}
+               </div>
+            </div>
+
+            {/* Footer */}
+            <div className="fixed bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-slate-50 via-slate-50/100 to-transparent pointer-events-none z-50 flex flex-col items-center pb-8 pt-12">
+               <div className="max-w-[400px] w-full pointer-events-auto">
+                  <button onClick={() => setPageIndex(2)} className={`w-full py-4 bg-gradient-to-r ${theme.from} ${theme.to} hover:opacity-90 shadow-[0_4px_15px_rgba(0,0,0,0.1)] active:shadow-none active:translate-y-1 transition-all rounded-full flex items-center justify-center text-white border-0`}>
+                     <span className="font-semibold text-[17px] tracking-wide">Continue</span>
+                  </button>
+               </div>
+            </div>
+          </div>
+        );
+      } else if (pageIndex === 2) {
+        const dialogs = [
+          { speaker: "Emma", text: "Hello! I'm Emma.\nNice to meet you!", bg: "bg-[#f5f5fc]", textBg: "#f5f5fc", avatar: "👩🏻" },
+          { speaker: "You", text: "Hi! I'm Alex.\nNice to meet you too!", bg: "bg-[#f2f7ec]", textBg: "#f2f7ec", avatar: "👦🏻" },
+          { speaker: "Emma", text: "Where are you from?", bg: "bg-[#f5f5fc]", textBg: "#f5f5fc", avatar: "👩🏻" },
+          { speaker: "You", text: "I'm from Turkey.\nAnd you?", bg: "bg-[#f2f7ec]", textBg: "#f2f7ec", avatar: "👦🏻" },
+          { speaker: "Emma", text: "I'm from Canada.", bg: "bg-[#f5f5fc]", textBg: "#f5f5fc", avatar: "👩🏻" },
+        ];
+
+        return (
+          <div className="fixed inset-0 z-[100] w-full h-[100dvh] flex flex-col font-sans bg-white pb-6 overflow-hidden">
+            {/* Top Bar with progress */}
+            <div className="px-5 py-4 flex items-center justify-between shrink-0 bg-transparent z-10 relative">
+               <button onClick={() => setPageIndex(1)} className="text-slate-400 hover:text-slate-600 transition-colors p-1">
+                  <ArrowLeft size={24} strokeWidth={2.5} />
+               </button>
+               <div className="flex-1 flex justify-center px-4">
+                   <div className="w-full max-w-[200px] h-3 bg-slate-100 rounded-full overflow-hidden flex">
+                      <div className={`h-full bg-gradient-to-r ${theme.from} ${theme.to} rounded-full transition-all duration-300`} style={{width: `66%`}}></div>
+                   </div>
+               </div>
+               <div className="flex items-center">
+                   <div className="w-6 h-6"></div>
+               </div>
+            </div>
+
+            {/* Content */}
+            <div className="flex-1 px-4 sm:px-6 w-full max-w-xl mx-auto overflow-y-auto pb-24 pt-2">
+               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-2 text-center">
+                  <h2 className="text-xl sm:text-2xl font-black text-slate-800 tracking-tight mb-1">Conversation</h2>
+                  <p className="text-sm text-slate-500 font-medium">Listen to the dialogue.</p>
+               </motion.div>
+               
+               <div className="flex flex-col gap-3 mt-3">
+                  {dialogs.map((msg, idx) => (
+                     <motion.div 
+                        key={idx}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: idx * 0.4 }}
+                        className="flex items-start gap-2.5 w-full"
+                     >
+                        <div className="w-9 h-9 bg-slate-50 rounded-full shrink-0 flex items-center justify-center text-xl shadow-sm border border-slate-100 z-10 relative overflow-hidden">
+                          {msg.avatar}
+                        </div>
+                        
+                        <div className={`relative px-4 py-3 rounded-[20px] rounded-tl-[6px] w-full max-w-[85%] ${msg.bg}`}>
+                          <svg className="absolute -left-[5px] top-2.5 w-1.5 h-3" viewBox="0 0 8 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                             <path d="M8 0C8 0 0 3 0 9C0 15 8 16 8 16V0Z" fill={msg.textBg} />
+                          </svg>
+                          
+                          <div className="flex justify-between items-start gap-2">
+                            <span className="text-[12px] font-bold text-[#4c487d] mb-0.5">{msg.speaker}</span>
+                            <button onClick={() => {
+                               const cleanText = msg.text.replace(/\n/g, ' ');
+                               const utterance = new SpeechSynthesisUtterance(cleanText);
+                               utterance.lang = 'en-US';
+                               window.speechSynthesis.speak(utterance);
+                            }} className="-mt-0.5 -mr-1 p-1 hover:opacity-70 transition-opacity">
+                               <Volume2 size={18} className="text-[#5b4eff] fill-[#5b4eff]" />
+                            </button>
+                          </div>
+                          
+                          <div className="text-[14px] font-semibold text-[#1c183b] leading-snug whitespace-pre-line -mt-1 relative z-10 w-full overflow-hidden">
+                            {msg.text}
+                          </div>
+                        </div>
+                     </motion.div>
+                  ))}
+               </div>
+            </div>
+
+            {/* Footer */}
+            <div className="fixed bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-white via-white/100 to-transparent pointer-events-none z-50 flex flex-col items-center pb-8 pt-12">
+               <div className="max-w-[400px] w-full pointer-events-auto">
+                  <button onClick={() => setPageIndex(3)} className={`w-full py-4 bg-gradient-to-r ${theme.from} ${theme.to} hover:opacity-90 shadow-[0_4px_15px_rgba(0,0,0,0.1)] active:shadow-none active:translate-y-1 transition-all rounded-full flex items-center justify-center text-white border-0`}>
+                     <span className="font-semibold text-[17px] tracking-wide">Continue</span>
+                  </button>
+               </div>
+            </div>
+          </div>
+        );
+      } else if (pageIndex === 3) {
+        const expressions = [
+          { en: "Hello!", tr: "Merhaba!", es: "¡Hola!", desc: "Used to greet someone." },
+          { en: "Nice to meet you!", tr: "Tanıştığıma memnun oldum!", es: "¡Mucho gusto!", desc: "Used when meeting someone for the first time." },
+          { en: "Where are you from?", tr: "Nerelisin?", es: "¿De dónde eres?", desc: "Used to ask about someone's country or origin." },
+          { en: "I'm from England.", tr: "Ben İngiltere'denim.", es: "Soy de Inglaterra.", desc: "Used to tell where you are from." },
+        ];
+
+        return (
+          <div className="fixed inset-0 z-[100] w-full h-[100dvh] flex flex-col font-sans bg-slate-50 pb-6 overflow-hidden">
+            {/* Top Bar with progress */}
+            <div className="px-5 py-3 flex items-center justify-between shrink-0 bg-transparent z-10 relative">
+               <button onClick={() => setPageIndex(2)} className="text-slate-400 hover:text-slate-600 transition-colors p-1">
+                  <ArrowLeft size={24} strokeWidth={2.5} />
+               </button>
+               <div className="flex-1 flex justify-center px-4">
+                   <div className="w-full max-w-[200px] h-3 bg-slate-200/60 rounded-full overflow-hidden flex">
+                      <div className={`h-full bg-gradient-to-r ${theme.from} ${theme.to} rounded-full transition-all duration-300`} style={{width: `100%`}}></div>
+                   </div>
+               </div>
+               <div className="flex items-center">
+                   <div className="w-6 h-6"></div>
+               </div>
+            </div>
+
+            {/* Content */}
+            <div className="flex-1 px-4 sm:px-6 w-full max-w-xl mx-auto overflow-y-auto pb-24 pt-1">
+               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-4 text-center">
+                  <h2 className="text-xl sm:text-2xl font-black text-slate-800 tracking-tight mb-1">Let's look closer!</h2>
+                  <p className="text-[13px] text-slate-500 font-medium">Key expressions from the conversation.</p>
+               </motion.div>
+               
+               <div className="flex flex-col gap-3">
+                  {expressions.map((exp, idx) => {
+                      const translation = (preferredLanguage === 'Turkish' && exp.tr) ||
+                                          (preferredLanguage === 'Spanish' && exp.es) ||
+                                          exp.es;
+                      return (
+                         <motion.div 
+                            key={idx}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: idx * 0.1 }}
+                            className="bg-white rounded-2xl p-4 shadow-[0_2px_10px_rgba(0,0,0,0.02)] border border-slate-100 flex flex-col relative overflow-hidden group"
+                         >
+                            <div className="flex justify-between items-start mb-1.5">
+                               <div className="text-[18px] font-bold text-slate-800 leading-tight">{exp.en}</div>
+                               <div className="w-7 h-7 rounded-full bg-blue-50 flex items-center justify-center text-blue-500 shrink-0 mt-0.5">
+                                  <Info size={14} strokeWidth={2.5} />
+                               </div>
+                            </div>
+                            <div className="text-[13px] font-semibold text-slate-400 mb-3">{translation}</div>
+                            <div className="text-[12px] text-slate-500 font-medium leading-relaxed bg-slate-50/80 p-3 rounded-xl border border-slate-100/50">
+                               {exp.desc}
+                            </div>
+                         </motion.div>
+                      );
+                  })}
+               </div>
+            </div>
+
+            {/* Footer */}
+            <div className="fixed bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-slate-50 via-slate-50/100 to-transparent pointer-events-none z-50 flex flex-col items-center pb-8 pt-12">
+               <div className="max-w-[400px] w-full pointer-events-auto">
+                  <button onClick={() => setPageIndex(4)} className={`w-full py-4 bg-gradient-to-r ${theme.from} ${theme.to} hover:opacity-90 shadow-[0_4px_15px_rgba(0,0,0,0.1)] active:shadow-none active:translate-y-1 transition-all rounded-full flex items-center justify-center text-white border-0`}>
+                     <span className="font-semibold text-[17px] tracking-wide">Continue</span>
+                  </button>
+               </div>
+            </div>
+          </div>
+        );
+      } else if (pageIndex === 4) {
+        // Practice 1: Choose the correct reply.
+        const options = ["I'm fine, thank you.", "Nice to meet you too!", "Good evening.", "Where are you from?"];
+        const correctOption = "Nice to meet you too!";
+        
+        return (
+          <div className="fixed inset-0 z-[100] w-full h-[100dvh] flex flex-col font-sans bg-slate-50 pb-6 overflow-hidden">
+            {/* Top Bar with progress */}
+            <div className="px-5 py-4 flex items-center justify-between shrink-0 bg-transparent z-10 relative">
+               <button onClick={() => setPageIndex(3)} className="text-slate-400 hover:text-slate-600 transition-colors p-1">
+                  <ArrowLeft size={24} strokeWidth={2.5} />
+               </button>
+               <div className="flex-1 flex justify-center px-4">
+                   <div className="w-full max-w-[200px] h-3 bg-slate-200/60 rounded-full overflow-hidden flex">
+                      <div className={`h-full bg-gradient-to-r ${theme.from} ${theme.to} rounded-full transition-all duration-300`} style={{width: `66%`}}></div>
+                   </div>
+               </div>
+               <div className="flex items-center">
+                   <div className="w-6 h-6"></div>
+               </div>
+            </div>
+
+            {/* Content */}
+            <div className="flex-1 px-4 sm:px-6 w-full max-w-xl mx-auto overflow-y-auto pb-32 pt-2">
+               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-8 text-center">
+                  <h2 className="text-2xl sm:text-3xl font-black text-slate-800 tracking-tight mb-2">Practice</h2>
+                  <p className="text-slate-500 font-medium">Choose the correct reply.</p>
+               </motion.div>
+               
+               <div className="bg-white rounded-[24px] p-6 shadow-sm border border-slate-100 flex flex-col mb-8 relative">
+                  <div className="text-sm font-bold text-slate-400 mb-2">Emma:</div>
+                  <div className="text-xl font-semibold text-slate-800 leading-relaxed">
+                     Hello! Nice to meet you.
+                  </div>
+               </div>
+               
+               <div className="flex flex-col gap-4">
+                  {options.map((opt, idx) => {
+                     const isSelected = practiceAnswer === opt;
+                     const isCorrectOpt = opt === correctOption;
+                     const showFeedback = practiceStatus !== 'idle';
+                     
+                     let bgClass = "bg-white border-slate-200";
+                     let textClass = "text-slate-700";
+                     if (showFeedback && isSelected) {
+                        bgClass = isCorrectOpt ? "bg-green-100 border-green-400" : "bg-red-100 border-red-400";
+                        textClass = isCorrectOpt ? "text-green-800" : "text-red-800";
+                     } else if (showFeedback && isCorrectOpt) {
+                        bgClass = "bg-green-100 border-green-400";
+                        textClass = "text-green-800";
+                     } else if (isSelected) {
+                        bgClass = "bg-blue-50 border-blue-400";
+                        textClass = "text-blue-800";
+                     }
+
+                     const letters = ['A.', 'B.', 'C.', 'D.'];
+
+                     return (
+                        <button 
+                           key={idx}
+                           disabled={showFeedback}
+                           onClick={() => setPracticeAnswer(opt)}
+                           className={`w-full p-5 rounded-2xl border-2 text-left transition-all ${bgClass} hover:border-blue-300 font-medium flex items-center justify-between text-[17px]`}
+                        >
+                           <span className={`flex items-center gap-3 ${textClass}`}><span className="text-slate-400 font-bold">{letters[idx]}</span> {opt}</span>
+                           {showFeedback && isCorrectOpt && <CheckCircle2 size={24} className="text-green-600" />}
+                           {showFeedback && isSelected && !isCorrectOpt && <XCircle size={24} className="text-red-600" />}
+                        </button>
+                     );
+                  })}
+               </div>
+            </div>
+
+            {/* Footer */}
+            <div className="fixed bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-slate-50 via-slate-50/100 to-transparent pointer-events-none z-50 flex flex-col items-center pb-8 pt-12">
+               <div className="max-w-[400px] w-full pointer-events-auto">
+                  <button 
+                     disabled={!practiceAnswer && practiceStatus === 'idle'}
+                     onClick={() => {
+                        if (practiceStatus === 'idle') {
+                           setPracticeStatus(practiceAnswer === correctOption ? 'correct' : 'incorrect');
+                        } else {
+                           setPageIndex(5);
+                        }
+                     }} 
+                     className={`w-full py-4 bg-gradient-to-r transition-all rounded-full flex items-center justify-center text-white border-0 ${
+                        (!practiceAnswer && practiceStatus === 'idle')
+                           ? 'from-slate-300 to-slate-400 opacity-60 cursor-not-allowed shadow-none' 
+                           : `${theme.from} ${theme.to} hover:opacity-90 shadow-[0_4px_15px_rgba(0,0,0,0.1)] active:shadow-none active:translate-y-1`
+                     }`}
+                  >
+                     <span className="font-semibold text-[17px] tracking-wide">{practiceStatus === 'idle' ? 'Check' : 'Continue'}</span>
+                  </button>
+               </div>
+            </div>
+          </div>
+        );
+      } else if (pageIndex === 5) {
+        // Practice 2: Listening Challenge
+        const options = ["Hello!", "Good evening!", "Nice to meet you!", "Where are you from?"];
+        const correctOption = "Nice to meet you!";
+        
+        return (
+          <div className="fixed inset-0 z-[100] w-full h-[100dvh] flex flex-col font-sans bg-slate-50 pb-6 overflow-hidden">
+            {/* Top Bar with progress */}
+            <div className="px-5 py-4 flex items-center justify-between shrink-0 bg-transparent z-10 relative">
+               <button onClick={() => setPageIndex(4)} className="text-slate-400 hover:text-slate-600 transition-colors p-1">
+                  <ArrowLeft size={24} strokeWidth={2.5} />
+               </button>
+               <div className="flex-1 flex justify-center px-4">
+                   <div className="w-full max-w-[200px] h-3 bg-slate-200/60 rounded-full overflow-hidden flex">
+                      <div className={`h-full bg-gradient-to-r ${theme.from} ${theme.to} rounded-full transition-all duration-300`} style={{width: `83%`}}></div>
+                   </div>
+               </div>
+               <div className="flex items-center">
+                   <div className="w-6 h-6"></div>
+               </div>
+            </div>
+
+            {/* Content */}
+            <div className="flex-1 px-4 sm:px-6 w-full max-w-xl mx-auto overflow-y-auto pb-32 pt-2">
+               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-8 text-center">
+                  <h2 className="text-2xl sm:text-3xl font-black text-slate-800 tracking-tight mb-2">Listening Challenge</h2>
+                  <p className="text-slate-500 font-medium">Listen carefully and choose what you hear.</p>
+               </motion.div>
+               
+               <div className="bg-white rounded-[32px] p-8 shadow-sm border border-slate-100 flex flex-col items-center justify-center mb-10 relative cursor-pointer hover:bg-slate-50 transition-colors"
+                  onClick={() => {
+                     const utterance = new SpeechSynthesisUtterance(correctOption);
+                     utterance.lang = 'en-US';
+                     window.speechSynthesis.speak(utterance);
+                  }}>
+                  <div className={`w-24 h-24 rounded-full bg-gradient-to-tr ${theme.from} ${theme.to} flex items-center justify-center shadow-lg mb-4 text-white hover:scale-[1.02] active:scale-95 transition-transform`}>
+                     <Volume2 size={48} strokeWidth={2} />
+                  </div>
+                  <div className="text-slate-400 font-semibold uppercase tracking-widest text-sm">Tap to listen</div>
+               </div>
+               
+               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {options.map((opt, idx) => {
+                     const isSelected = practiceAnswer === opt;
+                     const isCorrectOpt = opt === correctOption;
+                     const showFeedback = practiceStatus !== 'idle';
+                     
+                     let bgClass = "bg-white border-slate-200";
+                     let textClass = "text-slate-700";
+                     if (showFeedback && isSelected) {
+                        bgClass = isCorrectOpt ? "bg-green-100 border-green-400" : "bg-red-100 border-red-400";
+                        textClass = isCorrectOpt ? "text-green-800" : "text-red-800";
+                     } else if (showFeedback && isCorrectOpt) {
+                        bgClass = "bg-green-100 border-green-400";
+                        textClass = "text-green-800";
+                     } else if (isSelected) {
+                        bgClass = "bg-blue-50 border-blue-400";
+                        textClass = "text-blue-800";
+                     }
+
+                     return (
+                        <button 
+                           key={idx}
+                           disabled={showFeedback}
+                           onClick={() => setPracticeAnswer(opt)}
+                           className={`w-full p-4 rounded-3xl border-2 text-center transition-all ${bgClass} hover:border-blue-300 font-[600] flex flex-col items-center justify-center gap-2`}
+                        >
+                           <span className={textClass}>{opt}</span>
+                        </button>
+                     );
+                  })}
+               </div>
+            </div>
+
+            {/* Footer */}
+            <div className="fixed bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-slate-50 via-slate-50/100 to-transparent pointer-events-none z-50 flex flex-col items-center pb-8 pt-12">
+               <div className="max-w-[400px] w-full pointer-events-auto">
+                  <button 
+                     disabled={!practiceAnswer && practiceStatus === 'idle'}
+                     onClick={() => {
+                        if (practiceStatus === 'idle') {
+                           setPracticeStatus(practiceAnswer === correctOption ? 'correct' : 'incorrect');
+                        } else {
+                           setPageIndex(6);
+                        }
+                     }} 
+                     className={`w-full py-4 bg-gradient-to-r transition-all rounded-full flex items-center justify-center text-white border-0 ${
+                        (!practiceAnswer && practiceStatus === 'idle')
+                           ? 'from-slate-300 to-slate-400 opacity-60 cursor-not-allowed shadow-none' 
+                           : `${theme.from} ${theme.to} hover:opacity-90 shadow-[0_4px_15px_rgba(0,0,0,0.1)] active:shadow-none active:translate-y-1`
+                     }`}
+                  >
+                     <span className="font-semibold text-[17px] tracking-wide">{practiceStatus === 'idle' ? 'Check' : 'Continue'}</span>
+                  </button>
+               </div>
+            </div>
+          </div>
+        );
+      } else if (pageIndex === 6) {
+        // Practice 3: Speaking Practice
+        return (
+          <div className="fixed inset-0 z-[100] w-full h-[100dvh] flex flex-col font-sans bg-slate-50 pb-6 overflow-hidden">
+            {/* Top Bar with progress */}
+            <div className="px-5 py-4 flex items-center justify-between shrink-0 bg-transparent z-10 relative">
+               <button onClick={() => setPageIndex(5)} className="text-slate-400 hover:text-slate-600 transition-colors p-1">
+                  <ArrowLeft size={24} strokeWidth={2.5} />
+               </button>
+               <div className="flex-1 flex justify-center px-4">
+                   <div className="w-full max-w-[200px] h-3 bg-slate-200/60 rounded-full overflow-hidden flex">
+                      <div className={`h-full bg-gradient-to-r ${theme.from} ${theme.to} rounded-full transition-all duration-300`} style={{width: `100%`}}></div>
+                   </div>
+               </div>
+               <div className="flex items-center">
+                   <div className="w-6 h-6"></div>
+               </div>
+            </div>
+
+            {/* Content */}
+            <div className="flex-1 px-4 sm:px-6 w-full max-w-xl mx-auto overflow-y-auto pb-32 pt-2 flex flex-col items-center">
+               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-8 text-center">
+                  <h2 className="text-2xl sm:text-3xl font-black text-slate-800 tracking-tight mb-2">Speaking Practice</h2>
+                  <p className="text-slate-500 font-medium">Introduce yourself.</p>
+               </motion.div>
+               
+               <div className="flex items-start gap-4 w-full mb-10">
+                  <div className="w-14 h-14 bg-blue-100 rounded-full shrink-0 flex items-center justify-center text-3xl shadow-sm border border-white z-10 relative overflow-hidden">
+                    👩🏻
+                  </div>
+                  
+                  <div className={`relative px-5 py-4 rounded-[24px] rounded-tl-[8px] w-full max-w-[85%] bg-white shadow-sm border border-slate-100`}>
+                    <svg className="absolute -left-[6px] top-3 w-2 h-4" viewBox="0 0 8 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                       <path d="M8 0C8 0 0 3 0 9C0 15 8 16 8 16V0Z" fill="#ffffff" />
+                    </svg>
+                    
+                    <div className="text-[17px] font-semibold text-slate-800 leading-relaxed whitespace-pre-line relative z-10">
+                      Hello!<br/>What's your name?
+                    </div>
+                  </div>
+               </div>
+               
+               <div className="bg-white rounded-3xl p-6 w-full shadow-sm border border-slate-100 flex flex-col items-center flex-1 justify-center min-h-[250px] relative">
+                  <span className="text-sm font-semibold text-slate-400 absolute top-4 left-0 right-0 text-center uppercase tracking-wider">Your Turn</span>
+                  
+                  {micState === 'success' ? (
+                     <div className="flex flex-col items-center animate-fade-in">
+                        <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center text-green-600 mb-6 shadow-sm">
+                           <Check size={40} strokeWidth={2.5} />
+                        </div>
+                        <div className="text-xl font-bold text-slate-700 text-center mt-2">
+                           Great job!
+                        </div>
+                     </div>
+                  ) : (
+                     <div className="flex flex-col items-center w-full">
+                        <button 
+                           onClick={() => {
+                               if (micState === 'idle') {
+                                   setMicState('listening');
+                                   setTimeout(() => {
+                                       setMicState('success');
+                                   }, 3000);
+                               }
+                           }}
+                           className={`w-28 h-28 rounded-full flex items-center justify-center transition-all ${
+                               micState === 'listening' ? 'bg-blue-100 text-blue-500 scale-110 shadow-[0_0_0_10px_rgba(59,130,246,0.2)]' : `bg-gradient-to-r ${theme.from} ${theme.to} text-white hover:scale-[1.05] shadow-xl`
+                           }`}
+                        >
+                           <Mic size={48} strokeWidth={2} />
+                        </button>
+                        
+                        <div className="mt-8 text-center text-slate-500 font-medium min-h-[60px]">
+                           {micState === 'listening' ? (
+                               <div className="flex items-center justify-center gap-1.5 h-6">
+                                   {[...Array(5)].map((_, i) => (
+                                       <motion.div
+                                           key={i}
+                                           animate={{ height: [8, 24, 8] }}
+                                           transition={{ duration: 0.8, repeat: Infinity, delay: i * 0.1 }}
+                                           className="w-1.5 bg-blue-400 rounded-full"
+                                       />
+                                   ))}
+                               </div>
+                           ) : (
+                               <div>Speak and introduce yourself.<br/><span className="text-sm opacity-70">Example: Hi! I'm Alex. I'm from Turkey.</span></div>
+                           )}
+                        </div>
+                     </div>
+                  )}
+               </div>
+            </div>
+
+            {/* Footer */}
+            <div className="fixed bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-slate-50 via-slate-50/100 to-transparent pointer-events-none z-50 flex flex-col items-center pb-8 pt-12">
+               <div className="max-w-[400px] w-full pointer-events-auto">
+                  <button 
+                     disabled={micState !== 'success'}
+                     onClick={() => onNext()} 
+                     className={`w-full py-4 bg-gradient-to-r transition-all rounded-full flex items-center justify-center text-white border-0 ${
+                        micState !== 'success'
+                           ? 'from-slate-300 to-slate-400 opacity-60 cursor-not-allowed shadow-none' 
+                           : `${theme.from} ${theme.to} hover:opacity-90 shadow-[0_4px_15px_rgba(0,0,0,0.1)] active:shadow-none active:translate-y-1`
+                     }`}
+                  >
+                     <span className="font-semibold text-[17px] tracking-wide">Finish</span>
+                  </button>
+               </div>
+            </div>
+          </div>
+        );
+      }
     }
 
     const isAnimal = lesson.title === 'Animals';
@@ -660,10 +1372,7 @@ const InteractiveExplanationScreen: React.FC<{
          {/* Top Bar with progress */}
          <div className="px-5 py-4 flex items-center justify-between shrink-0 bg-transparent z-10 relative">
             <button onClick={() => setPageIndex(pageIndex - 1)} className="text-slate-400 hover:text-slate-600 transition-colors p-1">
-               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="18" y1="6" x2="6" y2="18"></line>
-                  <line x1="6" y1="6" x2="18" y2="18"></line>
-               </svg>
+               <ArrowLeft size={24} strokeWidth={2.5} />
             </button>
             <div className="flex-1 flex justify-center px-4">
                 <div className="w-full max-w-[200px] h-3 bg-slate-200/60 rounded-full overflow-hidden flex">
@@ -888,7 +1597,23 @@ const GrammarLessons: React.FC = () => {
   };
 
   const handleStartQuiz = () => {
-    setPhase('quiz');
+    if (!selectedLesson) return;
+    
+    playWinSound();
+    setPhase('completed');
+    if (!completedLessons.includes(selectedLesson.id)) {
+      const nextCompleted = [...completedLessons, selectedLesson.id];
+      setCompletedLessons(nextCompleted);
+      
+      markGrammarLessonCompleted(selectedLesson.id);
+      
+      // Check if it's an exam
+      if (selectedLesson.id.includes('exam')) {
+           handleExamPass(selectedLesson.level);
+      } else {
+           awardPoints(100, 'Lesson Completed', 'grammar');
+      }
+    }
   };
 
   const handleSubmitAnswer = () => {
@@ -1403,12 +2128,12 @@ const GrammarLessons: React.FC = () => {
                               setSelectedVideo(null);
                               handleStartLesson(match);
                             } else {
-                              alert("No direct lesson quiz found for this unit. Start standard lessons instead.");
+                              alert("No direct lesson found for this unit. Start standard lessons instead.");
                             }
                           }}
                           className="w-full text-xs font-black py-3.5 rounded-xl shadow-md"
                         >
-                          Start Practice Quiz →
+                          Start Practice Lesson →
                         </Button>
                       </div>
                     </div>
@@ -1575,24 +2300,103 @@ const GrammarLessons: React.FC = () => {
 
   // --- RENDER: COMPLETED ---
   if (phase === 'completed' && selectedLesson) {
+    const subtitle = `You practiced ${selectedLesson.title.toLowerCase()}!`;
+    
     return (
-      <div className="max-w-2xl mx-auto text-center animate-fade-in pb-20 pt-10 px-4">
+      <div className="fixed inset-0 z-[100] w-full h-[100dvh] bg-[#f8fafe] flex flex-col font-sans overflow-hidden">
         <Confetti />
-        <div className="w-32 h-32 bg-fun-yellow rounded-full flex items-center justify-center mx-auto mb-8 shadow-xl border-8 border-white animate-bounce-slow">
-          <Award size={64} className="text-orange-500" />
-        </div>
-        <h2 className="text-5xl font-black text-slate-800 mb-4 tracking-tight">Lesson Complete!</h2>
-        <p className="text-2xl font-bold text-slate-500 mb-8">You mastered: {selectedLesson.title}</p>
         
-        <div className="bg-white p-8 rounded-[3rem] border-4 border-slate-100 shadow-xl mb-10">
-          <div className="flex items-center justify-center gap-4 text-fun-blue font-black text-2xl">
-            <Sparkles /> +100 XP Earned! <Sparkles />
+        <div className="flex-1 w-full max-w-md mx-auto flex flex-col justify-center px-6 pb-28 pt-4">
+          
+          {/* Header */}
+          <div className="text-center mb-6">
+             <h1 className="text-3xl font-black text-[#1e2330] mb-1 tracking-tight">Great job!</h1>
+             <p className="text-[15px] sm:text-[17px] text-slate-500 font-medium">{subtitle}</p>
           </div>
+
+          {/* Center Mascot / Success Illustration Placeholder */}
+          <div className="w-full flex justify-center mb-8 relative shrink-0">
+             <div className="absolute inset-0 bg-[#5D8EF7] blur-[50px] opacity-20 rounded-full scale-75"></div>
+             {/* Fallback illustration / placeholder for user's own mascot */}
+             <div className="w-32 h-32 sm:w-40 sm:h-40 bg-white rounded-full flex items-center justify-center shadow-[0_8px_30px_rgba(93,142,247,0.15)] border-4 border-[#eff4ff] relative z-10 shrink-0">
+                {/* User can put their image here inside this circle. As a default abstract symbol: */}
+                <div className="w-20 h-20 sm:w-24 sm:h-24 bg-[#5D8EF7] rounded-full flex items-center justify-center text-white shadow-inner relative overflow-hidden">
+                   <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-bl from-white/30 to-transparent"></div>
+                   <CheckCircle2 size={40} strokeWidth={2.5} className="relative z-10 drop-shadow-md sm:w-12 sm:h-12 w-10 h-10" />
+                </div>
+                {/* Floating sparkles */}
+                <Sparkles className="absolute -top-1 -right-2 text-yellow-400 w-6 h-6 sm:w-8 sm:h-8 animate-pulse" />
+                <Sparkles className="absolute bottom-2 -left-4 text-[#5D8EF7] w-5 h-5 sm:w-6 sm:h-6 animate-pulse delay-300" />
+             </div>
+          </div>
+
+          {/* Rewards Card */}
+          <div className="w-full bg-white rounded-[24px] sm:rounded-[28px] p-4 sm:p-5 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-slate-100 mb-4 sm:mb-6 shrink-0">
+             <div className="flex flex-col gap-3">
+                <div className="flex items-center justify-between">
+                   <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-500">
+                         <Zap size={18} fill="currentColor" />
+                      </div>
+                      <span className="font-bold text-slate-700 text-[14px] sm:text-[16px]">Sparks</span>
+                   </div>
+                   <span className="font-bold text-yellow-500 text-[16px] sm:text-[18px]">+5</span>
+                </div>
+                
+                <div className="h-px w-full bg-slate-50"></div>
+
+                <div className="flex items-center justify-between">
+                   <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-500">
+                         <StarIcon size={18} fill="currentColor" />
+                      </div>
+                      <span className="font-bold text-slate-700 text-[14px] sm:text-[16px]">Smart Points</span>
+                   </div>
+                   <span className="font-bold text-blue-500 text-[16px] sm:text-[18px]">+25</span>
+                </div>
+                
+                <div className="h-px w-full bg-slate-50"></div>
+
+                <div className="flex items-center justify-between">
+                   <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-orange-100 flex items-center justify-center text-orange-500">
+                         <Flame size={18} fill="currentColor" />
+                      </div>
+                      <span className="font-bold text-slate-700 text-[14px] sm:text-[16px]">Streak Day</span>
+                   </div>
+                   <span className="font-bold text-orange-500 text-[16px] sm:text-[18px]">+1</span>
+                </div>
+             </div>
+          </div>
+
+          {/* Progress Section */}
+          <div className="w-full bg-white rounded-[24px] sm:rounded-[28px] p-5 sm:p-6 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-slate-100 shrink-0">
+             <h3 className="text-[15px] sm:text-[17px] font-bold text-slate-800 mb-1">Your Progress</h3>
+             <p className="text-[11px] sm:text-[13px] font-semibold text-slate-400 mb-3 sm:mb-4 tracking-wider uppercase">A1 • COMMUNICATION</p>
+             
+             <div className="flex flex-col gap-2 relative">
+                <div className="w-full h-2 sm:h-3 bg-slate-100 rounded-full overflow-hidden relative">
+                   <div className="absolute left-0 top-0 bottom-0 bg-[#5D8EF7] rounded-full transition-all duration-1000 shadow-[0_0_10px_rgba(93,142,247,0.5)]" style={{width: '25%'}}></div>
+                </div>
+                <div className="text-right text-[12px] sm:text-[14px] font-bold text-[#5D8EF7]">
+                   5 / 20
+                </div>
+             </div>
+          </div>
+          
         </div>
 
-        <Button onClick={handleBackToList} className="px-12 py-5 text-xl">
-          Back to Lessons
-        </Button>
+        {/* Footer CTA */}
+        <div className="absolute bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-[#f8fafe] via-[#f8fafe]/100 to-transparent pointer-events-none z-50 flex flex-col items-center pb-8 pt-12">
+           <div className="max-w-md w-full pointer-events-auto">
+              <button 
+                onClick={handleBackToList} 
+                className="w-full py-4 bg-[#5D8EF7] hover:bg-[#4a7de8] transition-all rounded-[20px] flex items-center justify-center text-white border-0 shadow-[0_8px_20px_rgba(93,142,247,0.3)] hover:-translate-y-0.5 active:translate-y-1 active:shadow-none shrink-0"
+              >
+                 <span className="font-bold text-[16px] sm:text-[17px] tracking-wide">Continue to next lesson</span>
+              </button>
+           </div>
+        </div>
       </div>
     );
   }
