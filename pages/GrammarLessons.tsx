@@ -53,10 +53,11 @@ import { useGamification } from '../context/GamificationContext';
 import Confetti from '../components/Confetti';
 import { UI_TRANSLATIONS } from '../translations';
 
-import defaultLessonImage from '../src/assets/images/alphabettitle.png';
+import defaultLessonImage from '../src/assets/images/alphabet.png';
 import { LESSONS, Lesson, Level, Exercise } from '../components/grammarLessonsData';
 
 const firstScreenImages = import.meta.glob('../src/assets/images/*firstscreen*.{png,jpg,jpeg,svg}', { eager: true, import: 'default' });
+const allLessonImages = import.meta.glob('../src/assets/images/*.{png,jpg,jpeg,svg}', { eager: true, import: 'default' });
 
 const LEVELS: { id: Level; title: string; desc: string; color: string; hex: string }[] = [
   { id: 'A1', title: 'Beginner', desc: 'Essential foundations', color: 'bg-blue-500', hex: '#5D8EF7' },
@@ -489,9 +490,26 @@ const InteractiveExplanationScreen: React.FC<{
   const [listenGuess, setListenGuess] = useState<string | null>(null);
   const [practiceAnswer, setPracticeAnswer] = useState<string | null>(null);
   const [practiceStatus, setPracticeStatus] = useState<'idle' | 'correct' | 'incorrect'>('idle');
-  const isAlphabet = lesson.id === 'a1-m1-l1' || lesson.title === 'Alphabet';
-  const isGreetings = lesson.id === 'a1-m1-l2' || lesson.title === 'Greetings';
-  const totalPages = isAlphabet ? 78 : (isGreetings ? 6 : 10);
+const isAlphabet = lesson.id === 'a1-m1-l1' || lesson.title === 'Alphabet';
+  const isGreetings = ['Greetings', 'Directions', 'Restaurant English', 'Classroom English', 'Asking for Help'].includes(lesson.title) || lesson.id === 'a1-m1-l2';
+  const isNumbers = lesson.id === 'a1-m1-l3' || lesson.title === 'Numbers';
+  const isDaysMonths = lesson.id === 'a1-m1-l4' || lesson.title === 'Days & Months';
+  const isBasicVocab = lesson.title === 'Basic Vocabulary';
+  const isNationalities = lesson.title === 'Nationalities';
+  const isPersonalInfo = lesson.title === 'Personal Information';
+  const isDailyRoutines = lesson.title === 'Daily Routines';
+  const isLikesDislikes = lesson.title === 'Likes & Dislikes';
+  const isHomeVocab = lesson.title === 'Home Vocabulary';
+  const isPlacesInTown = lesson.title === 'Places in Town';
+  const isHobbies = lesson.title === 'Hobbies';
+  const isShopping = lesson.title === 'Shopping';
+  const isToBe = ['To Be', 'Subject Pronouns', 'Possessive Adjectives', 'Articles', 'Singular/Plural', 'Demonstratives', 'Basic Questions', 'Present Simple', 'Frequency Adverbs', 'There Is/Are', 'Prepositions', 'Present Continuous', `Can/Can't`, 'Was/Were', 'Simple Past Basics', 'Going To Future'].includes(lesson.title) || lesson.id === 'a1-m2-l1';
+  const isStandard10ItemLesson = [
+    isNumbers, isBasicVocab, isNationalities, isPersonalInfo, isDailyRoutines,
+    isLikesDislikes, isHomeVocab, isPlacesInTown, isHobbies, isShopping
+  ].some(Boolean);
+  
+  const totalPages = isToBe ? 7 : (isAlphabet ? 78 : (isDaysMonths ? 57 : (isStandard10ItemLesson ? 30 : (isGreetings ? 6 : 10))));
   
   useEffect(() => {
     setMicState('idle');
@@ -601,7 +619,7 @@ const InteractiveExplanationScreen: React.FC<{
                     </button>
                   )}
  
-                  <div className="text-[80px] xs:text-[100px] sm:text-[120px] font-black leading-none text-[#5d8ef7] mb-1">{item.letter}</div>
+                  <div className="text-[80px] xs:text-[100px] sm:text-[120px] font-black leading-none text-[#5d8ef7] mb-1">{item.emoji || item.letter}</div>
                   <div className="text-[14px] xs:text-[16px] sm:text-[20px] text-slate-400 font-mono tracking-widest mb-2 sm:mb-4">{item.pron}</div>
                   <div className="w-24 h-24 xs:w-28 xs:h-28 sm:w-32 sm:h-32 mb-2 sm:mb-3 rounded-2xl overflow-hidden shadow-md">
                      <img src={item.image} alt={item.word} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
@@ -820,6 +838,1068 @@ const InteractiveExplanationScreen: React.FC<{
            </div>
          </div>
       );
+    }
+
+    if (isStandard10ItemLesson) {
+      let numberList = [];
+      if (isNumbers) {
+         numberList = [
+            { letter: '1', emoji: '🔢', pron: '/wʌn/', word: 'One', wordSuffix: 'ne' },
+            { letter: '2', emoji: '🔢', pron: '/tuː/', word: 'Two', wordSuffix: 'wo' },
+            { letter: '3', emoji: '🔢', pron: '/θriː/', word: 'Three', wordSuffix: 'hree' },
+            { letter: '4', emoji: '🔢', pron: '/fɔːr/', word: 'Four', wordSuffix: 'our' },
+            { letter: '5', emoji: '🔢', pron: '/faɪv/', word: 'Five', wordSuffix: 'ive' },
+            { letter: '6', emoji: '🔢', pron: '/sɪks/', word: 'Six', wordSuffix: 'ix' },
+            { letter: '7', emoji: '🔢', pron: '/ˈsɛvən/', word: 'Seven', wordSuffix: 'even' },
+            { letter: '8', emoji: '🔢', pron: '/eɪt/', word: 'Eight', wordSuffix: 'ight' },
+            { letter: '9', emoji: '🔢', pron: '/naɪn/', word: 'Nine', wordSuffix: 'ine' },
+            { letter: '10', emoji: '🔟', pron: '/tɛn/', word: 'Ten', wordSuffix: 'en' }
+         ];
+      } else if (isBasicVocab) {
+         numberList = [
+            { letter: 'A', emoji: '🍎', pron: '/ˈæpəl/', word: 'Apple', wordSuffix: 'pple' },
+            { letter: 'W', emoji: '💧', pron: '/ˈwɔːtər/', word: 'Water', wordSuffix: 'ater' },
+            { letter: 'B', emoji: '🍞', pron: '/brɛd/', word: 'Bread', wordSuffix: 'read' },
+            { letter: 'H', emoji: '🏠', pron: '/haʊs/', word: 'House', wordSuffix: 'ouse' },
+            { letter: 'C', emoji: '🚗', pron: '/kɑːr/', word: 'Car', wordSuffix: 'ar' },
+            { letter: 'D', emoji: '🐕', pron: '/dɒɡ/', word: 'Dog', wordSuffix: 'og' },
+            { letter: 'C', emoji: '🐈', pron: '/kæt/', word: 'Cat', wordSuffix: 'at' },
+            { letter: 'S', emoji: '☀️', pron: '/sʌn/', word: 'Sun', wordSuffix: 'un' },
+            { letter: 'B', emoji: '📖', pron: '/bʊk/', word: 'Book', wordSuffix: 'ook' },
+            { letter: 'T', emoji: '🌳', pron: '/triː/', word: 'Tree', wordSuffix: 'ree' }
+         ];
+      } else if (isNationalities) {
+         numberList = [
+            { letter: 'A', emoji: '🇺🇸', pron: '/əˈmɛrɪkən/', word: 'American', wordSuffix: 'merican' },
+            { letter: 'B', emoji: '🇬🇧', pron: '/ˈbrɪtɪʃ/', word: 'British', wordSuffix: 'ritish' },
+            { letter: 'S', emoji: '🇪🇸', pron: '/ˈspænɪʃ/', word: 'Spanish', wordSuffix: 'panish' },
+            { letter: 'F', emoji: '🇫🇷', pron: '/frɛntʃ/', word: 'French', wordSuffix: 'rench' },
+            { letter: 'G', emoji: '🇩🇪', pron: '/ˈdʒɜːrmən/', word: 'German', wordSuffix: 'erman' },
+            { letter: 'I', emoji: '🇮🇹', pron: '/ɪˈtæljən/', word: 'Italian', wordSuffix: 'talian' },
+            { letter: 'J', emoji: '🇯🇵', pron: '/ˌdʒæpəˈniːz/', word: 'Japanese', wordSuffix: 'apanese' },
+            { letter: 'C', emoji: '🇨🇳', pron: '/tʃaɪˈniːz/', word: 'Chinese', wordSuffix: 'hinese' },
+            { letter: 'B', emoji: '🇧🇷', pron: '/brəˈzɪljən/', word: 'Brazilian', wordSuffix: 'razilian' },
+            { letter: 'I', emoji: '🇮🇳', pron: '/ˈɪndiən/', word: 'Indian', wordSuffix: 'ndian' }
+         ];
+      } else if (isPersonalInfo) {
+         numberList = [
+            { letter: 'N', emoji: '📛', pron: '/neɪm/', word: 'Name', wordSuffix: 'ame' },
+            { letter: 'A', emoji: '🎂', pron: '/eɪdʒ/', word: 'Age', wordSuffix: 'ge' },
+            { letter: 'A', emoji: '📍', pron: '/əˈdrɛs/', word: 'Address', wordSuffix: 'ddress' },
+            { letter: 'P', emoji: '☎️', pron: '/foʊn/', word: 'Phone', wordSuffix: 'hone' },
+            { letter: 'E', emoji: '📧', pron: '/ˈiːmeɪl/', word: 'Email', wordSuffix: 'mail' },
+            { letter: 'J', emoji: '⚙️', pron: '/dʒɒb/', word: 'Job', wordSuffix: 'ob' },
+            { letter: 'C', emoji: '🏙️', pron: '/ˈsɪti/', word: 'City', wordSuffix: 'ity' },
+            { letter: 'C', emoji: '🌎', pron: '/ˈkʌntri/', word: 'Country', wordSuffix: 'ountry' },
+            { letter: 'F', emoji: '👪', pron: '/ˈfæmɪli/', word: 'Family', wordSuffix: 'amily' },
+            { letter: 'F', emoji: '👬', pron: '/frɛnd/', word: 'Friend', wordSuffix: 'riend' }
+         ];
+      } else if (isDailyRoutines) {
+         numberList = [
+            { letter: 'W', emoji: '🌅', pron: '/weɪk/', word: 'Wake', wordSuffix: 'ake' },
+            { letter: 'S', emoji: '🛏️', pron: '/sliːp/', word: 'Sleep', wordSuffix: 'leep' },
+            { letter: 'S', emoji: '🚿', pron: '/ˈʃaʊər/', word: 'Shower', wordSuffix: 'hower' },
+            { letter: 'B', emoji: '🦷', pron: '/brʌʃ/', word: 'Brush', wordSuffix: 'rush' },
+            { letter: 'C', emoji: '🍳', pron: '/kʊk/', word: 'Cook', wordSuffix: 'ook' },
+            { letter: 'E', emoji: '🍽️', pron: '/iːt/', word: 'Eat', wordSuffix: 'at' },
+            { letter: 'W', emoji: '🚶', pron: '/wɔːk/', word: 'Walk', wordSuffix: 'alk' },
+            { letter: 'W', emoji: '👔', pron: '/wɜːrk/', word: 'Work', wordSuffix: 'ork' },
+            { letter: 'S', emoji: '📚', pron: '/ˈstʌdi/', word: 'Study', wordSuffix: 'tudy' },
+            { letter: 'W', emoji: '📺', pron: '/wɒtʃ/', word: 'Watch', wordSuffix: 'atch' }
+         ];
+      } else if (isLikesDislikes) {
+         numberList = [
+            { letter: 'L', emoji: '❤️', pron: '/lʌv/', word: 'Love', wordSuffix: 'ove' },
+            { letter: 'L', emoji: '👍', pron: '/laɪk/', word: 'Like', wordSuffix: 'ike' },
+            { letter: 'D', emoji: '👎', pron: '/dɪsˈlaɪk/', word: 'Dislike', wordSuffix: 'islike' },
+            { letter: 'H', emoji: '😡', pron: '/heɪt/', word: 'Hate', wordSuffix: 'ate' },
+            { letter: 'E', emoji: '😊', pron: '/ɪnˈdʒɔɪ/', word: 'Enjoy', wordSuffix: 'njoy' },
+            { letter: 'S', emoji: '⚽', pron: '/spɔːrt/', word: 'Sport', wordSuffix: 'port' },
+            { letter: 'M', emoji: '🎵', pron: '/ˈmjuːzɪk/', word: 'Music', wordSuffix: 'usic' },
+            { letter: 'F', emoji: '🌮', pron: '/fuːd/', word: 'Food', wordSuffix: 'ood' },
+            { letter: 'M', emoji: '🎬', pron: '/ˈmuːvi/', word: 'Movie', wordSuffix: 'ovie' },
+            { letter: 'G', emoji: '🎮', pron: '/ɡeɪm/', word: 'Game', wordSuffix: 'ame' }
+         ];
+      } else if (isHomeVocab) {
+         numberList = [
+            { letter: 'D', emoji: '🚪', pron: '/dɔːr/', word: 'Door', wordSuffix: 'oor' },
+            { letter: 'W', emoji: '🪟', pron: '/ˈwɪndoʊ/', word: 'Window', wordSuffix: 'indow' },
+            { letter: 'B', emoji: '🛏️', pron: '/bɛd/', word: 'Bed', wordSuffix: 'ed' },
+            { letter: 'C', emoji: '🪑', pron: '/tʃɛər/', word: 'Chair', wordSuffix: 'hair' },
+            { letter: 'S', emoji: '🛋️', pron: '/ˈsoʊfə/', word: 'Sofa', wordSuffix: 'ofa' },
+            { letter: 'T', emoji: '📺', pron: '/ˌtiːˈviː/', word: 'TV', wordSuffix: 'V' },
+            { letter: 'K', emoji: '🍳', pron: '/kɪtʃɪn/', word: 'Kitchen', wordSuffix: 'itchen' },
+            { letter: 'B', emoji: '🛁', pron: '/ˈbæθruːm/', word: 'Bathroom', wordSuffix: 'athroom' },
+            { letter: 'P', emoji: '🪴', pron: '/plænt/', word: 'Plant', wordSuffix: 'lant' },
+            { letter: 'L', emoji: '💡', pron: '/læmp/', word: 'Lamp', wordSuffix: 'amp' }
+         ];
+      } else if (isPlacesInTown) {
+         numberList = [
+            { letter: 'S', emoji: '🏫', pron: '/skuːl/', word: 'School', wordSuffix: 'chool' },
+            { letter: 'H', emoji: '🏥', pron: '/ˈhɒspɪtl/', word: 'Hospital', wordSuffix: 'ospital' },
+            { letter: 'B', emoji: '🏦', pron: '/bæŋk/', word: 'Bank', wordSuffix: 'ank' },
+            { letter: 'S', emoji: '🏬', pron: '/stɔːr/', word: 'Store', wordSuffix: 'tore' },
+            { letter: 'C', emoji: '☕', pron: '/kæˈfeɪ/', word: 'Cafe', wordSuffix: 'afe' },
+            { letter: 'P', emoji: '🌳', pron: '/pɑːrk/', word: 'Park', wordSuffix: 'ark' },
+            { letter: 'C', emoji: '🎬', pron: '/ˈsɪnəmə/', word: 'Cinema', wordSuffix: 'inema' },
+            { letter: 'A', emoji: '✈️', pron: '/ˈɛərpɔːrt/', word: 'Airport', wordSuffix: 'irport' },
+            { letter: 'S', emoji: '🚉', pron: '/ˈsteɪʃən/', word: 'Station', wordSuffix: 'tation' },
+            { letter: 'H', emoji: '🏨', pron: '/hoʊˈtɛl/', word: 'Hotel', wordSuffix: 'otel' }
+         ];
+      } else if (isHobbies) {
+         numberList = [
+            { letter: 'R', emoji: '📖', pron: '/riːd/', word: 'Read', wordSuffix: 'ead' },
+            { letter: 'P', emoji: '🎨', pron: '/peɪnt/', word: 'Paint', wordSuffix: 'aint' },
+            { letter: 'D', emoji: '✍️', pron: '/draɪv/', word: 'Draw', wordSuffix: 'raw' },
+            { letter: 'R', emoji: '🏃', pron: '/rʌn/', word: 'Run', wordSuffix: 'un' },
+            { letter: 'S', emoji: '🏊', pron: '/swɪm/', word: 'Swim', wordSuffix: 'wim' },
+            { letter: 'C', emoji: '🚴', pron: '/saɪkəl/', word: 'Cycle', wordSuffix: 'ycle' },
+            { letter: 'B', emoji: '🍳', pron: '/bɛɪk/', word: 'Bake', wordSuffix: 'ake' },
+            { letter: 'S', emoji: '🎤', pron: '/sɪŋ/', word: 'Sing', wordSuffix: 'ing' },
+            { letter: 'D', emoji: '💃', pron: '/dæns/', word: 'Dance', wordSuffix: 'ance' },
+            { letter: 'P', emoji: '📷', pron: '/foʊtoʊ/', word: 'Photo', wordSuffix: 'hoto' }
+         ];
+      } else if (isShopping) {
+         numberList = [
+            { letter: 'S', emoji: '🛒', pron: '/ʃɒp/', word: 'Shop', wordSuffix: 'hop' },
+            { letter: 'M', emoji: '💵', pron: '/mʌni/', word: 'Money', wordSuffix: 'oney' },
+            { letter: 'P', emoji: '🏷️', pron: '/praɪs/', word: 'Price', wordSuffix: 'rice' },
+            { letter: 'B', emoji: '🛍️', pron: '/bæɡ/', word: 'Bag', wordSuffix: 'ag' },
+            { letter: 'S', emoji: '👕', pron: '/ʃɜːrt/', word: 'Shirt', wordSuffix: 'hirt' },
+            { letter: 'P', emoji: '👖', pron: '/pænts/', word: 'Pants', wordSuffix: 'ants' },
+            { letter: 'S', emoji: '👟', pron: '/ʃuː/', word: 'Shoe', wordSuffix: 'hoe' },
+            { letter: 'D', emoji: '👗', pron: '/drɛs/', word: 'Dress', wordSuffix: 'ress' },
+            { letter: 'C', emoji: '💳', pron: '/kɑːrd/', word: 'Card', wordSuffix: 'ard' },
+            { letter: 'B', emoji: '🧾', pron: '/bɪl/', word: 'Bill', wordSuffix: 'ill' }
+         ];
+      }
+      let content;
+      let canContinue = true;
+
+      const playAudio = () => {
+         const currentItem = numberList[(pageIndex - 1) % 10];
+         const utterance = new SpeechSynthesisUtterance(currentItem.word);
+         utterance.lang = 'en-US';
+         window.speechSynthesis.speak(utterance);
+      };
+
+      const handleMicClick = () => {
+        if (micState === 'listening') return;
+        setMicState('listening');
+        setTimeout(() => {
+          setMicState('success');
+          awardPoints(2, 'Perfect pronunciation!', 'speaking');
+        }, 1500);
+      };
+
+      if (pageIndex <= 10) {
+         const item = numberList[pageIndex - 1];
+         
+         content = (
+            <div className="flex-1 overflow-y-auto min-h-0 w-full px-4 sm:px-6 md:px-8 max-w-xl mx-auto flex flex-col items-center justify-start sm:justify-center pb-28 pt-2 sm:pt-4 relative">
+                <motion.div 
+                  key={`page-${pageIndex}`}
+                  initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  className="w-full max-w-[300px] xs:max-w-[340px] sm:max-w-[380px] mx-auto min-h-[300px] flex-1 max-h-[460px] bg-white rounded-[32px] shadow-[0_10px_40px_rgba(0,0,0,0.06)] flex flex-col items-center justify-center border border-slate-100 relative group mb-4 shrink-0 px-4 py-8"
+                >
+                  {pageIndex > 1 && (
+                    <button onClick={() => setPageIndex(pageIndex - 1)} className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 text-slate-300 hover:text-slate-500 w-10 h-10 flex items-center justify-center z-10">
+                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                    </button>
+                  )}
+                  
+                  {pageIndex < totalPages && (
+                    <button onClick={() => {
+                      setPageIndex(pageIndex + 1);
+                      awardPoints(5, "Number learned", "vocabulary");
+                    }} className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 text-slate-300 hover:text-slate-500 w-10 h-10 flex items-center justify-center z-10">
+                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </button>
+                  )}
+                  
+                  <div className="text-[80px] xs:text-[100px] sm:text-[120px] font-black leading-none text-[#5d8ef7] mb-1">{item.emoji || item.letter}</div>
+                  <div className="text-[14px] xs:text-[16px] sm:text-[20px] text-slate-400 font-mono tracking-widest mb-2 sm:mb-4">{item.pron}</div>
+                  {/* Since image might not exist, we just show a colorful circle for numbers learning */}
+                  <div className="w-24 h-24 xs:w-28 xs:h-28 sm:w-32 sm:h-32 mb-2 sm:mb-3 rounded-full bg-blue-50 flex items-center justify-center shadow-inner border-[6px] border-blue-100 text-blue-400">
+                     <span className="text-4xl font-bold">{item.emoji || item.letter}</span>
+                  </div>
+                  <div className="text-[18px] xs:text-[20px] sm:text-[24px] font-bold text-slate-700 tracking-wide uppercase">{item.word}</div>
+                </motion.div>
+                
+                <div className="flex flex-col items-center space-y-3 sm:space-y-4 shrink-0 mt-auto w-full">
+                   <div className="flex gap-4 items-center">
+                     <button onClick={playAudio} className={`w-14 h-14 sm:w-16 sm:h-16 bg-white hover:bg-slate-50 ${theme.textHex ? `text-[${theme.textHex}]` : 'text-slate-600'} rounded-full flex items-center justify-center transition-colors shadow-sm border border-slate-100`}>
+                         <Volume2 size={28} stroke={theme.hex || "currentColor"} />
+                     </button>
+                     <button 
+                         onClick={handleMicClick} 
+                         className={`w-14 h-14 sm:w-16 sm:h-16 ${micState === 'success' ? 'bg-green-50 text-green-500 border border-green-200' : micState === 'listening' ? 'bg-red-50 text-red-500 border border-red-200 animate-pulse' : 'bg-white hover:bg-slate-50 text-slate-600 border border-slate-100'} rounded-full flex items-center justify-center transition-colors shadow-sm`}
+                     >
+                         {micState === 'success' ? <CheckCircle2 size={28} /> : <Mic size={28} stroke={micState === 'idle' ? (theme.hex || "currentColor") : 'currentColor'} />}
+                     </button>
+                   </div>
+                   <div className="flex gap-1 flex-wrap justify-center px-2 max-w-full">
+                      {numberList.map((_, i) => (
+                        <div key={i} className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full ${pageIndex === i + 1 ? (theme.bg || 'bg-blue-500') : 'bg-slate-200'}`} />
+                      ))}
+                   </div>
+                   <div className="text-xs sm:text-sm font-bold text-slate-400">
+                      {pageIndex} / 10
+                   </div>
+                </div>
+            </div>
+         );
+      } else if (pageIndex <= 20) {
+         // Phase 2: Missing Details (Match number to word)
+         const matchIndex = pageIndex - 11; // 0 to 9
+         const currentItem = numberList[matchIndex];
+         
+         canContinue = matchedPairs.includes(currentItem.word);
+         
+         const hash = (matchIndex * 137) % 6;
+         const permutations = [ [0,1,2], [0,2,1], [1,0,2], [1,2,0], [2,0,1], [2,1,0] ];
+         const order = permutations[hash] || [0,1,2];
+         
+         const distinctOpts = [currentItem];
+         for (let i = 1; i < 10; i++) {
+             let item = numberList[(matchIndex + i) % 10];
+             if (!distinctOpts.find(o => o.letter === item.letter) && distinctOpts.length < 3) {
+                 distinctOpts.push(item);
+             }
+         }
+         while(distinctOpts.length < 3) distinctOpts.push(numberList[(matchIndex + distinctOpts.length) % 10]);
+
+         const opts = [distinctOpts[order[0]], distinctOpts[order[1]], distinctOpts[order[2]]];
+
+         const handleOptionClick = (letter: string) => {
+            if (matchedPairs.includes(currentItem.word)) return;
+            setSelectedLeft(letter);
+            // Verify by letter since buttons render letter
+            if (letter === currentItem.letter) {
+                 setMatchedPairs(prev => [...prev, currentItem.word]);
+                 awardPoints(5, "Correct!", "vocabulary");
+            }
+         };
+
+         content = (
+            <div className="flex-1 w-full px-4 sm:px-6 max-w-xl mx-auto flex flex-col items-center justify-center pb-28 pt-2 relative">
+              <h2 className="text-xl sm:text-2xl font-black text-slate-800 mb-8 text-center tracking-tight">Complete the Word</h2>
+              <div className="w-full max-w-[280px] xs:max-w-[320px] sm:max-w-[420px] mx-auto bg-white rounded-[40px] shadow-[0_15px_50px_rgba(0,0,0,0.08)] flex flex-col items-center justify-center border border-slate-100 p-6 sm:p-12 mb-6 sm:mb-10 shrink-0">
+                 <div className="w-24 h-24 xs:w-28 xs:h-28 sm:w-40 sm:h-40 mb-4 sm:mb-6 rounded-full bg-blue-50 flex items-center justify-center shadow-inner border border-blue-100 text-blue-400 shrink-0">
+                    <span className="text-[50px] sm:text-[70px] font-bold">{currentItem.emoji || currentItem.letter}</span>
+                 </div>
+                 <div className="flex items-end justify-center text-[28px] xs:text-[34px] sm:text-[56px] font-black tracking-tight text-slate-800 uppercase space-x-1 max-w-full overflow-hidden px-2">
+                    <div className={`w-8 xs:w-10 sm:w-16 flex justify-center text-center pb-1 shrink-0 ${canContinue ? 'text-green-500' : 'text-slate-200 border-b-4 border-slate-300'}`}>
+                       {canContinue ? currentItem.letter : (selectedLeft && selectedLeft !== currentItem.letter ? <span className="text-red-400">{selectedLeft}</span> : "")}
+                    </div>
+                    <span className="truncate">{currentItem.wordSuffix}</span>
+                 </div>
+              </div>
+              <div className="w-full flex justify-center gap-3 sm:gap-6 mt-2 sm:mt-4">
+                 {opts.map(opt => (
+                    <button 
+                       key={opt.letter} 
+                       onClick={() => handleOptionClick(opt.letter)}
+                       disabled={canContinue}
+                       className={`flex-1 max-w-[80px] xs:max-w-[90px] sm:max-w-[100px] aspect-square rounded-[24px] sm:rounded-[30px] border-2 font-black text-3xl sm:text-5xl transition-all shadow-sm ${
+                          canContinue && opt.letter === currentItem.letter ? 'bg-green-100 border-green-500 text-green-600 shadow-md scale-105' : 
+                          selectedLeft === opt.letter && !canContinue ? 'bg-red-50 border-red-400 text-red-500' : 
+                          'bg-white border-slate-200 text-slate-700 hover:border-slate-300 hover:shadow-md hover:scale-105 active:scale-95'
+                       }`}
+                    >
+                       {opt.letter}
+                    </button>
+                 ))}
+              </div>
+              <div className="h-16 mt-4 sm:mt-8 flex items-center justify-center">
+                 {canContinue && (
+                     <div className="text-green-500 font-bold text-xl drop-shadow-sm flex items-center gap-2 animate-bounce">
+                        <CheckCircle2 size={24} /> Perfect!
+                     </div>
+                 )}
+              </div>
+            </div>
+         );
+      } else {
+         // Phase 3: Listen & Guess Game
+         const guessIndex = pageIndex - 21; // 0 to 9
+         const correctItem = numberList[guessIndex];
+         canContinue = listenGuess === correctItem.word;
+         
+         const hash = (guessIndex * 97) % 8;
+         const rawOpts = [
+            correctItem, 
+            numberList[(guessIndex * 3 + 5) % 10], 
+            numberList[(guessIndex * 7 + 2) % 10], 
+            numberList[(guessIndex * 1 + 9) % 10]
+         ];
+         const distinctOpts = [rawOpts[0]];
+         for (let i = 1; i < 4; i++) {
+            let item = rawOpts[i];
+            let fallback = 1;
+            while(distinctOpts.find(o => o.word === item.word)) {
+               item = numberList[(guessIndex + fallback++) % 10];
+            }
+            distinctOpts.push(item);
+         }
+         
+         const opts = [...distinctOpts];
+         for (let i = opts.length - 1; i > 0; i--) {
+            const j = (hash + i) % (i + 1);
+            [opts[i], opts[j]] = [opts[j], opts[i]];
+         }
+
+         content = (
+            <div className="flex-1 w-full px-4 sm:px-6 max-w-xl mx-auto flex flex-col items-center justify-center pb-28 pt-2 relative">
+              <h2 className="text-xl sm:text-2xl font-black text-slate-800 mb-8 text-center tracking-tight">Listen & Guess</h2>
+              
+              <button onClick={playAudio} className={`w-28 h-28 sm:w-32 sm:h-32 mb-10 bg-white hover:bg-slate-50 ${theme.textHex ? `text-[${theme.textHex}]` : 'text-slate-600'} rounded-full flex items-center justify-center transition-all shadow-lg border border-slate-100 hover:scale-105 active:scale-95`}>
+                  <Volume2 size={48} stroke={theme.hex || "currentColor"} />
+              </button>
+
+              <div className="grid grid-cols-2 gap-4 w-full">
+                 {opts.map((opt, i) => (
+                    <button 
+                      key={opt.word + "_" + i}
+                      onClick={() => {
+                         setListenGuess(opt.word);
+                         if (opt.word === correctItem.word) {
+                             awardPoints(5, "Great listening!", "vocabulary");
+                         }
+                      }}
+                      disabled={canContinue}
+                      className={`w-full aspect-[4/3] rounded-[24px] sm:rounded-[32px] border-2 font-black transition-all shadow-sm flex items-center justify-center ${
+                         canContinue && opt.word === correctItem.word ? 'bg-green-100 border-green-500 text-green-600 shadow-md scale-[1.02]' : 
+                         listenGuess === opt.word && !canContinue ? 'bg-red-50 border-red-400 text-red-500' : 
+                         listenGuess !== null && opt.word !== correctItem.word ? 'bg-slate-50 border-slate-200 text-slate-400 opacity-50' :
+                         'bg-white border-slate-200 text-slate-700 hover:border-slate-300 hover:shadow-md hover:scale-[1.02] active:scale-95'
+                      }`}
+                    >
+                      <span className="text-[40px] xs:text-[50px] sm:text-[60px]">{opt.emoji || opt.letter}</span>
+                    </button>
+                 ))}
+              </div>
+              <div className="h-16 mt-4 sm:mt-8 flex items-center justify-center">
+                 {canContinue && listenGuess === correctItem.word && (
+                     <div className="text-green-500 font-bold text-xl drop-shadow-sm flex items-center gap-2 animate-bounce">
+                        <CheckCircle2 size={24} /> Spot on!
+                     </div>
+                 )}
+                 {canContinue && listenGuess !== correctItem.word && (
+                     <div className="text-red-500 font-bold text-lg flex items-center gap-2">
+                        <span className="text-slate-500">Correct was:</span> <span className="text-2xl text-slate-800">{correctItem.emoji || correctItem.letter}</span>
+                     </div>
+                 )}
+              </div>
+            </div>
+         );
+      }
+      
+      return (
+         <div className="fixed inset-0 z-[100] w-full h-[100dvh] flex flex-col font-sans bg-slate-50 pb-6 overflow-hidden">
+           {/* Top Bar with close button left, progress bar below */}
+           <div className="px-5 py-4 flex flex-col shrink-0 bg-transparent z-10 relative">
+              <div className="flex items-center w-full mb-3">
+                 <button onClick={() => setPageIndex(pageIndex - 1)} className="text-slate-400 hover:text-slate-600 transition-colors p-1 flex items-center justify-center">
+                    <ArrowLeft size={24} strokeWidth={2.5} />
+                 </button>
+              </div>
+              <div className="w-full h-3 bg-slate-200/60 rounded-full overflow-hidden flex">
+                 <div className={`h-full bg-gradient-to-r ${theme.from} ${theme.to} rounded-full transition-all duration-300`} style={{width: `${((pageIndex) / totalPages) * 100}%`}}></div>
+              </div>
+           </div>
+ 
+           {content}
+ 
+           {/* Footer */}
+           <div className="fixed bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-slate-50 via-slate-50/100 to-transparent pointer-events-none z-50 flex flex-col items-center pb-8 pt-12">
+              <div className="max-w-[400px] w-full pointer-events-auto">
+                 <button 
+                    disabled={!canContinue}
+                    onClick={() => {
+                        if (pageIndex < totalPages) {
+                            setPageIndex(pageIndex + 1);
+                        } else {
+                            onNext();
+                        }
+                    }} 
+                    className={`w-full py-4 bg-gradient-to-r transition-all rounded-full flex items-center justify-center text-white border-0 ${
+                        !canContinue 
+                           ? 'from-slate-300 to-slate-400 opacity-60 cursor-not-allowed shadow-none' 
+                           : `${theme.from} ${theme.to} hover:opacity-90 shadow-[0_4px_15px_rgba(0,0,0,0.1)] active:shadow-none active:translate-y-1`
+                    }`}
+                 >
+                    <span className="font-semibold text-[17px] tracking-wide">{pageIndex === totalPages ? 'Finish' : 'Continue'}</span>
+                 </button>
+              </div>
+           </div>
+         </div>
+      );
+    }
+
+    if (isDaysMonths) {
+      const daysMonthsList = [
+        { letter: 'Mon', pron: '/ˈmʌndeɪ/', word: 'Monday', wordSuffix: 'onday' },
+        { letter: 'Tue', pron: '/ˈtjuːzdeɪ/', word: 'Tuesday', wordSuffix: 'uesday' },
+        { letter: 'Wed', pron: '/ˈwɛnzdeɪ/', word: 'Wednesday', wordSuffix: 'ednesday' },
+        { letter: 'Thu', pron: '/ˈθɜːrzdeɪ/', word: 'Thursday', wordSuffix: 'hursday' },
+        { letter: 'Fri', pron: '/ˈfraɪdeɪ/', word: 'Friday', wordSuffix: 'riday' },
+        { letter: 'Sat', pron: '/ˈsætərdeɪ/', word: 'Saturday', wordSuffix: 'aturday' },
+        { letter: 'Sun', pron: '/ˈsʌndeɪ/', word: 'Sunday', wordSuffix: 'unday' },
+        { letter: 'Jan', pron: '/ˈdʒænjuɛri/', word: 'January', wordSuffix: 'anuary' },
+        { letter: 'Feb', pron: '/ˈfɛbrʊəri/', word: 'February', wordSuffix: 'ebruary' },
+        { letter: 'Mar', pron: '/mɑːrtʃ/', word: 'March', wordSuffix: 'arch' },
+        { letter: 'Apr', pron: '/ˈeɪprəl/', word: 'April', wordSuffix: 'pril' },
+        { letter: 'May', pron: '/meɪ/', word: 'May', wordSuffix: 'ay' },
+        { letter: 'Jun', pron: '/dʒuːn/', word: 'June', wordSuffix: 'une' },
+        { letter: 'Jul', pron: '/dʒʊˈlaɪ/', word: 'July', wordSuffix: 'uly' },
+        { letter: 'Aug', pron: '/ˈɔːɡəst/', word: 'August', wordSuffix: 'ugust' },
+        { letter: 'Sep', pron: '/sɛpˈtɛmbər/', word: 'September', wordSuffix: 'eptember' },
+        { letter: 'Oct', pron: '/ɒkˈtoʊbər/', word: 'October', wordSuffix: 'ctober' },
+        { letter: 'Nov', pron: '/noʊˈvɛmbər/', word: 'November', wordSuffix: 'ovember' },
+        { letter: 'Dec', pron: '/dɪˈsɛmbər/', word: 'December', wordSuffix: 'ecember' }
+      ];
+      let content;
+      let canContinue = true;
+
+      const playAudio = () => {
+         const currentItem = daysMonthsList[(pageIndex - 1) % 19];
+         const utterance = new SpeechSynthesisUtterance(currentItem.word);
+         utterance.lang = 'en-US';
+         window.speechSynthesis.speak(utterance);
+      };
+
+      const handleMicClick = () => {
+        if (micState === 'listening') return;
+        setMicState('listening');
+        setTimeout(() => {
+          setMicState('success');
+          awardPoints(2, 'Perfect pronunciation!', 'speaking');
+        }, 1500);
+      };
+
+      if (pageIndex <= 19) {
+         const item = daysMonthsList[pageIndex - 1];
+         
+         content = (
+            <div className="flex-1 overflow-y-auto min-h-0 w-full px-4 sm:px-6 md:px-8 max-w-xl mx-auto flex flex-col items-center justify-start sm:justify-center pb-28 pt-2 sm:pt-4 relative">
+                <motion.div 
+                  key={`page-${pageIndex}`}
+                  initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  className="w-full max-w-[300px] xs:max-w-[340px] sm:max-w-[380px] mx-auto min-h-[300px] flex-1 max-h-[460px] bg-white rounded-[32px] shadow-[0_10px_40px_rgba(0,0,0,0.06)] flex flex-col items-center justify-center border border-slate-100 relative group mb-4 shrink-0 px-4 py-8"
+                >
+                  {pageIndex > 1 && (
+                    <button onClick={() => setPageIndex(pageIndex - 1)} className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 text-slate-300 hover:text-slate-500 w-10 h-10 flex items-center justify-center z-10">
+                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                    </button>
+                  )}
+                  
+                  {pageIndex < totalPages && (
+                    <button onClick={() => {
+                      setPageIndex(pageIndex + 1);
+                      awardPoints(5, "Number learned", "vocabulary");
+                    }} className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 text-slate-300 hover:text-slate-500 w-10 h-10 flex items-center justify-center z-10">
+                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </button>
+                  )}
+                  
+                  <div className="text-[60px] xs:text-[80px] sm:text-[100px] font-black leading-none text-[#5d8ef7] mb-1">{item.letter}</div>
+                  <div className="text-[14px] xs:text-[16px] sm:text-[20px] text-slate-400 font-mono tracking-widest mb-2 sm:mb-4">{item.pron}</div>
+                  {/* Since image might not exist, we just show a colorful circle for numbers learning */}
+                  <div className="w-24 h-24 xs:w-28 xs:h-28 sm:w-32 sm:h-32 mb-2 sm:mb-3 rounded-full bg-blue-50 flex items-center justify-center shadow-inner border-[6px] border-blue-100 text-blue-400">
+                     <span className="text-4xl font-bold">{item.letter}</span>
+                  </div>
+                  <div className="text-[18px] xs:text-[20px] sm:text-[24px] font-bold text-slate-700 tracking-wide uppercase">{item.word}</div>
+                </motion.div>
+                
+                <div className="flex flex-col items-center space-y-3 sm:space-y-4 shrink-0 mt-auto w-full">
+                   <div className="flex gap-4 items-center">
+                     <button onClick={playAudio} className={`w-14 h-14 sm:w-16 sm:h-16 bg-white hover:bg-slate-50 ${theme.textHex ? `text-[${theme.textHex}]` : 'text-slate-600'} rounded-full flex items-center justify-center transition-colors shadow-sm border border-slate-100`}>
+                         <Volume2 size={28} stroke={theme.hex || "currentColor"} />
+                     </button>
+                     <button 
+                         onClick={handleMicClick} 
+                         className={`w-14 h-14 sm:w-16 sm:h-16 ${micState === 'success' ? 'bg-green-50 text-green-500 border border-green-200' : micState === 'listening' ? 'bg-red-50 text-red-500 border border-red-200 animate-pulse' : 'bg-white hover:bg-slate-50 text-slate-600 border border-slate-100'} rounded-full flex items-center justify-center transition-colors shadow-sm`}
+                     >
+                         {micState === 'success' ? <CheckCircle2 size={28} /> : <Mic size={28} stroke={micState === 'idle' ? (theme.hex || "currentColor") : 'currentColor'} />}
+                     </button>
+                   </div>
+                   <div className="flex gap-1 flex-wrap justify-center px-2 max-w-full">
+                      {daysMonthsList.map((_, i) => (
+                        <div key={i} className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full ${pageIndex === i + 1 ? (theme.bg || 'bg-blue-500') : 'bg-slate-200'}`} />
+                      ))}
+                   </div>
+                   <div className="text-xs sm:text-sm font-bold text-slate-400">
+                      {pageIndex} / 19
+                   </div>
+                </div>
+            </div>
+         );
+      } else if (pageIndex <= 38) {
+         // Phase 2: Missing Details (Match number to word)
+         const matchIndex = pageIndex - 20; // 0 to 9
+         const currentItem = daysMonthsList[matchIndex];
+         
+         canContinue = matchedPairs.includes(currentItem.letter);
+         
+         const hash = (matchIndex * 137) % 6;
+         const permutations = [ [0,1,2], [0,2,1], [1,0,2], [1,2,0], [2,0,1], [2,1,0] ];
+         const order = permutations[hash] || [0,1,2];
+         
+         const rawOpts = [
+            currentItem,
+            daysMonthsList[(matchIndex * 3 + 7) % 19],
+            daysMonthsList[(matchIndex * 7 + 3) % 19]
+         ];
+         if (rawOpts[1].letter === rawOpts[0].letter) rawOpts[1] = daysMonthsList[(matchIndex + 1) % 19];
+         if (rawOpts[2].letter === rawOpts[0].letter || rawOpts[2].letter === rawOpts[1].letter) rawOpts[2] = daysMonthsList[(matchIndex + 2) % 19];
+
+         const opts = [rawOpts[order[0]], rawOpts[order[1]], rawOpts[order[2]]];
+
+         const handleOptionClick = (letter: string) => {
+            if (matchedPairs.includes(currentItem.letter)) return;
+            setSelectedLeft(letter);
+            if (letter === currentItem.letter) {
+                 setMatchedPairs(prev => [...prev, letter]);
+                 awardPoints(5, "Correct!", "vocabulary");
+            }
+         };
+
+         content = (
+            <div className="flex-1 w-full px-4 sm:px-6 max-w-xl mx-auto flex flex-col items-center justify-center pb-28 pt-2 relative">
+              <h2 className="text-xl sm:text-2xl font-black text-slate-800 mb-8 text-center tracking-tight">Complete the Word</h2>
+              <div className="w-full max-w-[280px] xs:max-w-[320px] sm:max-w-[420px] mx-auto bg-white rounded-[40px] shadow-[0_15px_50px_rgba(0,0,0,0.08)] flex flex-col items-center justify-center border border-slate-100 p-6 sm:p-12 mb-6 sm:mb-10 shrink-0">
+                 <div className="w-24 h-24 xs:w-28 xs:h-28 sm:w-40 sm:h-40 mb-4 sm:mb-6 rounded-full bg-blue-50 flex items-center justify-center shadow-inner border border-blue-100 text-blue-400 shrink-0">
+                    <span className="text-[40px] sm:text-[50px] font-bold">{currentItem.letter}</span>
+                 </div>
+                 <div className="flex items-end justify-center text-[28px] xs:text-[34px] sm:text-[56px] font-black tracking-tight text-slate-800 uppercase space-x-1 max-w-full overflow-hidden px-2">
+                    <div className={`w-8 xs:w-10 sm:w-16 flex justify-center text-center pb-1 shrink-0 ${canContinue ? 'text-green-500' : 'text-slate-200 border-b-4 border-slate-300'}`}>
+                       {canContinue ? currentItem.letter : (selectedLeft && selectedLeft !== currentItem.letter ? <span className="text-red-400">{selectedLeft}</span> : "")}
+                    </div>
+                    <span className="truncate">{currentItem.wordSuffix}</span>
+                 </div>
+              </div>
+              <div className="w-full flex justify-center gap-3 sm:gap-6 mt-2 sm:mt-4">
+                 {opts.map(opt => (
+                    <button 
+                       key={opt.letter} 
+                       onClick={() => handleOptionClick(opt.letter)}
+                       disabled={canContinue}
+                       className={`flex-1 max-w-[80px] xs:max-w-[90px] sm:max-w-[100px] aspect-square rounded-[24px] sm:rounded-[30px] border-2 font-black text-3xl sm:text-5xl transition-all shadow-sm ${
+                          canContinue && opt.letter === currentItem.letter ? 'bg-green-100 border-green-500 text-green-600 shadow-md scale-105' : 
+                          selectedLeft === opt.letter && !canContinue ? 'bg-red-50 border-red-400 text-red-500' : 
+                          'bg-white border-slate-200 text-slate-700 hover:border-slate-300 hover:shadow-md hover:scale-105 active:scale-95'
+                       }`}
+                    >
+                       {opt.letter}
+                    </button>
+                 ))}
+              </div>
+              <div className="h-16 mt-4 sm:mt-8 flex items-center justify-center">
+                 {canContinue && (
+                     <div className="text-green-500 font-bold text-xl drop-shadow-sm flex items-center gap-2 animate-bounce">
+                        <CheckCircle2 size={24} /> Perfect!
+                     </div>
+                 )}
+              </div>
+            </div>
+         );
+      } else {
+         // Phase 3: Listen & Guess Game
+         const guessIndex = pageIndex - 39; // 0 to 9
+         const correctItem = daysMonthsList[guessIndex];
+         canContinue = listenGuess !== null;
+         
+         const hash = (guessIndex * 97) % 8;
+         const rawOpts = [
+            correctItem, 
+            daysMonthsList[(guessIndex * 3 + 5) % 19], 
+            daysMonthsList[(guessIndex * 7 + 2) % 19], 
+            daysMonthsList[(guessIndex * 1 + 9) % 19]
+         ];
+         const distinctOpts = [rawOpts[0]];
+         for (let i = 1; i < 4; i++) {
+            let item = rawOpts[i];
+            let fallback = 1;
+            while(distinctOpts.find(o => o.letter === item.letter)) {
+               item = daysMonthsList[(guessIndex + fallback++) % 19];
+            }
+            distinctOpts.push(item);
+         }
+         
+         const opts = [...distinctOpts];
+         for (let i = opts.length - 1; i > 0; i--) {
+            const j = (hash + i) % (i + 1);
+            [opts[i], opts[j]] = [opts[j], opts[i]];
+         }
+
+         content = (
+            <div className="flex-1 w-full px-4 sm:px-6 max-w-xl mx-auto flex flex-col items-center justify-center pb-28 pt-2 relative">
+              <h2 className="text-xl sm:text-2xl font-black text-slate-800 mb-8 text-center tracking-tight">Listen & Guess</h2>
+              
+              <button onClick={playAudio} className={`w-28 h-28 sm:w-32 sm:h-32 mb-10 bg-white hover:bg-slate-50 ${theme.textHex ? `text-[${theme.textHex}]` : 'text-slate-600'} rounded-full flex items-center justify-center transition-all shadow-lg border border-slate-100 hover:scale-105 active:scale-95`}>
+                  <Volume2 size={48} stroke={theme.hex || "currentColor"} />
+              </button>
+
+              <div className="grid grid-cols-2 gap-4 w-full">
+                 {opts.map(opt => (
+                    <button 
+                      key={opt.letter}
+                      onClick={() => {
+                         setListenGuess(opt.letter);
+                         if (opt.letter === correctItem.letter) {
+                             awardPoints(5, "Great listening!", "vocabulary");
+                         }
+                      }}
+                      disabled={canContinue}
+                      className={`w-full aspect-[4/3] rounded-[24px] sm:rounded-[32px] border-2 font-black text-4xl sm:text-6xl transition-all shadow-sm ${
+                         canContinue && opt.letter === correctItem.letter ? 'bg-green-100 border-green-500 text-green-600 shadow-md scale-[1.02]' : 
+                         listenGuess === opt.letter && !canContinue ? 'bg-red-50 border-red-400 text-red-500' : 
+                         listenGuess !== null && opt.letter !== correctItem.letter ? 'bg-slate-50 border-slate-200 text-slate-400 opacity-50' :
+                         'bg-white border-slate-200 text-slate-700 hover:border-slate-300 hover:shadow-md hover:scale-[1.02] active:scale-95'
+                      }`}
+                    >
+                      {opt.letter}
+                    </button>
+                 ))}
+              </div>
+              <div className="h-16 mt-4 sm:mt-8 flex items-center justify-center">
+                 {canContinue && listenGuess === correctItem.letter && (
+                     <div className="text-green-500 font-bold text-xl drop-shadow-sm flex items-center gap-2 animate-bounce">
+                        <CheckCircle2 size={24} /> Spot on!
+                     </div>
+                 )}
+                 {canContinue && listenGuess !== correctItem.letter && (
+                     <div className="text-red-500 font-bold text-lg flex items-center gap-2">
+                        <span className="text-slate-500">Correct was:</span> <span className="text-2xl text-slate-800">{correctItem.letter}</span>
+                     </div>
+                 )}
+              </div>
+            </div>
+         );
+      }
+      
+      return (
+         <div className="fixed inset-0 z-[100] w-full h-[100dvh] flex flex-col font-sans bg-slate-50 pb-6 overflow-hidden">
+           {/* Top Bar with close button left, progress bar below */}
+           <div className="px-5 py-4 flex flex-col shrink-0 bg-transparent z-10 relative">
+              <div className="flex items-center w-full mb-3">
+                 <button onClick={() => setPageIndex(pageIndex - 1)} className="text-slate-400 hover:text-slate-600 transition-colors p-1 flex items-center justify-center">
+                    <ArrowLeft size={24} strokeWidth={2.5} />
+                 </button>
+              </div>
+              <div className="w-full h-3 bg-slate-200/60 rounded-full overflow-hidden flex">
+                 <div className={`h-full bg-gradient-to-r ${theme.from} ${theme.to} rounded-full transition-all duration-300`} style={{width: `${((pageIndex) / totalPages) * 100}%`}}></div>
+              </div>
+           </div>
+ 
+           {content}
+ 
+           {/* Footer */}
+           <div className="fixed bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-slate-50 via-slate-50/100 to-transparent pointer-events-none z-50 flex flex-col items-center pb-8 pt-12">
+              <div className="max-w-[400px] w-full pointer-events-auto">
+                 <button 
+                    disabled={!canContinue}
+                    onClick={() => {
+                        if (pageIndex < totalPages) {
+                            setPageIndex(pageIndex + 1);
+                        } else {
+                            onNext();
+                        }
+                    }} 
+                    className={`w-full py-4 bg-gradient-to-r transition-all rounded-full flex items-center justify-center text-white border-0 ${
+                        !canContinue 
+                           ? 'from-slate-300 to-slate-400 opacity-60 cursor-not-allowed shadow-none' 
+                           : `${theme.from} ${theme.to} hover:opacity-90 shadow-[0_4px_15px_rgba(0,0,0,0.1)] active:shadow-none active:translate-y-1`
+                    }`}
+                 >
+                    <span className="font-semibold text-[17px] tracking-wide">{pageIndex === totalPages ? 'Finish' : 'Continue'}</span>
+                 </button>
+              </div>
+           </div>
+         </div>
+      );
+    }
+
+    if (isToBe) {
+      if (pageIndex === 1) {
+        return (
+          <div className="fixed inset-0 z-[100] w-full h-[100dvh] flex flex-col font-sans bg-slate-50 pb-6 overflow-hidden">
+            <div className="px-5 py-4 flex items-center justify-between shrink-0 bg-transparent z-10 relative">
+               <button onClick={() => setPageIndex(pageIndex - 1)} className="text-slate-400 hover:text-slate-600 transition-colors p-1">
+                  <ArrowLeft size={24} strokeWidth={2.5} />
+               </button>
+               <div className="flex-1 mx-6 h-3 bg-slate-200 rounded-full overflow-hidden">
+                  <div className="h-full bg-blue-500 rounded-full transition-all duration-500 ease-out" style={{ width: `${(pageIndex / totalPages) * 100}%` }} />
+               </div>
+               <div className="w-8" />
+            </div>
+
+            <div className="flex-1 w-full max-w-xl mx-auto px-6 py-4 overflow-y-auto flex flex-col">
+               <h2 className="text-2xl font-black text-slate-800 mb-6 text-center">CORE RULE</h2>
+               
+               <div className="bg-white rounded-3xl p-6 border-2 border-slate-100 shadow-sm mb-6 flex flex-col gap-3">
+                  <h3 className="font-bold text-slate-400 text-sm uppercase tracking-widest text-center mb-2">Subject → To Be</h3>
+                  {[{p:'I',v:'am'},{p:'You',v:'are'},{p:'He',v:'is'},{p:'She',v:'is'},{p:'It',v:'is'},{p:'We',v:'are'},{p:'They',v:'are'}].map((r, i) => (
+                      <div key={i} className="flex items-center justify-center gap-4 text-2xl font-black">
+                         <span className="text-slate-600 w-16 text-right">{r.p}</span>
+                         <span className="text-blue-400">→</span>
+                         <span className="text-blue-500 w-16 text-left">{r.v}</span>
+                      </div>
+                  ))}
+               </div>
+
+               <div className="bg-blue-50 rounded-2xl p-5 border border-blue-100 mb-6">
+                  <p className="text-blue-800 font-bold text-center">Use 'to be' to describe identity, origin, or feelings.</p>
+               </div>
+
+               <div className="space-y-4">
+                  <div className="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between">
+                     <span className="text-lg font-bold text-slate-700">I <span className="text-blue-500">am</span> a teacher.</span>
+                  </div>
+                  <div className="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between">
+                     <span className="text-lg font-bold text-slate-700">They <span className="text-blue-500">are</span> happy.</span>
+                  </div>
+               </div>
+            </div>
+
+            <div className="px-6 pt-4 pb-8 shrink-0 bg-white border-t border-slate-100 shadow-[0_-10px_20px_rgba(0,0,0,0.02)]">
+               <button onClick={() => setPageIndex(pageIndex + 1)} className="w-full max-w-md mx-auto block py-4 rounded-2xl font-black text-lg transition-all border-b-4 bg-blue-500 text-white border-blue-600 hover:bg-blue-400 hover:border-blue-500 active:translate-y-1 active:border-b-0">
+                 Continue
+               </button>
+            </div>
+          </div>
+        );
+      } else if (pageIndex === 2) {
+        return (
+          <div className="fixed inset-0 z-[100] w-full h-[100dvh] flex flex-col font-sans bg-slate-50 pb-6 overflow-hidden">
+            <div className="px-5 py-4 flex items-center justify-between shrink-0 bg-transparent z-10 relative">
+               <button onClick={() => setPageIndex(pageIndex - 1)} className="text-slate-400 hover:text-slate-600 transition-colors p-1">
+                  <ArrowLeft size={24} strokeWidth={2.5} />
+               </button>
+               <div className="flex-1 mx-6 h-3 bg-slate-200 rounded-full overflow-hidden">
+                  <div className="h-full bg-blue-500 rounded-full transition-all duration-500 ease-out" style={{ width: `${(pageIndex / totalPages) * 100}%` }} />
+               </div>
+               <div className="w-8" />
+            </div>
+
+            <div className="flex-1 w-full max-w-xl mx-auto px-6 py-4 overflow-y-auto flex flex-col items-center">
+               <h2 className="text-2xl font-black text-slate-800 mb-6 text-center">EXAMPLES</h2>
+               <p className="text-slate-500 font-bold mb-6 text-center">Listen to how we use "To Be" in real life.</p>
+
+               <div className="w-full space-y-6">
+                  {[{s: 'I am Emma.', e: '🙋‍♀️'}, {s: 'He is a doctor.', e: '👨‍⚕️'}, {s: 'They are friends.', e: '🧑‍🤝‍🧑'}].map((ex, i) => (
+                     <div key={i} className="bg-white rounded-3xl p-6 border-2 border-slate-100 shadow-sm flex flex-col items-center gap-4 relative overflow-hidden">
+                        <div className="text-6xl">{ex.e}</div>
+                        <h3 className="text-2xl font-black text-slate-800">{ex.s}</h3>
+                        <button onClick={playAudio} className="w-12 h-12 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center hover:bg-blue-100 transition-colors border border-blue-100">
+                           <Volume2 size={24} />
+                        </button>
+                     </div>
+                  ))}
+               </div>
+            </div>
+
+            <div className="px-6 pt-4 pb-8 shrink-0 bg-white border-t border-slate-100 shadow-[0_-10px_20px_rgba(0,0,0,0.02)]">
+               <button onClick={() => setPageIndex(pageIndex + 1)} className="w-full max-w-md mx-auto block py-4 rounded-2xl font-black text-lg transition-all border-b-4 bg-blue-500 text-white border-blue-600 hover:bg-blue-400 hover:border-blue-500 active:translate-y-1 active:border-b-0">
+                 Continue
+               </button>
+            </div>
+          </div>
+        );
+      } else if (pageIndex === 3) {
+        const canContinue = practiceAnswer !== null;
+        return (
+          <div className="fixed inset-0 z-[100] w-full h-[100dvh] flex flex-col font-sans bg-slate-50 pb-6 overflow-hidden">
+            <div className="px-5 py-4 flex items-center justify-between shrink-0 bg-transparent z-10 relative">
+               <button onClick={() => setPageIndex(pageIndex - 1)} className="text-slate-400 hover:text-slate-600 transition-colors p-1">
+                  <ArrowLeft size={24} strokeWidth={2.5} />
+               </button>
+               <div className="flex-1 mx-6 h-3 bg-slate-200 rounded-full overflow-hidden">
+                  <div className="h-full bg-blue-500 rounded-full transition-all duration-500 ease-out" style={{ width: `${(pageIndex / totalPages) * 100}%` }} />
+               </div>
+               <div className="w-8" />
+            </div>
+
+            <div className="flex-1 w-full max-w-xl mx-auto px-6 py-4 overflow-y-auto flex flex-col items-center justify-center">
+               <h2 className="text-2xl font-black text-slate-800 mb-8 text-center uppercase tracking-tight">CHOOSE THE CORRECT FORM</h2>
+               
+               <div className="bg-white rounded-[40px] p-10 border border-slate-100 shadow-[0_15px_50px_rgba(0,0,0,0.08)] mb-10 w-full flex items-center justify-center">
+                  <span className="text-4xl font-black text-slate-800 tracking-tight">I <span className={`inline-block w-20 text-center border-b-4 ${practiceAnswer ? 'text-blue-500 border-blue-500' : 'text-transparent border-slate-200'}`}>{practiceAnswer || 'am'}</span> happy.</span>
+               </div>
+
+               <div className="w-full space-y-4">
+                  {['am', 'is', 'are'].map((opt) => (
+                     <button
+                        key={opt}
+                        onClick={() => {
+                           if (practiceStatus === 'correct' || practiceStatus === 'incorrect') return;
+                           setPracticeAnswer(opt);
+                        }}
+                        className={`w-full p-6 rounded-3xl border-2 font-black text-xl transition-all shadow-sm ${practiceAnswer === opt ? (practiceStatus === 'correct' ? 'bg-green-100 border-green-500 text-green-600' : practiceStatus === 'incorrect' ? 'bg-red-100 border-red-500 text-red-600' : 'bg-blue-50 border-blue-400 text-blue-600') : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300'}`}
+                     >
+                        {opt}
+                     </button>
+                  ))}
+               </div>
+            </div>
+
+            <div className="px-6 pt-4 pb-8 shrink-0 bg-white border-t border-slate-100 shadow-[0_-10px_20px_rgba(0,0,0,0.02)]">
+               <button 
+                  onClick={() => {
+                     if (practiceStatus === 'idle') {
+                        if (practiceAnswer === 'am') {
+                           setPracticeStatus('correct');
+                           awardPoints(5, 'Correct!', 'grammar');
+                        } else {
+                           setPracticeStatus('incorrect');
+                        }
+                     } else if (practiceStatus === 'correct') {
+                        setPageIndex(pageIndex + 1);
+                     } else {
+                        setPracticeAnswer(null);
+                        setPracticeStatus('idle');
+                     }
+                  }} 
+                  disabled={!canContinue}
+                  className={`w-full max-w-md mx-auto block py-4 rounded-2xl font-black text-lg transition-all border-b-4 ${canContinue ? (practiceStatus === 'correct' ? 'bg-green-500 text-white border-green-600' : practiceStatus === 'incorrect' ? 'bg-red-500 text-white border-red-600' : 'bg-blue-500 text-white border-blue-600') : 'bg-slate-200 text-slate-400 border-slate-300'}`}
+               >
+                 {practiceStatus === 'idle' ? 'Check' : practiceStatus === 'incorrect' ? 'Try Again' : 'Continue'}
+               </button>
+            </div>
+          </div>
+        );
+      } else if (pageIndex === 4) {
+        const targetWords = ["I", "am", "Alex."];
+        const canContinue = matchedPairs.length === targetWords.length && matchedPairs.map(i => targetWords[Number(i)]).join(' ') === targetWords.join(' ');
+        
+        return (
+          <div className="fixed inset-0 z-[100] w-full h-[100dvh] flex flex-col font-sans bg-slate-50 pb-6 overflow-hidden">
+            <div className="px-5 py-4 flex items-center justify-between shrink-0 bg-transparent z-10 relative">
+               <button onClick={() => setPageIndex(pageIndex - 1)} className="text-slate-400 hover:text-slate-600 transition-colors p-1">
+                  <ArrowLeft size={24} strokeWidth={2.5} />
+               </button>
+               <div className="flex-1 mx-6 h-3 bg-slate-200 rounded-full overflow-hidden">
+                  <div className="h-full bg-blue-500 rounded-full transition-all duration-500 ease-out" style={{ width: `${(pageIndex / totalPages) * 100}%` }} />
+               </div>
+               <div className="w-8" />
+            </div>
+
+            <div className="flex-1 w-full max-w-xl mx-auto px-6 py-4 overflow-y-auto flex flex-col items-center justify-center">
+               <h2 className="text-2xl font-black text-slate-800 mb-8 text-center uppercase tracking-tight">BUILD THE SENTENCE</h2>
+               
+               <div className="w-24 h-24 bg-blue-50 rounded-full flex items-center justify-center text-5xl mb-10 shadow-inner border border-blue-100">
+                  🙋‍♂️
+               </div>
+
+               <div className="w-full min-h-[80px] bg-white rounded-3xl border-2 border-dashed border-slate-300 p-4 mb-10 flex flex-wrap gap-2 items-center justify-center shadow-inner">
+                  {matchedPairs.length === 0 && <span className="text-slate-300 font-bold">Tap words to build</span>}
+                  {matchedPairs.map((idxStr, i) => (
+                     <button key={i} onClick={() => setMatchedPairs(matchedPairs.filter(x => x !== idxStr))} className="px-5 py-3 bg-blue-500 text-white font-black text-xl rounded-2xl shadow-md border-b-4 border-blue-600 active:translate-y-1 active:border-b-0 hover:bg-blue-400">
+                        {targetWords[Number(idxStr)]}
+                     </button>
+                  ))}
+               </div>
+
+               <div className="flex flex-wrap gap-3 justify-center w-full">
+                  {[2, 0, 1].map((arrIdx) => (
+                     <button
+                        key={arrIdx}
+                        disabled={matchedPairs.includes(arrIdx.toString())}
+                        onClick={() => setMatchedPairs([...matchedPairs, arrIdx.toString()])}
+                        className={`px-6 py-4 rounded-2xl font-black text-xl transition-all ${matchedPairs.includes(arrIdx.toString()) ? 'bg-slate-100 text-transparent border-2 border-slate-100 shadow-none pointer-events-none' : 'bg-white text-slate-700 border-2 border-slate-200 hover:border-blue-300 hover:text-blue-500 hover:shadow-md active:scale-95 shadow-sm'}`}
+                     >
+                        {targetWords[arrIdx]}
+                     </button>
+                  ))}
+               </div>
+            </div>
+
+            <div className="px-6 pt-4 pb-8 shrink-0 bg-white border-t border-slate-100 shadow-[0_-10px_20px_rgba(0,0,0,0.02)]">
+               <button onClick={() => {
+                   awardPoints(5, 'Great structuring!', 'grammar');
+                   setPageIndex(pageIndex + 1);
+               }} disabled={!canContinue} className={`w-full max-w-md mx-auto block py-4 rounded-2xl font-black text-lg transition-all border-b-4 ${canContinue ? 'bg-blue-500 text-white border-blue-600 hover:bg-blue-400 hover:border-blue-500 active:translate-y-1 active:border-b-0' : 'bg-slate-200 text-slate-400 border-slate-300'}`}>
+                 Continue
+               </button>
+            </div>
+          </div>
+        );
+      } else if (pageIndex === 5) {
+        const canContinue = practiceAnswer !== null;
+        return (
+          <div className="fixed inset-0 z-[100] w-full h-[100dvh] flex flex-col font-sans bg-slate-50 pb-6 overflow-hidden">
+            <div className="px-5 py-4 flex items-center justify-between shrink-0 bg-transparent z-10 relative">
+               <button onClick={() => setPageIndex(pageIndex - 1)} className="text-slate-400 hover:text-slate-600 transition-colors p-1">
+                  <ArrowLeft size={24} strokeWidth={2.5} />
+               </button>
+               <div className="flex-1 mx-6 h-3 bg-slate-200 rounded-full overflow-hidden">
+                  <div className="h-full bg-blue-500 rounded-full transition-all duration-500 ease-out" style={{ width: `${(pageIndex / totalPages) * 100}%` }} />
+               </div>
+               <div className="w-8" />
+            </div>
+
+            <div className="flex-1 w-full max-w-xl mx-auto px-6 py-4 overflow-y-auto flex flex-col items-center justify-center">
+               <h2 className="text-2xl font-black text-slate-800 mb-8 text-center uppercase tracking-tight">COMPLETE THE SENTENCE</h2>
+               
+               <div className="bg-white rounded-[40px] p-10 border border-slate-100 shadow-[0_15px_50px_rgba(0,0,0,0.08)] mb-10 w-full flex items-center justify-center text-center">
+                  <span className="text-4xl font-black text-slate-800 tracking-tight leading-tight">She <span className={`inline-block w-20 text-center border-b-4 ${practiceAnswer ? 'text-blue-500 border-blue-500' : 'text-transparent border-slate-200'}`}>{practiceAnswer || 'is'}</span> a student.</span>
+               </div>
+
+               <div className="grid grid-cols-3 gap-4 w-full">
+                  {['am', 'is', 'are'].map((opt) => (
+                     <button
+                        key={opt}
+                        onClick={() => {
+                           if (practiceStatus === 'correct' || practiceStatus === 'incorrect') return;
+                           setPracticeAnswer(opt);
+                        }}
+                        className={`w-full p-6 rounded-3xl border-2 font-black text-xl transition-all shadow-sm ${practiceAnswer === opt ? (practiceStatus === 'correct' ? 'bg-green-100 border-green-500 text-green-600' : practiceStatus === 'incorrect' ? 'bg-red-100 border-red-500 text-red-600' : 'bg-blue-50 border-blue-400 text-blue-600') : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300'}`}
+                     >
+                        {opt}
+                     </button>
+                  ))}
+               </div>
+            </div>
+
+            <div className="px-6 pt-4 pb-8 shrink-0 bg-white border-t border-slate-100 shadow-[0_-10px_20px_rgba(0,0,0,0.02)]">
+               <button 
+                  onClick={() => {
+                     if (practiceStatus === 'idle') {
+                        if (practiceAnswer === 'is') {
+                           setPracticeStatus('correct');
+                           awardPoints(5, 'Correct!', 'grammar');
+                        } else {
+                           setPracticeStatus('incorrect');
+                        }
+                     } else if (practiceStatus === 'correct') {
+                        setPageIndex(pageIndex + 1);
+                     } else {
+                        setPracticeAnswer(null);
+                        setPracticeStatus('idle');
+                     }
+                  }} 
+                  disabled={!canContinue}
+                  className={`w-full max-w-md mx-auto block py-4 rounded-2xl font-black text-lg transition-all border-b-4 ${canContinue ? (practiceStatus === 'correct' ? 'bg-green-500 text-white border-green-600' : practiceStatus === 'incorrect' ? 'bg-red-500 text-white border-red-600' : 'bg-blue-500 text-white border-blue-600') : 'bg-slate-200 text-slate-400 border-slate-300'}`}
+               >
+                 {practiceStatus === 'idle' ? 'Check' : practiceStatus === 'incorrect' ? 'Try Again' : 'Continue'}
+               </button>
+            </div>
+          </div>
+        );
+      } else if (pageIndex === 6) {
+        return (
+          <div className="fixed inset-0 z-[100] w-full h-[100dvh] flex flex-col font-sans bg-slate-50 pb-6 overflow-hidden">
+            <div className="px-5 py-4 flex items-center justify-between shrink-0 bg-transparent z-10 relative">
+               <button onClick={() => setPageIndex(pageIndex - 1)} className="text-slate-400 hover:text-slate-600 transition-colors p-1">
+                  <ArrowLeft size={24} strokeWidth={2.5} />
+               </button>
+               <div className="flex-1 mx-6 h-3 bg-slate-200 rounded-full overflow-hidden">
+                  <div className="h-full bg-blue-500 rounded-full transition-all duration-500 ease-out" style={{ width: `${(pageIndex / totalPages) * 100}%` }} />
+               </div>
+               <div className="w-8" />
+            </div>
+
+            <div className="flex-1 w-full max-w-xl mx-auto px-6 py-4 overflow-y-auto flex flex-col items-center justify-center">
+               <h2 className="text-2xl font-black text-slate-800 mb-8 text-center uppercase tracking-tight">SPEAKING PRACTICE</h2>
+               <p className="text-slate-500 font-bold mb-6 text-center">Say the sentence aloud.</p>
+
+               <div className="bg-white rounded-[40px] p-10 border border-slate-100 shadow-[0_15px_50px_rgba(0,0,0,0.08)] mb-12 w-full flex flex-col items-center justify-center text-center gap-4">
+                  <span className="text-4xl font-black text-slate-800 tracking-tight leading-tight">I am Alex.</span>
+                  <span className="text-2xl font-bold text-slate-400">I am a student.</span>
+               </div>
+
+               <div className="flex-1 w-full flex items-center justify-center">
+                 <button onClick={handleMicClick}
+                    className={`relative w-32 h-32 rounded-full flex items-center justify-center group ${micState === 'listening' ? 'bg-blue-500 shadow-[0_0_0_12px_rgba(59,130,246,0.2)] animate-pulse' : micState === 'success' ? 'bg-green-500 shadow-[0_0_40px_rgba(34,197,94,0.4)]' : 'bg-slate-100 border-4 border-slate-200 hover:bg-slate-200'}`}
+                 >
+                   {micState === 'listening' ? (
+                     <div className="flex space-x-2">
+                       <div className="w-2.5 h-10 bg-white rounded-full animate-bounce" style={{animationDelay: '0ms'}}></div>
+                       <div className="w-2.5 h-14 bg-white rounded-full animate-bounce" style={{animationDelay: '150ms'}}></div>
+                       <div className="w-2.5 h-8 bg-white rounded-full animate-bounce" style={{animationDelay: '300ms'}}></div>
+                     </div>
+                   ) : micState === 'success' ? (
+                     <CheckCircle2 size={56} className="text-white" strokeWidth={2.5} />
+                   ) : (
+                     <Mic size={48} className="text-slate-400 group-hover:text-slate-600 transition-colors" strokeWidth={2.5} />
+                   )}
+                 </button>
+               </div>
+            </div>
+
+            <div className="px-6 pt-4 pb-8 shrink-0 bg-white border-t border-slate-100 shadow-[0_-10px_20px_rgba(0,0,0,0.02)]">
+               <button onClick={() => setPageIndex(pageIndex + 1)} disabled={micState !== 'success'} className={`w-full max-w-md mx-auto block py-4 rounded-2xl font-black text-lg transition-all border-b-4 ${micState === 'success' ? 'bg-blue-500 text-white border-blue-600 hover:bg-blue-400 hover:border-blue-500 active:translate-y-1 active:border-b-0' : 'bg-slate-200 text-slate-400 border-slate-300'}`}>
+                 Continue
+               </button>
+            </div>
+          </div>
+        );
+      } else if (pageIndex === 7) {
+        const canContinue = practiceAnswer !== null;
+        return (
+          <div className="fixed inset-0 z-[100] w-full h-[100dvh] flex flex-col font-sans bg-slate-50 pb-6 overflow-hidden">
+            <div className="px-5 py-4 flex items-center justify-between shrink-0 bg-transparent z-10 relative">
+               <button onClick={() => setPageIndex(pageIndex - 1)} className="text-slate-400 hover:text-slate-600 transition-colors p-1">
+                  <ArrowLeft size={24} strokeWidth={2.5} />
+               </button>
+               <div className="flex-1 mx-6 h-3 bg-slate-200 rounded-full overflow-hidden">
+                  <div className="h-full bg-blue-500 rounded-full transition-all duration-500 ease-out" style={{ width: `${(pageIndex / totalPages) * 100}%` }} />
+               </div>
+               <div className="w-8" />
+            </div>
+
+            <div className="flex-1 w-full max-w-xl mx-auto px-6 py-4 overflow-y-auto flex flex-col items-center justify-center">
+               <h2 className="text-2xl font-black text-slate-800 mb-8 text-center uppercase tracking-tight">FINAL CHALLENGE</h2>
+               
+               <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-[40px] p-10 border border-indigo-100 shadow-[0_15px_50px_rgba(99,102,241,0.08)] mb-10 w-full flex items-center justify-center text-center">
+                  <span className="text-4xl font-black text-indigo-900 tracking-tight leading-tight">We <span className={`inline-block w-20 text-center border-b-4 ${practiceAnswer ? 'text-indigo-500 border-indigo-500' : 'text-transparent border-indigo-200'}`}>{practiceAnswer || 'are'}</span> friends.</span>
+               </div>
+
+               <div className="grid grid-cols-3 gap-4 w-full">
+                  {['am', 'is', 'are'].map((opt) => (
+                     <button
+                        key={opt}
+                        onClick={() => {
+                           if (practiceStatus === 'correct' || practiceStatus === 'incorrect') return;
+                           setPracticeAnswer(opt);
+                        }}
+                        className={`w-full p-6 rounded-3xl border-2 font-black text-xl transition-all shadow-sm ${practiceAnswer === opt ? (practiceStatus === 'correct' ? 'bg-green-100 border-green-500 text-green-600' : practiceStatus === 'incorrect' ? 'bg-red-100 border-red-500 text-red-600' : 'bg-indigo-50 border-indigo-400 text-indigo-600') : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300'}`}
+                     >
+                        {opt}
+                     </button>
+                  ))}
+               </div>
+            </div>
+
+            <div className="px-6 pt-4 pb-8 shrink-0 bg-white border-t border-slate-100 shadow-[0_-10px_20px_rgba(0,0,0,0.02)]">
+               <button 
+                  onClick={() => {
+                     if (practiceStatus === 'idle') {
+                        if (practiceAnswer === 'are') {
+                           setPracticeStatus('correct');
+                           awardPoints(10, 'Challenge complete!', 'grammar');
+                        } else {
+                           setPracticeStatus('incorrect');
+                        }
+                     } else if (practiceStatus === 'correct') {
+                        onNext();
+                     } else {
+                        setPracticeAnswer(null);
+                        setPracticeStatus('idle');
+                     }
+                  }} 
+                  disabled={!canContinue}
+                  className={`w-full max-w-md mx-auto block py-4 rounded-2xl font-black text-lg transition-all border-b-4 ${canContinue ? (practiceStatus === 'correct' ? 'bg-green-500 text-white border-green-600' : practiceStatus === 'incorrect' ? 'bg-red-500 text-white border-red-600' : 'bg-indigo-500 text-white border-indigo-600') : 'bg-slate-200 text-slate-400 border-slate-300'}`}
+               >
+                 {practiceStatus === 'idle' ? 'Check' : practiceStatus === 'incorrect' ? 'Try Again' : 'Complete Lesson'}
+               </button>
+            </div>
+          </div>
+        );
+      }
     }
 
     if (isGreetings) {
@@ -1463,6 +2543,18 @@ const InteractiveExplanationScreen: React.FC<{
 
   // Choose illustration
   let illustration = defaultLessonImage;
+  if (lesson.imageUrl) {
+     const cleanPath = lesson.imageUrl.startsWith('/src/') 
+        ? lesson.imageUrl.replace('/src/', '../src/')
+        : lesson.imageUrl;
+     
+     if (allLessonImages[cleanPath]) {
+        illustration = allLessonImages[cleanPath] as string;
+     } else {
+        illustration = lesson.imageUrl;
+     }
+  }
+
   const lessonIdLower = lesson.id.toLowerCase(); // e.g. "a1-m1-l1"
   
   // Try to find a custom image matching: a1-m1-l1firstscreen or a1-1firstscreen
